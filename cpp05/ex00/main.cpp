@@ -82,8 +82,10 @@ int main() {
 		try {
 			Bureaucrat a = Bureaucrat("Bureaucrat_A", 5);
 			Bureaucrat b = Bureaucrat(a);
+			b.setName("Bureaucrat_B");
 			std::cout << a << std::endl;
 			std::cout << b << std::endl;
+			std::cout << std::endl;
 			a.incrementGrade();
 			b.decrementGrade();
 			std::cout << a << std::endl;
@@ -96,13 +98,16 @@ int main() {
 		std::cout << std::endl;
 	}
 	{
-		std::cout << "[7] a:()" << std::endl;
+		std::cout << "[7] a:(), ++ && --" << std::endl;
 		try {
 			Bureaucrat a = Bureaucrat();
 			std::cout << a << std::endl;
 			a.incrementGrade();
 			std::cout << a << std::endl;
-
+			a.decrementGrade();
+			std::cout << a << std::endl;
+			a.decrementGrade();
+			std::cout << a << std::endl;
 		}
 		catch (std::exception &e) {
 			std::cerr << e.what() << std::endl;

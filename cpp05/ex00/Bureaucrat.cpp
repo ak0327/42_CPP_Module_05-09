@@ -9,21 +9,19 @@
 #define COLOR_RESET		"\x1b[0m"
 
 /***** constructor, destructor, copy assignment operator ****/
-Bureaucrat::Bureaucrat() : name_(), grade_(), upper_grade_(UPPER), lower_grade_(LOWER) {}
+Bureaucrat::Bureaucrat() :
+	name_(INIT_NAME), grade_(INIT_GRADE), upper_grade_(GRADE_UPPER), lower_grade_(GRADE_LOWER) {}
 
 Bureaucrat::~Bureaucrat() {}
 
-Bureaucrat::Bureaucrat(const std::string &name,
-					   const unsigned int grade) :
-		name_(name),
-		grade_(grade),
-		upper_grade_(UPPER),
-		lower_grade_(LOWER) {
-	validateGradeRange(grade);
-}
+Bureaucrat::Bureaucrat(const std::string &name, const unsigned int grade) :
+	name_(name),
+	grade_(grade),
+	upper_grade_(GRADE_UPPER),
+	lower_grade_(GRADE_LOWER) { validateGradeRange(grade);}
 
 Bureaucrat::Bureaucrat(const Bureaucrat &bureaucrat) :
-		name_(), grade_(), upper_grade_(UPPER), lower_grade_(LOWER) {
+	name_(INIT_NAME), grade_(INIT_GRADE), upper_grade_(GRADE_UPPER), lower_grade_(GRADE_LOWER) {
 	*this = bureaucrat;
 }
 
@@ -31,8 +29,8 @@ Bureaucrat &Bureaucrat::operator=(const Bureaucrat &bureaucrat) {
 	if (this != &bureaucrat) {
 		setName(bureaucrat.getName());
 		setGrade(bureaucrat.getGrade());
-		setUpperGrade(UPPER);
-		setLowerGrade(LOWER);
+		setUpperGrade(GRADE_UPPER);
+		setLowerGrade(GRADE_LOWER);
 	}
 	return *this;
 }
@@ -83,18 +81,16 @@ void Bureaucrat::validateGradeRange(const unsigned int grade) {
 
 
 /***** exception ****/
-const char *Bureaucrat::GradeTooLowException::what() const throw() {
-	return COLOR_RED"Grade too Low"COLOR_RESET;
-}
+Bureaucrat::GradeTooLowException::GradeTooLowException() :
+	std::out_of_range(COLOR_RED"Grade too Low X("COLOR_RESET) {}
 
-const char *Bureaucrat::GradeTooHighException::what() const throw() {
-	return COLOR_RED"Grade too High"COLOR_RESET;
-}
-
+Bureaucrat::GradeTooHighException::GradeTooHighException() :
+	std::out_of_range(COLOR_RED"Grade too High :o"COLOR_RESET) {}
 
 
 // overload of the insertion << operator
 std::ostream &operator<<(std::ostream &os, const Bureaucrat &bureaucrat) {
-	os << COLOR_GREEN << bureaucrat.getName() << ", bureaucrat grade " << bureaucrat.getGrade() << COLOR_RESET;
+	os << COLOR_GREEN << bureaucrat.getName() <<
+	", bureaucrat grade " << bureaucrat.getGrade() << COLOR_RESET;
 	return os;
 }

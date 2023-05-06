@@ -3,8 +3,10 @@
 #include <iostream>
 #include <string>
 
-#define UPPER	1
-#define LOWER	150
+#define GRADE_UPPER	1
+#define GRADE_LOWER	150
+#define INIT_NAME	"InitName"
+#define INIT_GRADE	150
 
 class Bureaucrat {
 private:
@@ -37,16 +39,15 @@ public:
 
 
 	/***** exception ****/
-	class GradeTooLowException : public std::exception {
+	class GradeTooLowException : public std::out_of_range {
 	public:
-		const char *what() const throw();
+		GradeTooLowException();
 	};
 
-	class GradeTooHighException : public std::exception {
+	class GradeTooHighException : public std::out_of_range {
 	public:
-		const char *what() const throw();
+		GradeTooHighException();
 	};
-
 
 };
 
