@@ -5,6 +5,9 @@
 
 #include "Form.hpp"
 
+#define GRADE_UPPER	1
+#define GRADE_LOWER	150
+
 class Form;
 
 class Bureaucrat {

@@ -8,9 +8,6 @@
 #define COLOR_CYAN		"\x1b[36m"
 #define COLOR_RESET		"\x1b[0m"
 
-#define GRADE_UPPER	1
-#define GRADE_LOWER	150
-
 /***** constructor, destructor, copy assignment operator ****/
 Bureaucrat::Bureaucrat() : name_(), grade_(), upper_grade_(GRADE_UPPER), lower_grade_(GRADE_LOWER) {}
 
