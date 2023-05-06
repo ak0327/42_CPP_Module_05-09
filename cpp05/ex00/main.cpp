@@ -20,7 +20,7 @@ int main() {
 			bureaucrat.incrementGrade();
 			std::cout << std::endl;
 		}
-		catch (std::exception &e) {
+		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
 		std::cout << std::endl;
@@ -39,7 +39,7 @@ int main() {
 			bureaucrat.incrementGrade();
 			std::cout << std::endl;
 		}
-		catch (std::exception &e) {
+		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
 		std::cout << std::endl;
@@ -50,7 +50,7 @@ int main() {
 			Bureaucrat bureaucrat = Bureaucrat("Bureaucrat_C", 0);
 			std::cout << bureaucrat << std::endl;
 		}
-		catch (std::exception &e) {
+		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
 		std::cout << std::endl;
@@ -61,7 +61,7 @@ int main() {
 			Bureaucrat bureaucrat = Bureaucrat("Bureaucrat_D", 151);
 			std::cout << bureaucrat << std::endl;
 		}
-		catch (std::exception &e) {
+		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
 		std::cout << std::endl;
@@ -72,7 +72,7 @@ int main() {
 			Bureaucrat bureaucrat = Bureaucrat("Bureaucrat_E", UINT_MAX);
 			std::cout << bureaucrat << std::endl;
 		}
-		catch (std::exception &e) {
+		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
 		std::cout << std::endl;
@@ -92,7 +92,7 @@ int main() {
 			std::cout << b << std::endl;
 
 		}
-		catch (std::exception &e) {
+		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
 		std::cout << std::endl;
@@ -109,7 +109,7 @@ int main() {
 			a.decrementGrade();
 			std::cout << a << std::endl;
 		}
-		catch (std::exception &e) {
+		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
 		std::cout << std::endl;

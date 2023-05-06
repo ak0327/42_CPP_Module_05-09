@@ -55,14 +55,14 @@ public:
 
 
 	/***** exception ****/
-	class GradeTooLowException : public std::exception {
+	class GradeTooLowException : public std::out_of_range {
 	public:
-		const char *what() const throw();
+		GradeTooLowException();
 	};
 
-	class GradeTooHighException : public std::exception {
+	class GradeTooHighException : public std::out_of_range {
 	public:
-		const char *what() const throw();
+		GradeTooHighException();
 	};
 };
 

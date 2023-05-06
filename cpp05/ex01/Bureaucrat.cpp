@@ -94,13 +94,12 @@ void Bureaucrat::signForm(Form &form) {
 
 
 /***** exception ****/
-const char *Bureaucrat::GradeTooLowException::what() const throw() {
-	return COLOR_RED"Grade too Low"COLOR_RESET;
-}
+Bureaucrat::GradeTooLowException::GradeTooLowException() :
+		std::out_of_range(COLOR_RED"Grade too Low X("COLOR_RESET) {}
 
-const char *Bureaucrat::GradeTooHighException::what() const throw() {
-	return COLOR_RED"Grade too High"COLOR_RESET;
-}
+Bureaucrat::GradeTooHighException::GradeTooHighException() :
+		std::out_of_range(COLOR_RED"Grade too High :o"COLOR_RESET) {}
+
 
 
 /***** overload of the insertion << operator ****/

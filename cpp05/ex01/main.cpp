@@ -26,7 +26,7 @@ int main() {
 			std::cout << "\nBureA sign to formB" << std::endl;
 			formB.beSigned(bureaucrat);
 		}
-		catch (std::exception &e) {
+		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
 		std::cout << std::endl;
@@ -40,7 +40,7 @@ int main() {
 			std::cout << form << std::endl;
 			form.beSigned(bureaucrat);
 		}
-		catch (std::exception &e) {
+		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
 		std::cout << std::endl;
@@ -50,7 +50,7 @@ int main() {
 		try {
 			Form form = Form("FormA", false, 0, 0);
 		}
-		catch (std::exception &e) {
+		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
 		std::cout << std::endl;
@@ -61,7 +61,7 @@ int main() {
 			Form form = Form("FormA", false, 0, 151);
 
 		}
-		catch (std::exception &e) {
+		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
 		std::cout << std::endl;
@@ -71,7 +71,7 @@ int main() {
 		try {
 			Form form = Form("FormA", false, 100, 1);
 		}
-		catch (std::exception &e) {
+		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
 		std::cout << std::endl;
@@ -132,7 +132,7 @@ int main() {
 			std::cout << bureaucrat << std::endl;
 
 		}
-		catch (std::exception &e) {
+		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
 		std::cout << std::endl;

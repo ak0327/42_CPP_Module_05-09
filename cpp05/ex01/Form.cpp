@@ -90,13 +90,11 @@ void Form::setGradeToExec(const unsigned int grade_to_exec) {
 
 
 /***** exception ****/
-const char *Form::GradeTooLowException::what() const throw() {
-	return COLOR_RED"[Form Error] Grade too Low to sign"COLOR_RESET;
-}
+Form::GradeTooLowException::GradeTooLowException() :
+		std::out_of_range(COLOR_RED"Grade too Low X("COLOR_RESET) {}
 
-const char *Form::GradeTooHighException::what() const throw() {
-	return COLOR_RED"[Form Error] Grade too High to sign"COLOR_RESET;
-}
+Form::GradeTooHighException::GradeTooHighException() :
+		std::out_of_range(COLOR_RED"Grade too High :o"COLOR_RESET) {}
 
 
 
