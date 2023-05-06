@@ -19,8 +19,8 @@ class Form {
 private:
 	const std::string	name_;
 	bool				signed_;
-	const unsigned int	grade_to_sign_;
-	const unsigned int	grade_to_exec_;
+	const unsigned int	upper_grade_;
+	const unsigned int	lower_grade_;
 
 public:
 	/***** constructor, destructor, copy assignment operator ****/
@@ -43,13 +43,13 @@ public:
 	bool getSigned() const;
 	void setSigned(const bool is_signed);
 
-	// grade_to_sign
-	unsigned int getGradeToSign() const;
-	void setGradeToSign(const unsigned int grade_to_sign);
+	// upper_grade
+	unsigned int getUpperGrade() const;
+	void setUpperGrade(const unsigned int upper_grade);
 
-	// grade_to_exex
-	unsigned int getGradeToExec() const;
-	void setGradeToExec(const unsigned int grade_to_exec);
+	// lower_grade
+	unsigned int getLowerGrade() const;
+	void setLowerGrade(const unsigned int lower_grade);
 
 
 	/***** sign by bureaucrat ****/

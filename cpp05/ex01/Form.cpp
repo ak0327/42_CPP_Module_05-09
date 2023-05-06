@@ -2,35 +2,42 @@
 
 /***** constructor, destructor, copy assignment operator ****/
 
-Form::Form() : name_(), signed_(), upper_grade_(GRADE_UPPER), lower_grade_(GRADE_LOWER) {
-	validateGradeRange(getUpperGrade(), getLowerGrade());
+Form::Form() : name_(), signed_(), grade_to_sign_(GRADE_UPPER), grade_to_exec_(GRADE_UPPER) {
+	Bureaucrat::validateGradeRange(getGradeToSign());
+	Bureaucrat::validateGradeRange(getGradeToExec());
 }
 
 Form::~Form() {}
 
-Form::Form(const Form &form) : name_(), signed_(), upper_grade_(GRADE_UPPER), lower_grade_(GRADE_LOWER)  {
+Form::Form(const Form &form) : name_(), signed_(), grade_to_sign_(GRADE_UPPER), grade_to_exec_(GRADE_UPPER)  {
 	*this = form;
-	validateGradeRange(getUpperGrade(), getLowerGrade());
+
+	Bureaucrat::validateGradeRange(getGradeToSign());
+	Bureaucrat::validateGradeRange(getGradeToExec());
 }
 
 Form::Form(const std::string &name,
 		   const bool signed_,
-		   const unsigned int upper_grade,
-		   const unsigned int lower_grade) :
+		   const unsigned int grade_to_sign,
+		   const unsigned int grade_to_exec) :
 		   name_(name),
 		   signed_(signed_),
-		   upper_grade_(upper_grade),
-		   lower_grade_(lower_grade) {
-	validateGradeRange(getUpperGrade(), getLowerGrade());
+		   grade_to_sign_(grade_to_sign),
+		   grade_to_exec_(grade_to_exec) {
+
+	Bureaucrat::validateGradeRange(getGradeToSign());
+	Bureaucrat::validateGradeRange(getGradeToExec());
 }
 
 Form &Form::operator=(const Form &form) {
 	if (this != &form) {
 		setName(form.getName());
 		setSigned(form.getSigned());
-		setUpperGrade(form.getUpperGrade());
-		setLowerGrade(form.getLowerGrade());
-		validateGradeRange(getUpperGrade(), getLowerGrade());
+		setGradeToSign(form.getGradeToSign());
+		setGradeToExec(form.getGradeToExec());
+
+		Bureaucrat::validateGradeRange(getGradeToSign());
+		Bureaucrat::validateGradeRange(getGradeToExec());
 	}
 	return *this;
 }
@@ -43,27 +50,14 @@ void Form::beSigned(Bureaucrat &bureaucrat) {
 
 /***** validate ****/
 void Form::validateBureaucratSignableToForm(const Bureaucrat &bureaucrat) {
-	if (getUpperGrade() <= bureaucrat.getGrade() &&\
-		bureaucrat.getGrade() <= getLowerGrade()) {
+	if (getGradeToSign() <= bureaucrat.getGrade() &&\
+		bureaucrat.getGrade() <= getGradeToExec()) {
 		return ;
 	}
-	if (bureaucrat.getGrade() < getUpperGrade()) {
+	if (bureaucrat.getGrade() < getGradeToSign()) {
 		throw Form::GradeTooHighException();
 	}
 	throw Form::GradeTooLowException();
-}
-
-void Form::validateGradeRange(const unsigned int upper,
-							  const unsigned int lower) {
-	if (upper > lower) {
-		throw std::invalid_argument("invalid argument");
-	}
-	if (upper < GRADE_UPPER) {
-		throw std::invalid_argument("invalid argument");
-	}
-	if (GRADE_LOWER < lower) {
-		throw std::invalid_argument("invalid argument");
-	}
 }
 
 
@@ -80,38 +74,38 @@ bool Form::getSigned() const { return signed_; }
 
 void Form::setSigned(const bool is_signed) { signed_ = is_signed; }
 
-// lower_grade
- unsigned int Form::getLowerGrade() const { return lower_grade_; }
+// grade to sign
+unsigned int Form::getGradeToSign() const { return grade_to_sign_; }
 
-void Form::setLowerGrade(const unsigned int upper_grade) {
-	const_cast<unsigned int&>(lower_grade_) = upper_grade;
+void Form::setGradeToSign(const unsigned int grade_to_sign) {
+	const_cast<unsigned int&>(grade_to_sign_) = grade_to_sign;
 }
 
-// upper_grade
- unsigned int Form::getUpperGrade() const { return upper_grade_; }
+// grade to exec
+unsigned int Form::getGradeToExec() const { return grade_to_exec_; }
 
-void Form::setUpperGrade(const unsigned int upper_grade) {
-	const_cast<unsigned int&>(upper_grade_) = upper_grade;
+void Form::setGradeToExec(const unsigned int grade_to_exec) {
+	const_cast<unsigned int&>(grade_to_exec_) = grade_to_exec;
 }
 
 
 /***** exception ****/
 const char *Form::GradeTooLowException::what() const throw() {
-	return COLOR_RED"Grade too Low"COLOR_RESET;
+	return COLOR_RED"[Form Error] Grade too Low to sign"COLOR_RESET;
 }
 
 const char *Form::GradeTooHighException::what() const throw() {
-	return COLOR_RED"Grade too High"COLOR_RESET;
+	return COLOR_RED"[Form Error] Grade too High to sign"COLOR_RESET;
 }
 
 
 
 /***** overload of the operator ****/
 std::ostream &operator<<(std::ostream &os, const Form &form) {
-	os << COLOR_YELLOW << "Form info:" << form.getName() <<
+	os << COLOR_YELLOW << "[Form info:" << form.getName() <<
 	   ", signed:" << (form.getSigned() ? "true" : "false") <<
-	   ", grade:[" << form.getUpperGrade() <<
-	   ", " << form.getLowerGrade() <<
+	   ", grade to sign:" << form.getGradeToSign() <<
+	   ", grade to exec" << form.getGradeToExec() <<
 	   "]" << COLOR_RESET;
 	return os;
 }

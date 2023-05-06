@@ -8,9 +8,6 @@
 #define COLOR_CYAN		"\x1b[36m"
 #define COLOR_RESET		"\x1b[0m"
 
-#define GRADE_UPPER	1
-#define GRADE_LOWER	150
-
 /***** constructor, destructor, copy assignment operator ****/
 Bureaucrat::Bureaucrat() : name_(), grade_(), upper_grade_(GRADE_UPPER), lower_grade_(GRADE_LOWER) {}
 
@@ -75,7 +72,7 @@ void Bureaucrat::decrementGrade() {
 
 /***** validate grade range ****/
 void Bureaucrat::validateGradeRange(const unsigned int grade) {
-	if (GRADE_UPPER <= grade && grade <= GRADE_LOWER) {
+	if (1 <= grade && grade <= 150) {
 		return ;
 	}
 	if (grade < 1) {
@@ -106,7 +103,8 @@ const char *Bureaucrat::GradeTooHighException::what() const throw() {
 }
 
 
-/***** overload of the insertion << operator ****/
+
+// overload of the insertion << operator
 std::ostream &operator<<(std::ostream &os, const Bureaucrat &bureaucrat) {
 	os << COLOR_GREEN << bureaucrat.getName() << ", bureaucrat grade " << bureaucrat.getGrade() << COLOR_RESET;
 	return os;
