@@ -1,8 +1,5 @@
-//
-// Created by Akira TANIDA on 2023/05/06.
-//
+#pragma once
 
-#ifndef CPP05_ROBOTOMYREQUESTFORM_HPP
-#define CPP05_ROBOTOMYREQUESTFORM_HPP
+class RobotomyRequestForm {
 
-#endif //CPP05_ROBOTOMYREQUESTFORM_HPP
+};

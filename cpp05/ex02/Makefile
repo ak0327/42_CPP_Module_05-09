@@ -5,7 +5,10 @@ CXXFLAGS	= -Wall -Wextra -Werror -std=c++98 -MMD -MP
 
 SRCS		= main.cpp \
 			  Bureaucrat.cpp \
-			  Form.cpp
+			  AForm.cpp \
+			  ShrubberyCreationForm.cpp \
+			  RobotomyRequestForm.cpp \
+			  PresidentialPardonForm.cpp
 
 OBJ_DIR		= objs
 OBJ			= $(SRCS:%.cpp=%.o)

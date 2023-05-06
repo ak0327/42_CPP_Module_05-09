@@ -1,8 +1,5 @@
-//
-// Created by Akira TANIDA on 2023/05/06.
-//
+#pragma once
 
-#ifndef CPP05_SHRUBBERYCREATIONFORM_HPP
-#define CPP05_SHRUBBERYCREATIONFORM_HPP
+class ShrubberyCreationForm {
 
-#endif //CPP05_SHRUBBERYCREATIONFORM_HPP
+};

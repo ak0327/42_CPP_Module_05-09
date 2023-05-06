@@ -15,23 +15,23 @@
 
 class Bureaucrat;
 
-class Form {
+class AForm {
 private:
 	const std::string	name_;
 	bool				signed_;
-	const unsigned int	upper_grade_;
-	const unsigned int	lower_grade_;
+	const unsigned int	grade_to_sign_;
+	const unsigned int	grade_to_exec_;
 
 public:
 	/***** constructor, destructor, copy assignment operator ****/
-	Form();
-	Form(const Form &form);
-	Form(const std::string &name,
+	AForm();
+	AForm(const AForm &form);
+	AForm(const std::string &name,
 		 const bool signed_,
 		 const unsigned int upper_grade,
 		 const unsigned int lower_grade);
-	~Form();
-	Form &operator=(const Form &form);
+	~AForm();
+	AForm &operator=(const AForm &form);
 
 
 	/***** getter, setter ****/
@@ -43,13 +43,13 @@ public:
 	bool getSigned() const;
 	void setSigned(const bool is_signed);
 
-	// upper_grade
-	unsigned int getUpperGrade() const;
-	void setUpperGrade(const unsigned int upper_grade);
+	// grade_to_sign
+	unsigned int getGradeToSign() const;
+	void setGradeToSign(const unsigned int grade_to_sign);
 
-	// lower_grade
-	unsigned int getLowerGrade() const;
-	void setLowerGrade(const unsigned int lower_grade);
+	// grade_to_exex
+	unsigned int getGradeToExec() const;
+	void setGradeToExec(const unsigned int grade_to_exec);
 
 
 	/***** sign by bureaucrat ****/
@@ -74,4 +74,4 @@ public:
 };
 
 /***** overload of the operator ****/
-std::ostream &operator<<(std::ostream &os, const Form &form);
+std::ostream &operator<<(std::ostream &os, const AForm &form);

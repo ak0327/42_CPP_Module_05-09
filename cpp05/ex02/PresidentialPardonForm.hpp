@@ -1,8 +1,5 @@
-//
-// Created by Akira TANIDA on 2023/05/06.
-//
+#pragma once
 
-#ifndef CPP05_PRESIDENTIALPARDONFORM_HPP
-#define CPP05_PRESIDENTIALPARDONFORM_HPP
+class PresidentialPardonForm {
 
-#endif //CPP05_PRESIDENTIALPARDONFORM_HPP
+};

@@ -3,12 +3,12 @@
 #include <iostream>
 #include <string>
 
-#include "Form.hpp"
+#include "AForm.hpp"
 
 #define GRADE_UPPER	1
 #define GRADE_LOWER	150
 
-class Form;
+class AForm;
 
 class Bureaucrat {
 private:
@@ -18,6 +18,7 @@ private:
 	const unsigned int	lower_grade_;
 
 public:
+	/***** constructor, destructor, copy assignment operator ****/
 	Bureaucrat();
 	Bureaucrat(const Bureaucrat &bureaucrat);
 	Bureaucrat(const std::string &name, const unsigned int grade);
@@ -25,21 +26,32 @@ public:
 
 	Bureaucrat &operator=(const Bureaucrat &bureaucrat);
 
-	// getter, setter
+
+	/***** getter, setter ****/
+	// name
 	const std::string &getName() const ;
 	void setName(const std::string &name);
+
+	// grade
 	unsigned int getGrade() const ;
 	void setGrade(const unsigned int grade);
+
+	// upper, lower grade
 	void setUpperGrade(const unsigned int upper);
 	void setLowerGrade(const unsigned int lower);
 
-	// two member functions to increment or decrement the bureaucrat grade.
+
+	/***** increment, decrement grade ****/
 	void incrementGrade();
 	void decrementGrade();
 
-	void validateGradeRange(const unsigned int grade);
 
-	void signForm(Form &form);
+	/***** validate grade range ****/
+	static void validateGradeRange(const unsigned int grade);
+
+
+	/***** sign form ****/
+	void signForm(AForm &form);
 
 
 	/***** exception ****/
@@ -52,10 +64,8 @@ public:
 	public:
 		const char *what() const throw();
 	};
-
-
 };
 
-// overload of the insertion << operator
+/***** overload of the insertion << operator ****/
 std::ostream &operator<<(std::ostream &os, const Bureaucrat &bureaucrat);
 

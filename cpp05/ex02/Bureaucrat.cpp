@@ -72,7 +72,7 @@ void Bureaucrat::decrementGrade() {
 
 /***** validate grade range ****/
 void Bureaucrat::validateGradeRange(const unsigned int grade) {
-	if (1 <= grade && grade <= 150) {
+	if (GRADE_UPPER <= grade && grade <= GRADE_LOWER) {
 		return ;
 	}
 	if (grade < 1) {
@@ -81,7 +81,7 @@ void Bureaucrat::validateGradeRange(const unsigned int grade) {
 	throw Bureaucrat::GradeTooLowException();
 }
 
-void Bureaucrat::signForm(Form &form) {
+void Bureaucrat::signForm(AForm &form) {
 	if (form.getSigned()) {
 		std::cout << COLOR_RED << this->getName() <<  " couldn’t sign " <<
 				  form.getName() << " because already signed " << COLOR_RESET << std::endl;
@@ -103,8 +103,7 @@ const char *Bureaucrat::GradeTooHighException::what() const throw() {
 }
 
 
-
-// overload of the insertion << operator
+/***** overload of the insertion << operator ****/
 std::ostream &operator<<(std::ostream &os, const Bureaucrat &bureaucrat) {
 	os << COLOR_GREEN << bureaucrat.getName() << ", bureaucrat grade " << bureaucrat.getGrade() << COLOR_RESET;
 	return os;
