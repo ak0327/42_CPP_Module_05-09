@@ -17,6 +17,7 @@
 !.gitignore
 !Makefile
 
+.idea
 /**/.idea
 /**/cmake-build-debug
 /**/objs
