@@ -2,16 +2,28 @@
 
 #include <string>
 #include "AForm.hpp"
+#include "ShrubberyCreationForm.hpp"
+#include "RobotomyRequestForm.hpp"
+#include "PresidentialPardonForm.hpp"
+
+
+#define FORM_CNT 3
 
 // The intern has no name, no grade, no unique characteristics.
 class Intern {
 private:
+	std::string form_names_[FORM_CNT];
 
 	void assertFormName(const std::string &form_name) const;
+	std::string toLower(const std::string &str) const;
+
 
 public:
+	/***** constructor, destructor, copy assignment operator ****/
 	Intern();
 	~Intern();
+	Intern(const Intern &intern);
+	Intern &operator=(const Intern &intern);
 
 	// argument : The first one is the name of a form, second one is the target of the form.
 	// return   : pointer to a Form object (whose name is the one passed as parameter)

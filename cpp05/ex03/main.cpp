@@ -6,243 +6,86 @@
 #include "ShrubberyCreationForm.hpp"
 #include "RobotomyRequestForm.hpp"
 #include "PresidentialPardonForm.hpp"
+#include "Intern.hpp"
 
 int main() {
 	std::srand(static_cast<unsigned>(std::time(NULL)));
+	std::string input;
 
 	std::cout << "\n\n #######################################################" << std::endl;
 	std::cout <<     " ================ ShrubberyCreationForm ================\n" << std::endl;
 	{
-		std::cout << "[1] " << std::endl;
+		std::cout << "[1] ShrubberyCreationForm" << std::endl;
 		try {
-			Bureaucrat bureaucrat = Bureaucrat("Cherry", 5);
+			input = "Shrubbery Creation";
+			std::cout << "input:" << input << std::endl;
+			Bureaucrat bureaucrat = Bureaucrat("Mr.Black", 5);
 			std::cout << bureaucrat << std::endl;
-			ShrubberyCreationForm form = ShrubberyCreationForm("file1");
-			std::cout << form << std::endl;
-			bureaucrat.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[2] unsigned" << std::endl;
-		try {
-			Bureaucrat bureaucrat = Bureaucrat("Maple", 5);
-			std::cout << bureaucrat << std::endl;
-			ShrubberyCreationForm form = ShrubberyCreationForm("file2");
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[3] grade too low to sign" << std::endl;
-		try {
-			Bureaucrat bureaucrat = Bureaucrat("Maple", 150);
-			std::cout << bureaucrat << std::endl;
-			ShrubberyCreationForm form = ShrubberyCreationForm("file3");
-			std::cout << form << std::endl;
-			bureaucrat.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[4] grade too low to exec" << std::endl;
-		try {
-			Bureaucrat bureaucrat_A = Bureaucrat("Willow", 1);
-			Bureaucrat bureaucrat_B = Bureaucrat("Maple", 150);
-			std::cout << bureaucrat_A << std::endl;
-			std::cout << bureaucrat_B << std::endl;
-			ShrubberyCreationForm form = ShrubberyCreationForm("file4");
-			std::cout << form << std::endl;
-			bureaucrat_A.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat_B.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[5] target=filename error" << std::endl;
-		try {
-			Bureaucrat bureaucrat = Bureaucrat("Maple", 5);
-			std::cout << bureaucrat << std::endl;
-			ShrubberyCreationForm form = ShrubberyCreationForm("");
-			std::cout << form << std::endl;
-			bureaucrat.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[6] target=filename error" << std::endl;
-		try {
-			Bureaucrat bureaucrat = Bureaucrat("Maple", 5);
-			std::cout << bureaucrat << std::endl;
-			ShrubberyCreationForm form = ShrubberyCreationForm("test/");
-			std::cout << form << std::endl;
-			bureaucrat.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
+			Intern intern;
 
+			std::cout << "make form" << std::endl;
+			AForm *form = intern.makeForm(input, "testfile1");
+
+			std::cout << "\nform info" << std::endl;
+			std::cout << *form << std::endl;
+
+			std::cout << "\nsign and execute" << std::endl;
+			bureaucrat.signForm(*form);
+			bureaucrat.executeForm(*form);
+
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
+	{
+		std::cout << "[2] ShrubberyCreationForm" << std::endl;
+		try {
+			input = "ShruBBery CreatIoN";
+			std::cout << "input:" << input << std::endl;
+			Bureaucrat bureaucrat = Bureaucrat("Mr.Black", 5);
+			std::cout << bureaucrat << std::endl;
+			Intern intern;
+
+			std::cout << "make form" << std::endl;
+			AForm *form = intern.makeForm(input, "testfile2");
+
+			std::cout << "\nform info" << std::endl;
+			std::cout << *form << std::endl;
+
+			std::cout << "\nsign and execute" << std::endl;
+			bureaucrat.signForm(*form);
+			bureaucrat.executeForm(*form);
+
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
+	}
+
+
 	std::cout << "\n\n #####################################################" << std::endl;
 	std::cout <<     " ================ RobotomyRequestForm ================\n" << std::endl;
 	{
-		std::cout << "[1] " << std::endl;
+		std::cout << "[1] ShrubberyCreationForm" << std::endl;
 		try {
-			Bureaucrat bureaucrat = Bureaucrat("R2-D2", 5);
+			input = "Robotomy Request";
+			std::cout << "input:" << input << std::endl;
+			Bureaucrat bureaucrat = Bureaucrat("Mr.Black", 5);
 			std::cout << bureaucrat << std::endl;
-			RobotomyRequestForm form = RobotomyRequestForm("Anakin Skywalker");
-			std::cout << form << std::endl;
-			bureaucrat.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
+			Intern intern;
 
-	}
-	{
-		std::cout << "[2] unsigned" << std::endl;
-		try {
-			Bureaucrat bureaucrat = Bureaucrat("C-3PO", 5);
-			std::cout << bureaucrat << std::endl;
-			RobotomyRequestForm form = RobotomyRequestForm("Yoda");
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[3] grade too low to sign" << std::endl;
-		try {
-			Bureaucrat bureaucrat = Bureaucrat("BB-8", 73);
-			std::cout << bureaucrat << std::endl;
-			RobotomyRequestForm form = RobotomyRequestForm("Luke Skywalke");
-			std::cout << form << std::endl;
-			bureaucrat.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[4] grade too low to exec" << std::endl;
-		try {
-			Bureaucrat bureaucrat_A = Bureaucrat("R2-D2", 1);
-			Bureaucrat bureaucrat_B = Bureaucrat("Maple", 46);
-			std::cout << bureaucrat_A << std::endl;
-			std::cout << bureaucrat_B << std::endl;
-			RobotomyRequestForm form = RobotomyRequestForm("Luke Skywalke");
-			std::cout << form << std::endl;
-			bureaucrat_A.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat_B.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[5] target name error" << std::endl;
-		try {
-			Bureaucrat bureaucrat = Bureaucrat("Maple", 5);
-			std::cout << bureaucrat << std::endl;
-			RobotomyRequestForm form = RobotomyRequestForm("");
-			std::cout << form << std::endl;
-			bureaucrat.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[6] sign grade == grade" << std::endl;
-		try {
-			Bureaucrat bureaucrat = Bureaucrat("BB-8", 72);
-			std::cout << bureaucrat << std::endl;
-			RobotomyRequestForm form = RobotomyRequestForm("Luke Skywalke");
-			std::cout << form << std::endl;
-			bureaucrat.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[7] exec grade == grade" << std::endl;
-		try {
-			Bureaucrat bureaucrat = Bureaucrat("BB-8", 45);
-			std::cout << bureaucrat << std::endl;
-			RobotomyRequestForm form = RobotomyRequestForm("Luke Skywalke");
-			std::cout << form << std::endl;
-			bureaucrat.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[8] robotomy x 3" << std::endl;
-		try {
-			Bureaucrat bureaucrat1 = Bureaucrat("Mr.White", 1);
-			RobotomyRequestForm form1 = RobotomyRequestForm("hoge");
-			bureaucrat1.signForm(form1);
-			bureaucrat1.executeForm(form1);
-			std::cout << std::endl;
+			std::cout << "make form" << std::endl;
+			AForm *form = intern.makeForm(input, "foo");
 
-			Bureaucrat bureaucrat2 = Bureaucrat("Mr.White", 1);
-			RobotomyRequestForm form2 = RobotomyRequestForm("huga");
-			bureaucrat2.signForm(form2);
-			bureaucrat2.executeForm(form2);
-			std::cout << std::endl;
+			std::cout << "\nform info" << std::endl;
+			std::cout << *form << std::endl;
 
-			Bureaucrat bureaucrat3 = Bureaucrat("Mr.White", 1);
-			RobotomyRequestForm form3 = RobotomyRequestForm("piyo");
-			bureaucrat3.signForm(form3);
-			bureaucrat3.executeForm(form3);
+			std::cout << "\nsign and execute" << std::endl;
+			bureaucrat.signForm(*form);
+			bureaucrat.executeForm(*form);
 
 		}
 		catch (std::exception const &e) {
@@ -250,34 +93,56 @@ int main() {
 		}
 		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
+	{
+		std::cout << "[2] ShrubberyCreationForm" << std::endl;
+		try {
+			input = "RBOTOMY Request";
+			std::cout << "input:" << input << std::endl;
+			Bureaucrat bureaucrat = Bureaucrat("Mr.Black", 5);
+			std::cout << bureaucrat << std::endl;
+			Intern intern;
+
+			std::cout << "make form" << std::endl;
+			AForm *form = intern.makeForm(input, "bar");
+
+			std::cout << "\nform info" << std::endl;
+			std::cout << *form << std::endl;
+
+			std::cout << "\nsign and execute" << std::endl;
+			bureaucrat.signForm(*form);
+			bureaucrat.executeForm(*form);
+
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
+	}
+
+
+
 	std::cout << "\n\n ########################################################" << std::endl;
 	std::cout <<     " ================ PresidentialPardonForm ================\n" << std::endl;
+	{
+		std::cout << "[1] PresidentialPardonForm" << std::endl;
+		try {
+			input = "Presidential Pardon";
+			std::cout << "input:" << input << std::endl;
 
-	{
-		std::cout << "[1] " << std::endl;
-		try {
-			Bureaucrat bureaucrat = Bureaucrat("R2-D2", 5);
+			Bureaucrat bureaucrat = Bureaucrat("Mr.Black", 5);
 			std::cout << bureaucrat << std::endl;
-			PresidentialPardonForm form = PresidentialPardonForm("Anakin Skywalker");
-			std::cout << form << std::endl;
-			bureaucrat.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
+			Intern intern;
 
-	}
-	{
-		std::cout << "[2] unsigned" << std::endl;
-		try {
-			Bureaucrat bureaucrat = Bureaucrat("C-3PO", 5);
-			std::cout << bureaucrat << std::endl;
-			PresidentialPardonForm form = PresidentialPardonForm("Yoda");
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
+			std::cout << "make form" << std::endl;
+			AForm *form = intern.makeForm(input, "bar");
+
+			std::cout << "\nform info" << std::endl;
+			std::cout << *form << std::endl;
+
+			std::cout << "\nsign and execute" << std::endl;
+			bureaucrat.signForm(*form);
+			bureaucrat.executeForm(*form);
+
 		}
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
@@ -285,81 +150,25 @@ int main() {
 		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
-		std::cout << "[3] grade too low to sign" << std::endl;
+		std::cout << "[2] PresidentialPardonForm" << std::endl;
 		try {
-			Bureaucrat bureaucrat = Bureaucrat("BB-8", 26);
+			input = "presiDEntIal PARDON";
+			std::cout << "input:" << input << std::endl;
+
+			Bureaucrat bureaucrat = Bureaucrat("Mr.Black", 5);
 			std::cout << bureaucrat << std::endl;
-			PresidentialPardonForm form = PresidentialPardonForm("Luke Skywalke");
-			std::cout << form << std::endl;
-			bureaucrat.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[4] grade too low to exec" << std::endl;
-		try {
-			Bureaucrat bureaucrat_A = Bureaucrat("R2-D2", 1);
-			Bureaucrat bureaucrat_B = Bureaucrat("Maple", 6);
-			std::cout << bureaucrat_A << std::endl;
-			std::cout << bureaucrat_B << std::endl;
-			PresidentialPardonForm form = PresidentialPardonForm("Luke Skywalke");
-			std::cout << form << std::endl;
-			bureaucrat_A.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat_B.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[5] target name error" << std::endl;
-		try {
-			Bureaucrat bureaucrat = Bureaucrat("Maple", 5);
-			std::cout << bureaucrat << std::endl;
-			PresidentialPardonForm form = PresidentialPardonForm("");
-			std::cout << form << std::endl;
-			bureaucrat.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[6] sign grade == grade" << std::endl;
-		try {
-			Bureaucrat bureaucrat = Bureaucrat("BB-8", 25);
-			std::cout << bureaucrat << std::endl;
-			PresidentialPardonForm form = PresidentialPardonForm("Luke Skywalke");
-			std::cout << form << std::endl;
-			bureaucrat.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
-		}
-		catch (std::exception const &e) {
-			std::cerr << e.what() << std::endl;
-		}
-		std::cout << "\n-----------------------------------------\n" << std::endl;
-	}
-	{
-		std::cout << "[7] exec grade == grade" << std::endl;
-		try {
-			Bureaucrat bureaucrat = Bureaucrat("BB-8", 5);
-			std::cout << bureaucrat << std::endl;
-			PresidentialPardonForm form = PresidentialPardonForm("Luke Skywalke");
-			std::cout << form << std::endl;
-			bureaucrat.signForm(form);
-			std::cout << form << std::endl;
-			bureaucrat.executeForm(form);
+			Intern intern;
+
+			std::cout << "make form" << std::endl;
+			AForm *form = intern.makeForm(input, "bar");
+
+			std::cout << "\nform info" << std::endl;
+			std::cout << *form << std::endl;
+
+			std::cout << "\nsign and execute" << std::endl;
+			bureaucrat.signForm(*form);
+			bureaucrat.executeForm(*form);
+
 		}
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
@@ -367,5 +176,137 @@ int main() {
 		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 
+
+	std::cout << "\n\n ########################################################" << std::endl;
+	std::cout <<     " ================ error ================\n" << std::endl;
+	{
+		std::cout << "[1] form name" << std::endl;
+		try {
+			input = "";
+			std::cout << "input:" << input << std::endl;
+			Intern intern;
+			std::cout << "make form" << std::endl;
+			AForm *form = intern.makeForm(input, "hoge");
+			std::cout << "\nform info" << std::endl;
+			std::cout << *form << std::endl;
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
+	}
+	{
+		std::cout << "[2] form name invalid" << std::endl;
+		try {
+			input = "Shrubbery Creationn";
+			std::cout << "input:" << input << std::endl;
+			Intern intern;
+			std::cout << "make form" << std::endl;
+			AForm *form = intern.makeForm(input, "hoge");
+			std::cout << "\nform info" << std::endl;
+			std::cout << *form << std::endl;
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
+	}
+	{
+		std::cout << "[3] form name invalid" << std::endl;
+		try {
+			input = "Shrubbery Creatiom";
+			std::cout << "input:" << input << std::endl;
+			Intern intern;
+			std::cout << "make form" << std::endl;
+			AForm *form = intern.makeForm(input, "hoge");
+			std::cout << "\nform info" << std::endl;
+			std::cout << *form << std::endl;
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
+	}
+	{
+		std::cout << "[4] form name invalid" << std::endl;
+		try {
+			input = "ShrubberyCreation";
+			std::cout << "input:" << input << std::endl;
+			Intern intern;
+			std::cout << "make form" << std::endl;
+			AForm *form = intern.makeForm(input, "hoge");
+			std::cout << "\nform info" << std::endl;
+			std::cout << *form << std::endl;
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
+	}
+	{
+		std::cout << "[5] form name invalid" << std::endl;
+		try {
+			input = "hoge";
+			std::cout << "input:" << input << std::endl;
+			Intern intern;
+			std::cout << "make form" << std::endl;
+			AForm *form = intern.makeForm(input, "hoge");
+			std::cout << "\nform info" << std::endl;
+			std::cout << *form << std::endl;
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
+	}
+	{
+		std::cout << "[6] form name invalid" << std::endl;
+		try {
+			input = "AForm";
+			std::cout << "input:" << input << std::endl;
+			Intern intern;
+			std::cout << "make form" << std::endl;
+			AForm *form = intern.makeForm(input, "hoge");
+			std::cout << "\nform info" << std::endl;
+			std::cout << *form << std::endl;
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
+	}
+	{
+		std::cout << "[7] form name invalid" << std::endl;
+		try {
+			input = "123";
+			std::cout << "input:" << input << std::endl;
+			Intern intern;
+			std::cout << "make form" << std::endl;
+			AForm *form = intern.makeForm(input, "hoge");
+			std::cout << "\nform info" << std::endl;
+			std::cout << *form << std::endl;
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
+	}
+	{
+		std::cout << "[8] target name invalid" << std::endl;
+		try {
+			input = "shrubbery creation";
+			std::cout << "input:" << input << std::endl;
+			Intern intern;
+			std::cout << "make form" << std::endl;
+			AForm *form = intern.makeForm(input, "");
+			std::cout << "\nform info" << std::endl;
+			std::cout << *form << std::endl;
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
+	}
+	system("leaks a.out");
 	return 0;
 }
