@@ -15,10 +15,10 @@ Bureaucrat::~Bureaucrat() {}
 
 Bureaucrat::Bureaucrat(const std::string &name,
 					   const unsigned int grade) :
-					   name_(name),
-					   grade_(grade),
-					   upper_grade_(GRADE_UPPER),
-					   lower_grade_(GRADE_LOWER) {
+		name_(name),
+		grade_(grade),
+		upper_grade_(GRADE_UPPER),
+		lower_grade_(GRADE_LOWER) {
 	validateGradeRange(grade);
 }
 
@@ -58,6 +58,43 @@ void Bureaucrat::setLowerGrade(const unsigned int lower) {
 }
 
 
+/***** sign form ****/
+void Bureaucrat::signForm(AForm &form) {
+
+	if (form.getSigned()) {
+		std::cout << COLOR_RED << this->getName() <<  " couldn’t sign " <<
+				  form.getName() << " because already signed " << COLOR_RESET << std::endl;
+	} else {
+		std::cout << COLOR_BLUE << this->getName() <<  " signed " <<
+				  form.getName()  << COLOR_RESET << std::endl;
+		form.beSigned(*this);
+	}
+}
+
+
+/***** execute form ****/
+void Bureaucrat::executeForm(const AForm &form) const {
+	std::cout << COLOR_CYAN << this->getName() <<  " executed " <<
+			  form.getName() << COLOR_RESET << std::endl;
+	form.execute(*this);
+}
+
+
+
+/***** validate grade range ****/
+// throw exception or try-catch
+void Bureaucrat::validateGradeRange(const unsigned int grade) {
+	if (GRADE_UPPER <= grade && grade <= GRADE_LOWER) {
+		return ;
+	}
+	if (grade < 1) {
+		throw Bureaucrat::GradeTooHighException();
+	}
+	throw Bureaucrat::GradeTooLowException();
+}
+
+
+
 /***** increment, decrement grade ****/
 void Bureaucrat::incrementGrade() {
 	setGrade(getGrade() - 1);
@@ -70,37 +107,13 @@ void Bureaucrat::decrementGrade() {
 }
 
 
-/***** validate grade range ****/
-void Bureaucrat::validateGradeRange(const unsigned int grade) {
-	if (GRADE_UPPER <= grade && grade <= GRADE_LOWER) {
-		return ;
-	}
-	if (grade < 1) {
-		throw Bureaucrat::GradeTooHighException();
-	}
-	throw Bureaucrat::GradeTooLowException();
-}
-
-void Bureaucrat::signForm(AForm &form) {
-	if (form.getSigned()) {
-		std::cout << COLOR_RED << this->getName() <<  " couldn’t sign " <<
-				  form.getName() << " because already signed " << COLOR_RESET << std::endl;
-	} else {
-		std::cout << COLOR_BLUE << this->getName() <<  " signed " <<
-				  getName()  << COLOR_RESET << std::endl;
-		form.setSigned(true);
-	}
-}
-
-
 /***** exception ****/
-const char *Bureaucrat::GradeTooLowException::what() const throw() {
-	return COLOR_RED"Grade too Low"COLOR_RESET;
-}
+Bureaucrat::GradeTooLowException::GradeTooLowException() :
+		std::out_of_range(COLOR_RED"Grade too Low X("COLOR_RESET) {}
 
-const char *Bureaucrat::GradeTooHighException::what() const throw() {
-	return COLOR_RED"Grade too High"COLOR_RESET;
-}
+Bureaucrat::GradeTooHighException::GradeTooHighException() :
+		std::out_of_range(COLOR_RED"Grade too High :o"COLOR_RESET) {}
+
 
 
 /***** overload of the insertion << operator ****/

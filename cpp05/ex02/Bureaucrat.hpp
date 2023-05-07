@@ -17,9 +17,16 @@ private:
 	const unsigned int	upper_grade_;
 	const unsigned int	lower_grade_;
 
+
+	/***** setter ****/
+	void setGrade(const unsigned int grade);
+	// upper, lower grade
+	void setUpperGrade(const unsigned int upper);
+	void setLowerGrade(const unsigned int lower);
+
+	Bureaucrat();
 public:
 	/***** constructor, destructor, copy assignment operator ****/
-	Bureaucrat();
 	Bureaucrat(const Bureaucrat &bureaucrat);
 	Bureaucrat(const std::string &name, const unsigned int grade);
 	~Bureaucrat();
@@ -34,11 +41,6 @@ public:
 
 	// grade
 	unsigned int getGrade() const ;
-	void setGrade(const unsigned int grade);
-
-	// upper, lower grade
-	void setUpperGrade(const unsigned int upper);
-	void setLowerGrade(const unsigned int lower);
 
 
 	/***** increment, decrement grade ****/
@@ -46,23 +48,28 @@ public:
 	void decrementGrade();
 
 
-	/***** validate grade range ****/
-	static void validateGradeRange(const unsigned int grade);
-
-
 	/***** sign form ****/
 	void signForm(AForm &form);
 
 
+	/***** execute form ****/
+	void executeForm(const AForm &form) const;
+
+
+	/***** validate grade range ****/
+	// use in validation of Form grade
+	static void validateGradeRange(const unsigned int grade);
+
+
 	/***** exception ****/
-	class GradeTooLowException : public std::exception {
+	class GradeTooLowException : public std::out_of_range {
 	public:
-		const char *what() const throw();
+		GradeTooLowException();
 	};
 
-	class GradeTooHighException : public std::exception {
+	class GradeTooHighException : public std::out_of_range {
 	public:
-		const char *what() const throw();
+		GradeTooHighException();
 	};
 };
 

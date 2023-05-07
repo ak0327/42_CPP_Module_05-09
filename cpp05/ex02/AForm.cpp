@@ -3,8 +3,7 @@
 /***** constructor, destructor, copy assignment operator ****/
 
 AForm::AForm() : name_(), signed_(), grade_to_sign_(GRADE_UPPER), grade_to_exec_(GRADE_UPPER) {
-	Bureaucrat::validateGradeRange(getGradeToSign());
-	Bureaucrat::validateGradeRange(getGradeToExec());
+	validateGradeRange(getGradeToSign(), getGradeToExec());
 }
 
 AForm::~AForm() {}
@@ -12,21 +11,19 @@ AForm::~AForm() {}
 AForm::AForm(const AForm &form) : name_(), signed_(), grade_to_sign_(GRADE_UPPER), grade_to_exec_(GRADE_UPPER)  {
 	*this = form;
 
-	Bureaucrat::validateGradeRange(getGradeToSign());
-	Bureaucrat::validateGradeRange(getGradeToExec());
+	validateGradeRange(getGradeToSign(), getGradeToExec());
 }
 
 AForm::AForm(const std::string &name,
 		   const bool signed_,
 		   const unsigned int grade_to_sign,
 		   const unsigned int grade_to_exec) :
-		   name_(name),
-		   signed_(signed_),
-		   grade_to_sign_(grade_to_sign),
-		   grade_to_exec_(grade_to_exec) {
+		name_(name),
+		signed_(signed_),
+		grade_to_sign_(grade_to_sign),
+		grade_to_exec_(grade_to_exec) {
 
-	Bureaucrat::validateGradeRange(getGradeToSign());
-	Bureaucrat::validateGradeRange(getGradeToExec());
+	validateGradeRange(getGradeToSign(), getGradeToExec());
 }
 
 AForm &AForm::operator=(const AForm &form) {
@@ -36,26 +33,41 @@ AForm &AForm::operator=(const AForm &form) {
 		setGradeToSign(form.getGradeToSign());
 		setGradeToExec(form.getGradeToExec());
 
-		Bureaucrat::validateGradeRange(getGradeToSign());
-		Bureaucrat::validateGradeRange(getGradeToExec());
+		validateGradeRange(getGradeToSign(), getGradeToExec());
 	}
 	return *this;
 }
 
-/***** sign by bureaucrat ****/
-void AForm::beSigned(Bureaucrat &bureaucrat) {
-	validateBureaucratSignableToForm(bureaucrat);
-	bureaucrat.signForm(*this);
+
+/***** sign by signer ****/
+void AForm::beSigned(Bureaucrat &signer) {
+	validateSignerGrade(signer);
+	setSigned(true);
+//	signer.signForm(*this);
 }
 
+
 /***** validate ****/
-void AForm::validateBureaucratSignableToForm(const Bureaucrat &bureaucrat) {
-	if (getGradeToSign() <= bureaucrat.getGrade() &&\
-		bureaucrat.getGrade() <= getGradeToExec()) {
+// grade to sign/exec must in range of bureaucrat's one
+void AForm::validateGradeRange(const unsigned int grade_to_sign,
+							   const unsigned int grade_to_exec) {
+	Bureaucrat::validateGradeRange(grade_to_sign);
+	Bureaucrat::validateGradeRange(grade_to_exec);
+}
+
+void AForm::validateSignerGrade(const Bureaucrat &signer) const {
+	if (signer.getGrade() <= getGradeToSign()) {
 		return ;
 	}
-	if (bureaucrat.getGrade() < getGradeToSign()) {
-		throw AForm::GradeTooHighException();
+	throw AForm::GradeTooLowException();
+}
+
+void AForm::validateExecutorGrade(const Bureaucrat &executor) const {
+	if (getSigned() && executor.getGrade() <= getGradeToExec()) {
+		return ;
+	}
+	if (!getSigned()) {
+		throw AForm::UnsignedException();
 	}
 	throw AForm::GradeTooLowException();
 }
@@ -90,22 +102,24 @@ void AForm::setGradeToExec(const unsigned int grade_to_exec) {
 
 
 /***** exception ****/
-const char *AForm::GradeTooLowException::what() const throw() {
-	return COLOR_RED"[AForm Error] Grade too Low to sign"COLOR_RESET;
-}
+AForm::GradeTooLowException::GradeTooLowException() :
+		std::out_of_range(COLOR_RED"Grade too LOW X("COLOR_RESET) {}
 
-const char *AForm::GradeTooHighException::what() const throw() {
-	return COLOR_RED"[AForm Error] Grade too High to sign"COLOR_RESET;
-}
+AForm::GradeTooHighException::GradeTooHighException() :
+		std::out_of_range(COLOR_RED"Grade too HIGH :o"COLOR_RESET) {}
+
+AForm::UnsignedException::UnsignedException() :
+		std::out_of_range(COLOR_RED"Form NOT SIGNED :<"COLOR_RESET) {}
 
 
 
 /***** overload of the operator ****/
 std::ostream &operator<<(std::ostream &os, const AForm &form) {
-	os << COLOR_YELLOW << "[AForm info:" << form.getName() <<
-	   ", signed:" << (form.getSigned() ? "true" : "false") <<
-	   ", grade to sign:" << form.getGradeToSign() <<
-	   ", grade to exec" << form.getGradeToExec() <<
-	   "]" << COLOR_RESET;
+	os << COLOR_YELLOW <<
+	   "### AForm info:: Name:[" << form.getName() <<
+	   "], signed:[" << (form.getSigned() ? "✓" : " ") <<
+	   "], grade to sign:[" << form.getGradeToSign() <<
+	   "], grade to exec:[" << form.getGradeToExec() <<
+	   "] ###" << COLOR_RESET;
 	return os;
 }

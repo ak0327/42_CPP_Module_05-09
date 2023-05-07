@@ -1,5 +1,39 @@
 #pragma once
 
-class ShrubberyCreationForm {
+#include <fstream>
+#include "AForm.hpp"
+
+// Required grades: sign 145, exec 137
+// Create a file <target>_shrubbery in the working directory, and writes ASCII trees inside it.
+
+// take only one parameter in their constructor: the target of the form.
+
+class ShrubberyCreationForm : public AForm {
+private:
+	const std::string	target_;
+
+
+	/***** constructor ****/
+	ShrubberyCreationForm();
+
+	/***** create file ****/
+	void createShrubberyFile() const;
+
+	/***** validate target name ****/
+	void validateTargetName() const;
+
+public:
+
+	/***** constructor, destructor, copy assignment operator ****/
+	ShrubberyCreationForm(const std::string &target);
+	~ShrubberyCreationForm();
+
+
+	/***** getter ****/
+	const std::string &getTarget() const;
+
+	/***** execute ****/
+	virtual void execute(const Bureaucrat &executor) const ;
 
 };
+

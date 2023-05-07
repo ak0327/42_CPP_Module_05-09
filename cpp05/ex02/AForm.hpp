@@ -19,8 +19,14 @@ class AForm {
 private:
 	const std::string	name_;
 	bool				signed_;
-	const unsigned int	grade_to_sign_;
-	const unsigned int	grade_to_exec_;
+	const unsigned int	grade_to_sign_; //needed??
+	const unsigned int	grade_to_exec_; //needed??
+
+
+	/***** setter ****/
+	void setGradeToSign(const unsigned int grade_to_sign);
+	void setGradeToExec(const unsigned int grade_to_exec);
+
 
 public:
 	/***** constructor, destructor, copy assignment operator ****/
@@ -28,47 +34,57 @@ public:
 	AForm(const AForm &form);
 	AForm(const std::string &name,
 		 const bool signed_,
-		 const unsigned int upper_grade,
-		 const unsigned int lower_grade);
-	~AForm();
+		 const unsigned int grade_to_sign,
+		 const unsigned int grade_to_exec);
+	virtual ~AForm();
 	AForm &operator=(const AForm &form);
+
+
+
+	/***** sign by signer ****/
+	void beSigned(Bureaucrat &signer);
+
+	/***** execute bu executor ****/
+	virtual void execute(const Bureaucrat &executor) const = 0;
+
+
+	/***** validate ****/
+	void validateGradeRange(const unsigned int grade_to_sign, const unsigned int grade_to_exec);
+	virtual void validateSignerGrade(const Bureaucrat &signer) const;
+	virtual void validateExecutorGrade(const Bureaucrat &executor) const;
 
 
 	/***** getter, setter ****/
 	// name
-	const std::string &getName() const;
+	virtual const std::string &getName() const;
 	void setName(const std::string &name);
 
 	// signed
-	bool getSigned() const;
+	virtual bool getSigned() const;
 	void setSigned(const bool is_signed);
 
 	// grade_to_sign
-	unsigned int getGradeToSign() const;
-	void setGradeToSign(const unsigned int grade_to_sign);
+	virtual unsigned int getGradeToSign() const;
 
 	// grade_to_exex
-	unsigned int getGradeToExec() const;
-	void setGradeToExec(const unsigned int grade_to_exec);
+	virtual unsigned int getGradeToExec() const;
 
-
-	/***** sign by bureaucrat ****/
-	void beSigned(Bureaucrat &bureaucrat);
-
-	/***** validate ****/
-	void validateBureaucratSignableToForm(const Bureaucrat &bureaucrat);
-	void validateGradeRange(const unsigned int upper, const unsigned int lower);
 
 
 	/***** exception ****/
-	class GradeTooLowException : public std::exception {
+	class GradeTooLowException : public std::out_of_range {
 	public:
-		const char *what() const throw();
+		GradeTooLowException();
 	};
 
-	class GradeTooHighException : public std::exception {
+	class GradeTooHighException : public std::out_of_range {
 	public:
-		const char *what() const throw();
+		GradeTooHighException();
+	};
+
+	class UnsignedException : public std::out_of_range {
+	public:
+		UnsignedException();
 	};
 
 };
