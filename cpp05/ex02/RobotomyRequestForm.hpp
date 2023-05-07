@@ -32,7 +32,7 @@ private:
 public:
 	/***** constructor, destructor, copy assignment operator ****/
 	RobotomyRequestForm(const std::string &target);
-	~RobotomyRequestForm();
+	virtual ~RobotomyRequestForm();
 
 	/***** getter ****/
 	const std::string &getTarget() const;

@@ -58,7 +58,7 @@ public:
 
 	/***** validate grade range ****/
 	// use in validation of Form grade
-	static void validateGradeRange(const unsigned int grade);
+	static void assertGradeRange(const unsigned int grade);
 
 
 	/***** exception ****/

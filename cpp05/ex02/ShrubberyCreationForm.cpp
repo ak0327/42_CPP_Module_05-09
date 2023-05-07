@@ -11,7 +11,7 @@ ShrubberyCreationForm::~ShrubberyCreationForm() {}
 ShrubberyCreationForm::ShrubberyCreationForm(const std::string &target) :
 		AForm("ShrubberyCreationForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC),
 		target_(target) {
-	validateTargetName();
+	assertTargetName();
 }
 
 
@@ -20,7 +20,7 @@ const std::string &ShrubberyCreationForm::getTarget() const { return target_; }
 
 
 /***** validate target name ****/
-void ShrubberyCreationForm::validateTargetName() const {
+void ShrubberyCreationForm::assertTargetName() const {
 	if (getTarget().empty()) {
 		throw std::invalid_argument("[Error] Target Name invalid");
 	}
@@ -29,7 +29,7 @@ void ShrubberyCreationForm::validateTargetName() const {
 
 /***** execute ****/
 void ShrubberyCreationForm::execute(const Bureaucrat &executor) const {
-	validateExecutorGrade(executor);
+	assertExecutorGrade(executor);
 	createShrubberyFile();
 }
 
@@ -40,7 +40,7 @@ void ShrubberyCreationForm::createShrubberyFile() const {
 
 	ofs.open(getTarget(), std::ofstream::out | std::ofstream::trunc);
 	if (!ofs) {
-		throw std::invalid_argument("[Error]filename invalid");
+		throw std::invalid_argument("[Error] file can't open");
 	}
 
 	ofs <<

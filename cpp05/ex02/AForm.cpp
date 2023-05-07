@@ -3,7 +3,7 @@
 /***** constructor, destructor, copy assignment operator ****/
 
 AForm::AForm() : name_(), signed_(), grade_to_sign_(GRADE_UPPER), grade_to_exec_(GRADE_UPPER) {
-	validateGradeRange(getGradeToSign(), getGradeToExec());
+	assertGradeRange(getGradeToSign(), getGradeToExec());
 }
 
 AForm::~AForm() {}
@@ -11,7 +11,7 @@ AForm::~AForm() {}
 AForm::AForm(const AForm &form) : name_(), signed_(), grade_to_sign_(GRADE_UPPER), grade_to_exec_(GRADE_UPPER)  {
 	*this = form;
 
-	validateGradeRange(getGradeToSign(), getGradeToExec());
+	assertGradeRange(getGradeToSign(), getGradeToExec());
 }
 
 AForm::AForm(const std::string &name,
@@ -23,7 +23,7 @@ AForm::AForm(const std::string &name,
 		grade_to_sign_(grade_to_sign),
 		grade_to_exec_(grade_to_exec) {
 
-	validateGradeRange(getGradeToSign(), getGradeToExec());
+	assertGradeRange(getGradeToSign(), getGradeToExec());
 }
 
 AForm &AForm::operator=(const AForm &form) {
@@ -33,7 +33,7 @@ AForm &AForm::operator=(const AForm &form) {
 		setGradeToSign(form.getGradeToSign());
 		setGradeToExec(form.getGradeToExec());
 
-		validateGradeRange(getGradeToSign(), getGradeToExec());
+		assertGradeRange(getGradeToSign(), getGradeToExec());
 	}
 	return *this;
 }
@@ -41,7 +41,7 @@ AForm &AForm::operator=(const AForm &form) {
 
 /***** sign by signer ****/
 void AForm::beSigned(Bureaucrat &signer) {
-	validateSignerGrade(signer);
+	assertSignerGrade(signer);
 	setSigned(true);
 //	signer.signForm(*this);
 }
@@ -49,20 +49,20 @@ void AForm::beSigned(Bureaucrat &signer) {
 
 /***** validate ****/
 // grade to sign/exec must in range of bureaucrat's one
-void AForm::validateGradeRange(const unsigned int grade_to_sign,
-							   const unsigned int grade_to_exec) {
-	Bureaucrat::validateGradeRange(grade_to_sign);
-	Bureaucrat::validateGradeRange(grade_to_exec);
+void AForm::assertGradeRange(const unsigned int grade_to_sign,
+							 const unsigned int grade_to_exec) {
+	Bureaucrat::assertGradeRange(grade_to_sign);
+	Bureaucrat::assertGradeRange(grade_to_exec);
 }
 
-void AForm::validateSignerGrade(const Bureaucrat &signer) const {
+void AForm::assertSignerGrade(const Bureaucrat &signer) const {
 	if (signer.getGrade() <= getGradeToSign()) {
 		return ;
 	}
 	throw AForm::GradeTooLowException();
 }
 
-void AForm::validateExecutorGrade(const Bureaucrat &executor) const {
+void AForm::assertExecutorGrade(const Bureaucrat &executor) const {
 	if (getSigned() && executor.getGrade() <= getGradeToExec()) {
 		return ;
 	}

@@ -28,7 +28,7 @@ void RobotomyRequestForm::validateTargetName() const {
 
 /***** execute ****/
 void RobotomyRequestForm::execute(const Bureaucrat &executor) const {
-	validateExecutorGrade(executor);
+	assertExecutorGrade(executor);
 	robotomize();
 }
 
@@ -53,6 +53,5 @@ bool RobotomyRequestForm::isSuccess() const {
 }
 
 int RobotomyRequestForm::calcSuccessProbability() const {
-	std::srand(static_cast<unsigned>(std::time(NULL)));
 	return std::rand() % 101;
 }

@@ -20,13 +20,13 @@ private:
 	void createShrubberyFile() const;
 
 	/***** validate target name ****/
-	void validateTargetName() const;
+	void assertTargetName() const;
 
 public:
 
 	/***** constructor, destructor, copy assignment operator ****/
 	ShrubberyCreationForm(const std::string &target);
-	~ShrubberyCreationForm();
+	virtual ~ShrubberyCreationForm();
 
 
 	/***** getter ****/

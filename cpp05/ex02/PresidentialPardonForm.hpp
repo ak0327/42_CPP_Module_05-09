@@ -25,7 +25,7 @@ public:
 
 	/***** constructor, destructor, copy assignment operator ****/
 	PresidentialPardonForm(const std::string &target);
-	~PresidentialPardonForm();
+	virtual ~PresidentialPardonForm();
 
 
 	/***** getter ****/

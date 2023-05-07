@@ -19,7 +19,7 @@ Bureaucrat::Bureaucrat(const std::string &name,
 		grade_(grade),
 		upper_grade_(GRADE_UPPER),
 		lower_grade_(GRADE_LOWER) {
-	validateGradeRange(grade);
+	assertGradeRange(grade);
 }
 
 Bureaucrat::Bureaucrat(const Bureaucrat &bureaucrat) :
@@ -83,7 +83,7 @@ void Bureaucrat::executeForm(const AForm &form) const {
 
 /***** validate grade range ****/
 // throw exception or try-catch
-void Bureaucrat::validateGradeRange(const unsigned int grade) {
+void Bureaucrat::assertGradeRange(const unsigned int grade) {
 	if (GRADE_UPPER <= grade && grade <= GRADE_LOWER) {
 		return ;
 	}
@@ -98,12 +98,12 @@ void Bureaucrat::validateGradeRange(const unsigned int grade) {
 /***** increment, decrement grade ****/
 void Bureaucrat::incrementGrade() {
 	setGrade(getGrade() - 1);
-	validateGradeRange(getGrade());
+	assertGradeRange(getGrade());
 }
 
 void Bureaucrat::decrementGrade() {
 	setGrade(getGrade() + 1);
-	validateGradeRange(getGrade());
+	assertGradeRange(getGrade());
 }
 
 

@@ -29,7 +29,7 @@ void PresidentialPardonForm::validateTargetName() const {
 
 /***** execute ****/
 void PresidentialPardonForm::execute(const Bureaucrat &executor) const {
-	validateExecutorGrade(executor);
+	assertExecutorGrade(executor);
 	std::cout << COLOR_MAGENTA << getTarget() <<
 	" has been pardoned by Zaphod Beeblebrox." << COLOR_RESET << std::endl;
 }

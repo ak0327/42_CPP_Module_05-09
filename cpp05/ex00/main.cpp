@@ -23,7 +23,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[2] grade=149" << std::endl;
@@ -42,7 +42,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[3] grade=0" << std::endl;
@@ -53,7 +53,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[4] grade=151" << std::endl;
@@ -64,7 +64,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[5] grade=UINT_MAX" << std::endl;
@@ -75,7 +75,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[6] a:grade=5, b=a" << std::endl;
@@ -95,7 +95,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[7] a:(), ++ && --" << std::endl;
@@ -112,7 +112,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	return 0;
 }

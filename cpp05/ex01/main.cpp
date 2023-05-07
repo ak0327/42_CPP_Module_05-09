@@ -29,7 +29,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << "\n" << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[2] Form[sign=1, exec=3], Bureaucrat[5]" << std::endl;
@@ -43,7 +43,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << "\n" << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[3] Form[sign=150, exec=150]" << std::endl;
@@ -54,7 +54,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << "\n" << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[4] Form[sign=0, exec=1]" << std::endl;
@@ -64,7 +64,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << "\n" << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[5] Form[sign=0, exec=151]" << std::endl;
@@ -75,7 +75,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << "\n" << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[6] Form[sign=151, exec=1]" << std::endl;
@@ -85,7 +85,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << "\n" << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[7] Form[sign=151, exec=151]" << std::endl;
@@ -96,7 +96,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << "\n" << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[8] Form[sign=1, exec=0]" << std::endl;
@@ -116,7 +116,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << "\n" << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[10] Form[sign=1, exec=5]=Form[10, 20], Bure(12)" << std::endl;
@@ -154,7 +154,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << "\n" << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	{
 		std::cout << "[11] FormA[sign=1, exec=5], FormB=Form(FormA), Bure(1)" << std::endl;
@@ -191,7 +191,7 @@ int main() {
 		catch (std::exception const &e) {
 			std::cerr << e.what() << std::endl;
 		}
-		std::cout << "\n" << std::endl;
+		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
 	return 0;
 }

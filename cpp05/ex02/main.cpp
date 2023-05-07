@@ -8,7 +8,10 @@
 #include "PresidentialPardonForm.hpp"
 
 int main() {
-	std::cout << "\n ================ ShrubberyCreationForm ================\n" << std::endl;
+	std::srand(static_cast<unsigned>(std::time(NULL)));
+
+	std::cout << "\n\n #######################################################" << std::endl;
+	std::cout <<     " ================ ShrubberyCreationForm ================\n" << std::endl;
 	{
 		std::cout << "[1] " << std::endl;
 		try {
@@ -106,7 +109,8 @@ int main() {
 		std::cout << "\n-----------------------------------------\n" << std::endl;
 
 	}
-	std::cout << "\n\n ================ RobotomyRequestForm ================\n" << std::endl;
+	std::cout << "\n\n #####################################################" << std::endl;
+	std::cout <<     " ================ RobotomyRequestForm ================\n" << std::endl;
 	{
 		std::cout << "[1] " << std::endl;
 		try {
@@ -220,9 +224,34 @@ int main() {
 		}
 		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
+	{
+		std::cout << "[8] robotomy x 3" << std::endl;
+		try {
+			Bureaucrat bureaucrat1 = Bureaucrat("Mr.White", 1);
+			RobotomyRequestForm form1 = RobotomyRequestForm("hoge");
+			bureaucrat1.signForm(form1);
+			bureaucrat1.executeForm(form1);
+			std::cout << std::endl;
 
+			Bureaucrat bureaucrat2 = Bureaucrat("Mr.White", 1);
+			RobotomyRequestForm form2 = RobotomyRequestForm("huga");
+			bureaucrat2.signForm(form2);
+			bureaucrat2.executeForm(form2);
+			std::cout << std::endl;
 
-	std::cout << "\n\n ================ PresidentialPardonForm ================\n" << std::endl;
+			Bureaucrat bureaucrat3 = Bureaucrat("Mr.White", 1);
+			RobotomyRequestForm form3 = RobotomyRequestForm("piyo");
+			bureaucrat3.signForm(form3);
+			bureaucrat3.executeForm(form3);
+
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
+	}
+	std::cout << "\n\n ########################################################" << std::endl;
+	std::cout <<     " ================ PresidentialPardonForm ================\n" << std::endl;
 
 	{
 		std::cout << "[1] " << std::endl;
@@ -337,7 +366,6 @@ int main() {
 		}
 		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
-
 
 	return 0;
 }

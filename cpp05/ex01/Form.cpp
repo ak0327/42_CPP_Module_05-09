@@ -3,8 +3,8 @@
 /***** constructor, destructor, copy assignment operator ****/
 
 Form::Form() : name_(), signed_(), grade_to_sign_(GRADE_UPPER), grade_to_exec_(GRADE_UPPER) {
-	Bureaucrat::validateGradeRange(getGradeToSign());
-	Bureaucrat::validateGradeRange(getGradeToExec());
+	Bureaucrat::assertGradeRange(getGradeToSign());
+	Bureaucrat::assertGradeRange(getGradeToExec());
 }
 
 Form::~Form() {}
@@ -12,8 +12,8 @@ Form::~Form() {}
 Form::Form(const Form &form) : name_(), signed_(), grade_to_sign_(GRADE_UPPER), grade_to_exec_(GRADE_UPPER)  {
 	*this = form;
 
-	Bureaucrat::validateGradeRange(getGradeToSign());
-	Bureaucrat::validateGradeRange(getGradeToExec());
+	Bureaucrat::assertGradeRange(getGradeToSign());
+	Bureaucrat::assertGradeRange(getGradeToExec());
 }
 
 Form::Form(const std::string &name,
@@ -25,8 +25,8 @@ Form::Form(const std::string &name,
 		   grade_to_sign_(grade_to_sign),
 		   grade_to_exec_(grade_to_exec) {
 
-	Bureaucrat::validateGradeRange(getGradeToSign());
-	Bureaucrat::validateGradeRange(getGradeToExec());
+	Bureaucrat::assertGradeRange(getGradeToSign());
+	Bureaucrat::assertGradeRange(getGradeToExec());
 }
 
 Form &Form::operator=(const Form &form) {
@@ -36,8 +36,8 @@ Form &Form::operator=(const Form &form) {
 		setGradeToSign(form.getGradeToSign());
 		setGradeToExec(form.getGradeToExec());
 
-		Bureaucrat::validateGradeRange(getGradeToSign());
-		Bureaucrat::validateGradeRange(getGradeToExec());
+		Bureaucrat::assertGradeRange(getGradeToSign());
+		Bureaucrat::assertGradeRange(getGradeToExec());
 	}
 	return *this;
 }
@@ -96,10 +96,11 @@ Form::GradeTooHighException::GradeTooHighException() :
 
 /***** overload of the operator ****/
 std::ostream &operator<<(std::ostream &os, const Form &form) {
-	os << COLOR_YELLOW << "### Form info:: Name:[" << form.getName() <<
-	   "], signed:[" << (form.getSigned() ? "true" : "false") <<
-	   "], grade to sign:[" << form.getGradeToSign() <<
-	   "], grade to exec:[" << form.getGradeToExec() <<
-	   "] ###" << COLOR_RESET;
+	os << COLOR_YELLOW <<
+	"### Form info:: Name:[" << form.getName() <<
+	"], signed:[" << (form.getSigned() ? "✓" : " ") <<
+	"], grade to sign:[" << form.getGradeToSign() <<
+	"], grade to exec:[" << form.getGradeToExec() <<
+	"] ###" << COLOR_RESET;
 	return os;
 }

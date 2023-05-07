@@ -35,7 +35,7 @@ public:
 	void incrementGrade();
 	void decrementGrade();
 
-	void validateGradeRange(const unsigned int grade);
+	void assertGradeRange(const unsigned int grade);
 
 
 	/***** exception ****/

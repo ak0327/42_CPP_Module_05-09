@@ -49,9 +49,9 @@ public:
 
 
 	/***** validate ****/
-	void validateGradeRange(const unsigned int grade_to_sign, const unsigned int grade_to_exec);
-	virtual void validateSignerGrade(const Bureaucrat &signer) const;
-	virtual void validateExecutorGrade(const Bureaucrat &executor) const;
+	void assertGradeRange(const unsigned int grade_to_sign, const unsigned int grade_to_exec);
+	virtual void assertSignerGrade(const Bureaucrat &signer) const;
+	virtual void assertExecutorGrade(const Bureaucrat &executor) const;
 
 
 	/***** getter, setter ****/
