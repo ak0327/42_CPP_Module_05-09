@@ -71,6 +71,7 @@ void Bureaucrat::decrementGrade() {
 
 
 /***** validate grade range ****/
+// throw exception or try-catch
 void Bureaucrat::validateGradeRange(const unsigned int grade) {
 	if (GRADE_UPPER <= grade && grade <= GRADE_LOWER) {
 		return ;
@@ -87,7 +88,7 @@ void Bureaucrat::signForm(Form &form) {
 				  form.getName() << " because already signed " << COLOR_RESET << std::endl;
 	} else {
 		std::cout << COLOR_BLUE << this->getName() <<  " signed " <<
-				  getName()  << COLOR_RESET << std::endl;
+				  form.getName()  << COLOR_RESET << std::endl;
 		form.setSigned(true);
 	}
 }

@@ -17,6 +17,13 @@ private:
 	const unsigned int	upper_grade_;
 	const unsigned int	lower_grade_;
 
+
+	/***** setter ****/
+	void setGrade(const unsigned int grade);
+	// upper, lower grade
+	void setUpperGrade(const unsigned int upper);
+	void setLowerGrade(const unsigned int lower);
+
 public:
 	/***** constructor, destructor, copy assignment operator ****/
 	Bureaucrat();
@@ -34,11 +41,6 @@ public:
 
 	// grade
 	unsigned int getGrade() const ;
-	void setGrade(const unsigned int grade);
-
-	// upper, lower grade
-	void setUpperGrade(const unsigned int upper);
-	void setLowerGrade(const unsigned int lower);
 
 
 	/***** increment, decrement grade ****/
@@ -46,12 +48,13 @@ public:
 	void decrementGrade();
 
 
-	/***** validate grade range ****/
-	static void validateGradeRange(const unsigned int grade);
-
-
 	/***** sign form ****/
 	void signForm(Form &form);
+
+
+	/***** validate grade range ****/
+	// use in validation of Form grade
+	static void validateGradeRange(const unsigned int grade);
 
 
 	/***** exception ****/

@@ -50,12 +50,8 @@ void Form::beSigned(Bureaucrat &bureaucrat) {
 
 /***** validate ****/
 void Form::validateBureaucratSignableToForm(const Bureaucrat &bureaucrat) {
-	if (getGradeToSign() <= bureaucrat.getGrade() &&\
-		bureaucrat.getGrade() <= getGradeToExec()) {
+	if (bureaucrat.getGrade() <= getGradeToSign()) {
 		return ;
-	}
-	if (bureaucrat.getGrade() < getGradeToSign()) {
-		throw Form::GradeTooHighException();
 	}
 	throw Form::GradeTooLowException();
 }
@@ -100,10 +96,10 @@ Form::GradeTooHighException::GradeTooHighException() :
 
 /***** overload of the operator ****/
 std::ostream &operator<<(std::ostream &os, const Form &form) {
-	os << COLOR_YELLOW << "[Form info:" << form.getName() <<
-	   ", signed:" << (form.getSigned() ? "true" : "false") <<
-	   ", grade to sign:" << form.getGradeToSign() <<
-	   ", grade to exec" << form.getGradeToExec() <<
-	   "]" << COLOR_RESET;
+	os << COLOR_YELLOW << "### Form info:: Name:[" << form.getName() <<
+	   "], signed:[" << (form.getSigned() ? "true" : "false") <<
+	   "], grade to sign:[" << form.getGradeToSign() <<
+	   "], grade to exec:[" << form.getGradeToExec() <<
+	   "] ###" << COLOR_RESET;
 	return os;
 }

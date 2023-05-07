@@ -22,14 +22,24 @@ private:
 	const unsigned int	grade_to_sign_;
 	const unsigned int	grade_to_exec_;
 
+
+	/***** setter ****/
+	void setGradeToSign(const unsigned int grade_to_sign);
+	void setGradeToExec(const unsigned int grade_to_exec);
+
+
+	/***** validate ****/
+	void validateBureaucratSignableToForm(const Bureaucrat &bureaucrat);
+	void validateGradeRange(const unsigned int upper, const unsigned int lower);
+
 public:
 	/***** constructor, destructor, copy assignment operator ****/
 	Form();
 	Form(const Form &form);
 	Form(const std::string &name,
 		 const bool signed_,
-		 const unsigned int upper_grade,
-		 const unsigned int lower_grade);
+		 const unsigned int grade_to_sign,
+		 const unsigned int grade_to_exec);
 	~Form();
 	Form &operator=(const Form &form);
 
@@ -45,19 +55,13 @@ public:
 
 	// grade_to_sign
 	unsigned int getGradeToSign() const;
-	void setGradeToSign(const unsigned int grade_to_sign);
 
 	// grade_to_exex
 	unsigned int getGradeToExec() const;
-	void setGradeToExec(const unsigned int grade_to_exec);
 
 
 	/***** sign by bureaucrat ****/
 	void beSigned(Bureaucrat &bureaucrat);
-
-	/***** validate ****/
-	void validateBureaucratSignableToForm(const Bureaucrat &bureaucrat);
-	void validateGradeRange(const unsigned int upper, const unsigned int lower);
 
 
 	/***** exception ****/
