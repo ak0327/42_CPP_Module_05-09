@@ -3,25 +3,44 @@
 #define GRADE_TO_SIGN 145
 #define GRADE_TO_EXEC 137
 
+/***** constructor, destructor, copy assignment operator ****/
 ShrubberyCreationForm::ShrubberyCreationForm() :
-		AForm("ShrubberyCreationForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC), target_("hoge") {}
+		AForm("ShrubberyCreationForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC), target_() {}
 
 ShrubberyCreationForm::~ShrubberyCreationForm() {}
 
 ShrubberyCreationForm::ShrubberyCreationForm(const std::string &target) :
 		AForm("ShrubberyCreationForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC),
 		target_(target) {
-	assertTargetName();
+	assertTargetName(target);
+}
+
+ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &form) :
+		AForm("ShrubberyCreationForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC), target_() {
+	*this = form;
+}
+
+ShrubberyCreationForm &ShrubberyCreationForm::operator=(
+		const ShrubberyCreationForm &form) {
+	if (this != &form) {
+
+	}
+	return *this;
 }
 
 
-/***** getter ****/
+/***** getter, setter ****/
 const std::string &ShrubberyCreationForm::getTarget() const { return target_; }
+
+void ShrubberyCreationForm::setTarget(const std::string &target) {
+	assertTargetName(target);
+	const_cast<std::string &>(target_) = target;
+}
 
 
 /***** validate target name ****/
-void ShrubberyCreationForm::assertTargetName() const {
-	if (getTarget().empty()) {
+void ShrubberyCreationForm::assertTargetName(const std::string &target) const {
+	if (target.empty()) {
 		throw std::invalid_argument("[Error] Target Name invalid");
 	}
 }

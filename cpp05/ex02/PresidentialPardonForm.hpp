@@ -11,8 +11,11 @@ class PresidentialPardonForm: public AForm {
 public:
 
 	/***** constructor, destructor, copy assignment operator ****/
+	PresidentialPardonForm();
 	PresidentialPardonForm(const std::string &target);
+	PresidentialPardonForm(const PresidentialPardonForm &form);
 	virtual ~PresidentialPardonForm();
+	PresidentialPardonForm &operator=(const PresidentialPardonForm &form);
 
 
 	/***** getter ****/
@@ -25,12 +28,13 @@ private:
 	const std::string	target_;
 
 
-	/***** constructor ****/
-	PresidentialPardonForm();
+	/***** setter ****/
+	void setTarget(const std::string &target);
+
 
 	/***** pardoned ****/
 	void pardoned() const;
 
 	/***** validate target name ****/
-	void validateTargetName() const;
+	void assertTargetName(const std::string &target) const;
 };

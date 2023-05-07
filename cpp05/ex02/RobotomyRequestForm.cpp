@@ -3,24 +3,43 @@
 #define GRADE_TO_SIGN 72
 #define GRADE_TO_EXEC 45
 
+/***** constructor, destructor, copy assignment operator ****/
 RobotomyRequestForm::RobotomyRequestForm() :
-		AForm("RobotomyRequestForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC), target_("hoge") {}
+		AForm("RobotomyRequestForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC), target_() {}
 
 RobotomyRequestForm::~RobotomyRequestForm() {}
 
 RobotomyRequestForm::RobotomyRequestForm(const std::string &target) :
 		AForm("RobotomyRequestForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC),
 		target_(target) {
-	validateTargetName();
+	assertTargetName(target);
 }
 
-/***** getter ****/
+RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &form) :
+		AForm("RobotomyRequestForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC), target_() {
+	*this = form;
+}
+
+RobotomyRequestForm &RobotomyRequestForm::operator=(
+		const RobotomyRequestForm &form) {
+	if (this != &form) {
+		setTarget(form.getTarget());
+	}
+	return *this;
+}
+
+
+/***** getter, setter ****/
 const std::string &RobotomyRequestForm::getTarget() const { return target_; }
 
+void RobotomyRequestForm::setTarget(const std::string &target) {
+	assertTargetName(target);
+	const_cast<std::string &>(target_) = target;
+}
 
 /***** validate target name ****/
-void RobotomyRequestForm::validateTargetName() const {
-	if (getTarget().empty()) {
+void RobotomyRequestForm::assertTargetName(const std::string &target) const {
+	if (target.empty()) {
 		throw std::invalid_argument("[Error] Target Name invalid");
 	}
 }

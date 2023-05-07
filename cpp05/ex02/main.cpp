@@ -109,6 +109,43 @@ int main() {
 		std::cout << "\n-----------------------------------------\n" << std::endl;
 
 	}
+	{
+		std::cout << "[7] copy" << std::endl;
+		try {
+			std::cout << "formA signed" << std::endl;
+			ShrubberyCreationForm formA = ShrubberyCreationForm();
+			formA.setName("formA");
+			Bureaucrat bureaucrat = Bureaucrat("Maple", 1);
+			bureaucrat.signForm(formA);
+
+			std::cout << "\nformB = Form(formA)" << std::endl;
+			ShrubberyCreationForm formB = ShrubberyCreationForm(formA);
+			formB.setName("formB");
+			std::cout << formA << std::endl;
+			std::cout << formB << std::endl;
+			std::cout << std::endl;
+
+			std::cout << "\nformC = formB" << std::endl;
+			ShrubberyCreationForm formC;
+			formC = formB;
+			formC.setName("formC");
+			std::cout << formA << std::endl;
+			std::cout << formB << std::endl;
+			std::cout << formC << std::endl;
+
+			std::cout << "\nformC signed" << std::endl;
+			bureaucrat.signForm(formC);
+			std::cout << formA << std::endl;
+			std::cout << formB << std::endl;
+			std::cout << formC << std::endl;
+
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
+
+	}
 	std::cout << "\n\n #####################################################" << std::endl;
 	std::cout <<     " ================ RobotomyRequestForm ================\n" << std::endl;
 	{
@@ -250,6 +287,43 @@ int main() {
 		}
 		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
+	{
+		std::cout << "[8] copy" << std::endl;
+		try {
+			std::cout << "formA signed" << std::endl;
+			RobotomyRequestForm formA = RobotomyRequestForm();
+			formA.setName("formA");
+			Bureaucrat bureaucrat = Bureaucrat("Maple", 1);
+			bureaucrat.signForm(formA);
+
+			std::cout << "\nformB = Form(formA)" << std::endl;
+			RobotomyRequestForm formB = RobotomyRequestForm(formA);
+			formB.setName("formB");
+			std::cout << formA << std::endl;
+			std::cout << formB << std::endl;
+			std::cout << std::endl;
+
+			std::cout << "\nformC = formB" << std::endl;
+			RobotomyRequestForm formC;
+			formC = formB;
+			formC.setName("formC");
+			std::cout << formA << std::endl;
+			std::cout << formB << std::endl;
+			std::cout << formC << std::endl;
+
+			std::cout << "\nformC signed" << std::endl;
+			bureaucrat.signForm(formC);
+			std::cout << formA << std::endl;
+			std::cout << formB << std::endl;
+			std::cout << formC << std::endl;
+
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
+
+	}
 	std::cout << "\n\n ########################################################" << std::endl;
 	std::cout <<     " ================ PresidentialPardonForm ================\n" << std::endl;
 
@@ -366,6 +440,43 @@ int main() {
 		}
 		std::cout << "\n-----------------------------------------\n" << std::endl;
 	}
+	{
+		std::cout << "[8] copy" << std::endl;
+		try {
+			std::cout << "formA signed" << std::endl;
+			PresidentialPardonForm formA = PresidentialPardonForm();
+			formA.setName("formA");
+			Bureaucrat bureaucrat = Bureaucrat("Maple", 1);
+			bureaucrat.signForm(formA);
 
+			std::cout << "\nformB = Form(formA)" << std::endl;
+			PresidentialPardonForm formB = PresidentialPardonForm(formA);
+			formB.setName("formB");
+			std::cout << formA << std::endl;
+			std::cout << formB << std::endl;
+			std::cout << std::endl;
+
+			std::cout << "\nformC = formB" << std::endl;
+			PresidentialPardonForm formC;
+			formC = formB;
+			formC.setName("formC");
+			std::cout << formA << std::endl;
+			std::cout << formB << std::endl;
+			std::cout << formC << std::endl;
+
+			std::cout << "\nformC signed" << std::endl;
+			bureaucrat.signForm(formC);
+			std::cout << formA << std::endl;
+			std::cout << formB << std::endl;
+			std::cout << formC << std::endl;
+
+		}
+		catch (std::exception const &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << "\n-----------------------------------------\n" << std::endl;
+
+	}
+	system("leaks a.out");
 	return 0;
 }

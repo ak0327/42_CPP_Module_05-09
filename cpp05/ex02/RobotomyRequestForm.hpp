@@ -14,8 +14,12 @@
 class RobotomyRequestForm : public AForm {
 public:
 	/***** constructor, destructor, copy assignment operator ****/
+	RobotomyRequestForm();
 	RobotomyRequestForm(const std::string &target);
+	RobotomyRequestForm(const RobotomyRequestForm &form);
 	virtual ~RobotomyRequestForm();
+	RobotomyRequestForm &operator=(const RobotomyRequestForm &form);
+
 
 	/***** getter ****/
 	const std::string &getTarget() const;
@@ -27,8 +31,8 @@ private:
 	const std::string	target_;
 
 
-	/***** constructor ****/
-	RobotomyRequestForm();
+	/***** setter ****/
+	void setTarget(const std::string &target);
 
 
 	/***** execute ****/
@@ -38,5 +42,5 @@ private:
 
 
 	/***** validate target name ****/
-	void validateTargetName() const;
+	void assertTargetName(const std::string &target) const;
 };

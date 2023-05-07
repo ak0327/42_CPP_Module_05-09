@@ -11,8 +11,11 @@
 class ShrubberyCreationForm : public AForm {
 public:
 	/***** constructor, destructor, copy assignment operator ****/
+	ShrubberyCreationForm();
 	ShrubberyCreationForm(const std::string &target);
+	ShrubberyCreationForm(const ShrubberyCreationForm &form);
 	virtual ~ShrubberyCreationForm();
+	ShrubberyCreationForm &operator=(const ShrubberyCreationForm &form);
 
 
 	/***** getter ****/
@@ -24,13 +27,14 @@ public:
 private:
 	const std::string	target_;
 
-	/***** constructor ****/
-	ShrubberyCreationForm();
+
+	/***** setter ****/
+	void setTarget(const std::string &target);
 
 	/***** create file ****/
 	void createShrubberyFile() const;
 
 	/***** validate target name ****/
-	void assertTargetName() const;
+	void assertTargetName(const std::string &target) const;
 };
 
