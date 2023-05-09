@@ -41,7 +41,7 @@ void test(std::string str) {
 
 int main() {
 
-	std::cout << "[SUCCESS]" << std::endl;
+	std::cout << "====================== SUCCESS ======================" << std::endl;
 	test("0");
 	test("nan");
 	test("42.0f");
@@ -56,14 +56,26 @@ int main() {
 	test("-inff");
 	test("nanf");
 	test("   42   ");
+	test(".0");
+	test(".0f");
+	test("0.");
+	test("0.f");
+	test("10000.f");
+	test("10000.00");
+	test("048");
+	test("90.0");
+	test("32.0000f");
+	test("126.0000");
+
 
 	std::cout << "\n\n" << std::endl;
 
-	std::cout << "[NG]" << std::endl;
+	std::cout << "======================  NG ====================== " << std::endl;
 	test("a");
 	test("42.xx");
 	test("");
 	test("INT_MAX");
 
+//	system("leaks convert");
 	return 0;
 }

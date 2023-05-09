@@ -16,8 +16,6 @@ void ScalarConverter::convert(std::string &str) {
 
 	num_str = get_num_str(str);
 
-//	std::cout << "num_str:" << num_str << std::endl;
-
 	convert_to_char(num_str);
 	convert_to_int(num_str);
 	convert_to_float(num_str);
@@ -31,7 +29,6 @@ void ScalarConverter::convert_to_char(std::string &num_str) {
 	bool	is_convert_err;
 
 	int_num = convert_str_to_int(num_str, &is_convert_err);
-//	std::cout << "num_str:" << num_str << ", int_num:" << int_num << ", err:" << std::boolalpha << is_convert_err << std::endl;
 
 	std::cout << std::setw(SETW) << "  char" << ": " << std::ends;
 	chr = static_cast<char>(int_num);
@@ -75,20 +72,13 @@ void	ScalarConverter::convert_to_float(std::string &num_str) {
 	if (num_str[idx]) {
 		std::cout << COLOR_RED"impossible"COLOR_RESET << std::endl;
 	} else {
-		std::cout << float_num << std::ends;
+		std::cout << std::fixed << std::setprecision(1) << float_num << std::ends;
 
 		if (std::isinf(float_num) || std::isnan(float_num)) {
 			std::cout << std::endl;
 			return ;
 		}
-
-		if (count_chr_in_str('.', num_str) == 0) {
-			std::cout << ".0f" << std::endl;
-		} else if (num_str.length() && num_str[num_str.length() - 1] == '.') {
-			std::cout << "0f" << std::endl;
-		} else {
-			std::cout << "f" << std::endl;
-		}
+		std::cout << "f" << std::endl;
 
 	}
 }
@@ -114,19 +104,7 @@ void	ScalarConverter::convert_to_double(std::string &num_str) {
 	if (num_str[idx]) {
 		std::cout << COLOR_RED"impossible"COLOR_RESET << std::endl;
 	} else {
-		std::cout << double_num << "" << std::ends;
-
-		if (std::isinf(double_num) || std::isnan(double_num)) {
-			std::cout << std::endl;
-			return ;
-		}
-
-		if (count_chr_in_str('.', num_str) == 0) {
-			std::cout << ".0" << std::ends;
-		} else if (num_str.length() && num_str[num_str.length() - 1] == '.') {
-			std::cout << "0" << std::ends;
-		}
-		std::cout << std::endl;
+		std::cout << std::fixed << std::setprecision(1) << double_num << std::endl;
 	}
 }
 
@@ -171,7 +149,6 @@ int ScalarConverter::convert_str_to_int(std::string &num_str, bool *err) {
 		return 0;
 	}
 	lnum = std::strtol(num_str.c_str(), &end, 10);
-//	std::cout << "stol : lnum=" << lnum << ", end:" << end << std::endl;
 	if (ft_strlen_ns(end) > 0 && !is_digit_after_decimal_point(end)) {
 		return 0;
 	}
@@ -190,10 +167,10 @@ int ScalarConverter::convert_str_to_int(std::string &num_str, bool *err) {
 
 std::string ScalarConverter::get_num_str(std::string &str) {
 	std::string num_str;
-	std::cout << "get_num_str:: [" << str << "] -> [" << std::ends;
+//	std::cout << "get_num_str:: [" << str << "] -> [" << std::ends;
 	num_str = space_trim(str);
 	num_str = remove_suffix_f(str);
-	std::cout << num_str << "]" << std::endl;
+//	std::cout << num_str << "]" << std::endl;
 	return (num_str);
 }
 
