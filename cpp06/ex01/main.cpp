@@ -29,7 +29,7 @@ int main() {
 
 			Data *data2;
 			std::cout << "===== deserialized : Data *data2 = deserialize(ptr1) =====" << std::endl;
-//			std::cout << " &data2 = " << data2 << " (init)" << std::endl;
+			std::cout << " &data2 = " << data2 << " (init)" << std::endl;
 
 			data2 = Serializer::deserialize(ptr1);
 
