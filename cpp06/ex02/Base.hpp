@@ -1,12 +1,8 @@
 #pragma once
 
+#include <string>
+
 class Base {
 public:
-	~Base();
-
-private:
-
-
-
-
+	virtual ~Base();
 };
