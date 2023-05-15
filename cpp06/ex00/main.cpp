@@ -1,5 +1,8 @@
 #include <iostream>
 #include <string>
+#include <limits>
+#include <float.h>
+
 #include "ScalarConverter.hpp"
 
 /* /////////////////////////
@@ -66,7 +69,12 @@ int main() {
 	test("90.0");
 	test("32.0000f");
 	test("126.0000");
+	test("+123");
+	test("-123");
+	std::cout << std::endl;
 
+	test("2147483647");
+	test("-2147483648");
 
 	std::cout << "\n\n" << std::endl;
 
@@ -75,6 +83,22 @@ int main() {
 	test("42.xx");
 	test("");
 	test("INT_MAX");
+	test(".123.45");
+	test("123,45  +");
+	test("--123");
+	test("- -123");
+	test("-");
+	test("+");
+	test("                   ");
+	test("!");
+	test("*");
+
+	std::cout << "INT_MAX : " << INT_MAX << std::endl;
+	std::cout << "INT_MIN : " << INT_MIN << std::endl;
+	std::cout << "FLT_MAX : " << FLT_MAX << std::endl;
+	std::cout << "FLT_MIN : " << FLT_MIN << std::endl;
+	std::cout << "DBL_MAX : " << DBL_MAX << std::endl;
+	std::cout << "DBL_MIN : " << DBL_MIN << std::endl;
 
 //	system("leaks convert");
 	return 0;
