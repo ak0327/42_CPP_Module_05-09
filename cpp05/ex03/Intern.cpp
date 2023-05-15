@@ -25,7 +25,7 @@ Intern::~Intern() {}
 AForm *Intern::makeForm(const std::string &form_name,
 						const std::string &target) {
 
-	const std::string name = toLower(form_name);
+	const std::string name = stringToLower(form_name);
 	assertFormName(name);
 
 	AForm *form;
@@ -65,14 +65,14 @@ void Intern::assertFormName(const std::string &form_name) const {
 	throw std::invalid_argument(COLOR_RED"[Error] Form name invalid"COLOR_RESET);
 }
 
-std::string Intern::toLower(const std::string &str) const {
+std::string Intern::stringToLower(const std::string &str) const {
 	std::string ret = "";
 
 	for (size_t i=0; i<str.length(); i++) {
 		if ('A' <= str[i] && str[i] <= 'Z') {
 			ret += str[i] - 'A' + 'a';
 		} else {
-			ret += tolower(str[i]);
+			ret += std::tolower(str[i]);
 		}
 	}
 	return ret;
