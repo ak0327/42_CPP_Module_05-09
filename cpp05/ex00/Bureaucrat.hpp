@@ -1,27 +1,21 @@
 #pragma once
 
-#include <iostream>
-#include <string>
+# include <iostream>
+# include <string>
 
-#define GRADE_UPPER	1
-#define GRADE_LOWER	150
-#define INIT_NAME	"InitName"
-#define INIT_GRADE	150
+# define GRADE_UPPER	1
+# define GRADE_LOWER	150
+# define INIT_GRADE		150
+# define INIT_NAME		"InitName"
 
 class Bureaucrat {
-private:
-	const std::string	name_;
-	unsigned int		grade_;
-	const unsigned int	upper_grade_;
-	const unsigned int	lower_grade_;
-
-public:
+ public:
 	Bureaucrat();
-	Bureaucrat(const Bureaucrat &bureaucrat);
+	Bureaucrat(const Bureaucrat &other);
 	Bureaucrat(const std::string &name, const unsigned int grade);
 	~Bureaucrat();
 
-	Bureaucrat &operator=(const Bureaucrat &bureaucrat);
+	Bureaucrat &operator=(const Bureaucrat &lhs);
 
 	// getter, setter
 	const std::string &getName() const ;
@@ -35,20 +29,24 @@ public:
 	void incrementGrade();
 	void decrementGrade();
 
-	void assertGradeRange(const unsigned int grade);
+ private:
+	std::string		name_;
+	unsigned int	grade_;
+	unsigned int	upper_grade_;
+	unsigned int	lower_grade_;
 
+	void assertGradeRange(const unsigned int grade);
 
 	/***** exception ****/
 	class GradeTooLowException : public std::out_of_range {
-	public:
+	 public:
 		GradeTooLowException();
 	};
 
 	class GradeTooHighException : public std::out_of_range {
-	public:
+	 public:
 		GradeTooHighException();
 	};
-
 };
 
 // overload of the insertion << operator
