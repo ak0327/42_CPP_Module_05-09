@@ -3,9 +3,14 @@
 # include <iostream>
 # include <string>
 
-# define GRADE_UPPER	1
-# define GRADE_LOWER	150
-# define INIT_GRADE		150
+# define COLOR_RED		"\x1b[31m"
+# define COLOR_GREEN	"\x1b[32m"
+# define COLOR_YELLOW	"\x1b[33m"
+# define COLOR_BLUE		"\x1b[34m"
+# define COLOR_MAGENTA	"\x1b[35m"
+# define COLOR_CYAN		"\x1b[36m"
+# define COLOR_RESET	"\x1b[0m"
+
 # define INIT_NAME		"InitName"
 
 class Bureaucrat {
@@ -21,21 +26,10 @@ class Bureaucrat {
 	const std::string &getName() const ;
 	void setName(const std::string &name);
 	unsigned int getGrade() const ;
-	void setGrade(const unsigned int grade);
-	void setUpperGrade(const unsigned int upper);
-	void setLowerGrade(const unsigned int lower);
 
 	// two member functions to increment or decrement the bureaucrat grade.
 	void incrementGrade();
 	void decrementGrade();
-
- private:
-	std::string		name_;
-	unsigned int	grade_;
-	unsigned int	upper_grade_;
-	unsigned int	lower_grade_;
-
-	void assertGradeRange(const unsigned int grade);
 
 	/***** exception ****/
 	class GradeTooLowException : public std::out_of_range {
@@ -47,6 +41,15 @@ class Bureaucrat {
 	 public:
 		GradeTooHighException();
 	};
+
+ private:
+	const std::string	name_;
+	unsigned int		grade_;
+	static const int	GRADE_UPPER_ = 1;
+	static const int	GRADE_LOWER_ = 150;
+
+	void assertGradeRange(const unsigned int grade);
+	void setGrade(const unsigned int grade);
 };
 
 // overload of the insertion << operator
