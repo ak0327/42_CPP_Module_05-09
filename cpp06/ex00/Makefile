@@ -1,7 +1,11 @@
 NAME		= convert
 
-CC			= c++
-CXXFLAGS	= -Wall -Wextra -Werror -std=c++98 -MMD -MP
+CXX			= c++
+CXXFLAGS	= -Wall -Wextra -Werror -std=c++11 -MMD -MP -pedantic
+
+ifdef WITH_DEBUG
+	CXXFLAGS += -D DEBUG
+endif
 
 SRCS		= main.cpp \
 			  ScalarConverter.cpp
@@ -17,11 +21,11 @@ DEPS		= $(OBJS:%.o=%.d)
 all	: $(NAME)
 
 $(NAME)	: $(OBJS)
-	$(CC) $(CXXFLAGS) -o $@ $^
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 $(OBJ_DIR)/%.o	: %.cpp
 	@mkdir -p $$(dirname $@)
-	$(CC) $(CXXFLAGS) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 clean	:
 	rm -rf $(OBJ_DIR)
@@ -31,9 +35,12 @@ fclean	: clean
 
 re		: fclean all
 
-run		: re
+debug	:
+	make re WITH_DEBUG=1
+
+run		: debug
 	./$(NAME)
 
-.PHONY	: all clean fclean re run
+.PHONY	: all clean fclean re debug run
 
 -include $(DEPS)
