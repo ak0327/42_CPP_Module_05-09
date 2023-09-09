@@ -1,29 +1,33 @@
+#include <string>
 #include "PresidentialPardonForm.hpp"
 
-#define GRADE_TO_SIGN 25
-#define GRADE_TO_EXEC 5
+#define INIT_PRESIDENTIAL_TARGET	"init_target"
+#define INIT_PRESIDENTIAL_FORM_NAME	"PresidentialPardonForm"
 
+/***** constructor, destructor, copy assignment operator ****/
 PresidentialPardonForm::PresidentialPardonForm() :
-		AForm("PresidentialPardonForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC), target_() {}
+		AForm(INIT_PRESIDENTIAL_FORM_NAME, false, GRADE_TO_SIGN_, GRADE_TO_EXEC_),
+		target_(INIT_PRESIDENTIAL_TARGET) {}
 
 PresidentialPardonForm::~PresidentialPardonForm() {}
 
 PresidentialPardonForm::PresidentialPardonForm(const std::string &target) :
-		AForm("PresidentialPardonForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC),
+		AForm(INIT_PRESIDENTIAL_FORM_NAME, false, GRADE_TO_SIGN_, GRADE_TO_EXEC_),
 		target_(target) {
+
 	assertTargetName(getTarget());
 }
 
-PresidentialPardonForm::PresidentialPardonForm( const PresidentialPardonForm &form) :
-		AForm("PresidentialPardonForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC), target_() {
-	*this = form;
-}
+PresidentialPardonForm::PresidentialPardonForm(const PresidentialPardonForm &other) :
+		AForm(other),
+		target_(other.getTarget()) {}
 
-PresidentialPardonForm &PresidentialPardonForm::operator=(
-		const PresidentialPardonForm &form) {
-	if (this != &form) {
-		setTarget(form.getTarget());
+PresidentialPardonForm &PresidentialPardonForm::operator=(const PresidentialPardonForm &rhs) {
+	if (this == &rhs) {
+		return *this;
 	}
+	AForm::operator=(rhs);
+	target_ = rhs.getTarget();
 	return *this;
 }
 
