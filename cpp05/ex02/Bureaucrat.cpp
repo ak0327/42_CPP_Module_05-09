@@ -1,123 +1,121 @@
 #include "Bureaucrat.hpp"
 
-#define COLOR_RED		"\x1b[31m"
-#define COLOR_GREEN		"\x1b[32m"
-#define COLOR_YELLOW	"\x1b[33m"
-#define COLOR_BLUE		"\x1b[34m"
-#define COLOR_MAGENTA	"\x1b[35m"
-#define COLOR_CYAN		"\x1b[36m"
-#define COLOR_RESET		"\x1b[0m"
-
 /***** constructor, destructor, copy assignment operator ****/
-Bureaucrat::Bureaucrat() : name_(), grade_(), upper_grade_(GRADE_UPPER), lower_grade_(GRADE_LOWER) {}
+Bureaucrat::Bureaucrat() : name_(INIT_NAME),
+						   grade_(GRADE_LOWER_) {}
+
+
+Bureaucrat::Bureaucrat(const std::string &name,
+					   const unsigned int grade) : name_(name),
+												   grade_(GRADE_LOWER_) {
+
+	assertGradeRange(grade);
+	setGrade(grade);
+}
+
+Bureaucrat::Bureaucrat(const Bureaucrat &other) : name_(other.getName()),
+												grade_(other.getGrade()) {
+	assertGradeRange(this->getGrade());
+}
 
 Bureaucrat::~Bureaucrat() {}
 
-Bureaucrat::Bureaucrat(const std::string &name,
-					   const unsigned int grade) :
-		name_(name),
-		grade_(grade),
-		upper_grade_(GRADE_UPPER),
-		lower_grade_(GRADE_LOWER) {
-	assertGradeRange(grade);
-}
-
-Bureaucrat::Bureaucrat(const Bureaucrat &bureaucrat) :
-		name_(), grade_(), upper_grade_(GRADE_UPPER), lower_grade_(GRADE_LOWER) {
-	*this = bureaucrat;
-}
-
-Bureaucrat &Bureaucrat::operator=(const Bureaucrat &bureaucrat) {
-	if (this != &bureaucrat) {
-		setName(bureaucrat.getName());
-		setGrade(bureaucrat.getGrade());
-		setUpperGrade(GRADE_UPPER);
-		setLowerGrade(GRADE_LOWER);
+Bureaucrat &Bureaucrat::operator=(const Bureaucrat &rhs) {
+	if (this == &rhs) {
+		return *this;
 	}
+	setName(rhs.getName());
+	setGrade(rhs.getGrade());
+
+	assertGradeRange(this->getGrade());
 	return *this;
 }
 
 
 /***** getter, setter ****/
 // name
-void Bureaucrat::setName(const std::string &name) { const_cast<std::string &>(name_) = name; }
+void Bureaucrat::setName(const std::string &name) {
+	const_cast<std::string &>(name_) = name;
+}
 const std::string &Bureaucrat::getName() const { return name_; }
 
 // grade
 void Bureaucrat::setGrade(const unsigned grade) { grade_ = grade; }
 unsigned int Bureaucrat::getGrade() const { return grade_; }
 
-// upper
-void Bureaucrat::setUpperGrade(const unsigned int upper) {
-	const_cast<unsigned int&>(upper_grade_) = upper;
+
+/***** increment, decrement grade ****/
+// Grade (num of grade: upper < lower)
+//  upper|-------------- ... --------------|lower
+//         << increment       decrement >>
+void Bureaucrat::incrementGrade() {
+	unsigned int new_grade = getGrade() - 1;
+
+	assertGradeRange(new_grade);
+	setGrade(new_grade);
 }
 
-// lower
-void Bureaucrat::setLowerGrade(const unsigned int lower) {
-	const_cast<unsigned int&>(lower_grade_) = lower;
+void Bureaucrat::decrementGrade() {
+	unsigned int new_grade = getGrade() + 1;
+
+	assertGradeRange(new_grade);
+	setGrade(new_grade);
+}
+
+
+/***** validate grade range ****/
+void Bureaucrat::assertGradeRange(unsigned int grade) {
+	if (grade < GRADE_UPPER_) {
+		throw Bureaucrat::GradeTooHighException();
+	}
+	if (GRADE_LOWER_ < grade) {
+		throw Bureaucrat::GradeTooLowException();
+	}
 }
 
 
 /***** sign form ****/
-void Bureaucrat::signForm(AForm &form) {
-
+void Bureaucrat::signForm(AForm &form) const {
 	if (form.getSigned()) {
-		std::cout << COLOR_RED << this->getName() <<  " couldn’t sign " <<
-				  form.getName() << " because already signed " << COLOR_RESET << std::endl;
+		std::cout << COLOR_RED << "[Info] " <<
+		this->getName() << " couldn’t sign " << form.getName() << " because already signed " <<
+		COLOR_RESET << std::endl;
 	} else {
-		std::cout << COLOR_BLUE << this->getName() <<  " signed " <<
-				  form.getName()  << COLOR_RESET << std::endl;
+		std::cout << COLOR_BLUE <<
+		this->getName() << " signing by " << form.getName() << "..." <<
+		COLOR_RESET << std::endl;
 		form.beSigned(*this);
+		std::cout << COLOR_BLUE <<
+		this->getName() << " signed " << form.getName() <<
+		COLOR_RESET << std::endl;
 	}
 }
 
 
 /***** execute form ****/
 void Bureaucrat::executeForm(const AForm &form) const {
-	std::cout << COLOR_CYAN << this->getName() <<  " executed " <<
-			  form.getName() << COLOR_RESET << std::endl;
+	std::cout << COLOR_CYAN <<
+	this->getName() <<  " executing by " << form.getName() << "..." <<
+	COLOR_RESET << std::endl;
 	form.execute(*this);
-}
-
-
-
-/***** validate grade range ****/
-// throw exception or try-catch
-void Bureaucrat::assertGradeRange(const unsigned int grade) {
-	if (GRADE_UPPER <= grade && grade <= GRADE_LOWER) {
-		return ;
-	}
-	if (grade < 1) {
-		throw Bureaucrat::GradeTooHighException();
-	}
-	throw Bureaucrat::GradeTooLowException();
-}
-
-
-
-/***** increment, decrement grade ****/
-void Bureaucrat::incrementGrade() {
-	setGrade(getGrade() - 1);
-	assertGradeRange(getGrade());
-}
-
-void Bureaucrat::decrementGrade() {
-	setGrade(getGrade() + 1);
-	assertGradeRange(getGrade());
+	std::cout << COLOR_CYAN <<
+	this->getName() <<  " executed " << form.getName() <<
+	COLOR_RESET << std::endl;
 }
 
 
 /***** exception ****/
 Bureaucrat::GradeTooLowException::GradeTooLowException() :
-		std::out_of_range(COLOR_RED"Grade too Low X("COLOR_RESET) {}
+		std::out_of_range(COLOR_RED "Grade too Low X(" COLOR_RESET) {}
 
 Bureaucrat::GradeTooHighException::GradeTooHighException() :
-		std::out_of_range(COLOR_RED"Grade too High :o"COLOR_RESET) {}
+		std::out_of_range(COLOR_RED "Grade too High :o" COLOR_RESET) {}
 
 
-
-/***** overload of the insertion << operator ****/
+// overload of the insertion << operator
 std::ostream &operator<<(std::ostream &os, const Bureaucrat &bureaucrat) {
-	os << COLOR_GREEN << bureaucrat.getName() << ", bureaucrat grade " << bureaucrat.getGrade() << COLOR_RESET;
+	os << COLOR_GREEN <<
+	bureaucrat.getName() << ", bureaucrat grade " << bureaucrat.getGrade() <<
+	COLOR_RESET;
 	return os;
 }

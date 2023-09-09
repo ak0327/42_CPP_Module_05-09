@@ -1,30 +1,32 @@
 #include "RobotomyRequestForm.hpp"
 
-#define GRADE_TO_SIGN 72
-#define GRADE_TO_EXEC 45
+#define INIT_ROBOTOMY_TARGET	"init_target"
+#define INIT_ROBOTOMY_FORM_NAME	"RobotomyRequestForm"
 
 /***** constructor, destructor, copy assignment operator ****/
 RobotomyRequestForm::RobotomyRequestForm() :
-		AForm("RobotomyRequestForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC), target_() {}
+		AForm(INIT_ROBOTOMY_FORM_NAME, false, GRADE_TO_SIGN_, GRADE_TO_EXEC_),
+		target_(INIT_ROBOTOMY_TARGET) {}
 
 RobotomyRequestForm::~RobotomyRequestForm() {}
 
 RobotomyRequestForm::RobotomyRequestForm(const std::string &target) :
-		AForm("RobotomyRequestForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC),
+		AForm(INIT_ROBOTOMY_FORM_NAME, false, GRADE_TO_SIGN_, GRADE_TO_EXEC_),
 		target_(target) {
+
 	assertTargetName(target);
 }
 
-RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &form) :
-		AForm("RobotomyRequestForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC), target_() {
-	*this = form;
-}
+RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &other) :
+		AForm(other),
+		target_(other.getTarget()) {}
 
-RobotomyRequestForm &RobotomyRequestForm::operator=(
-		const RobotomyRequestForm &form) {
-	if (this != &form) {
-		setTarget(form.getTarget());
+RobotomyRequestForm &RobotomyRequestForm::operator=(const RobotomyRequestForm &rhs) {
+	if (this == &rhs) {
+		return *this;
 	}
+	AForm::operator=(rhs);
+	target_ = rhs.getTarget();
 	return *this;
 }
 
@@ -36,6 +38,7 @@ void RobotomyRequestForm::setTarget(const std::string &target) {
 	assertTargetName(target);
 	const_cast<std::string &>(target_) = target;
 }
+
 
 /***** validate target name ****/
 void RobotomyRequestForm::assertTargetName(const std::string &target) const {

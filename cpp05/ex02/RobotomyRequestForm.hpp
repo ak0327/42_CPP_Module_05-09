@@ -1,7 +1,8 @@
 #pragma once
-#include <cstdlib>
-#include <ctime>
-#include "AForm.hpp"
+
+# include <cstdlib>
+# include <ctime>
+# include "AForm.hpp"
 
 // Required grades: sign 72, exec 45
 // Makes some drilling noises.
@@ -10,30 +11,28 @@
 
 // take only one parameter in their constructor: the target of the form.
 
-
 class RobotomyRequestForm : public AForm {
-public:
+ public:
 	/***** constructor, destructor, copy assignment operator ****/
 	RobotomyRequestForm();
 	RobotomyRequestForm(const std::string &target);
-	RobotomyRequestForm(const RobotomyRequestForm &form);
+	RobotomyRequestForm(const RobotomyRequestForm &other);
 	virtual ~RobotomyRequestForm();
-	RobotomyRequestForm &operator=(const RobotomyRequestForm &form);
+	RobotomyRequestForm &operator=(const RobotomyRequestForm &rhs);
 
 
-	/***** getter ****/
+	/***** getter, setter ****/
 	const std::string &getTarget() const;
+	void setTarget(const std::string &target);
+
 
 	/***** execute ****/
 	virtual void execute(const Bureaucrat &executor) const ;
 
-private:
-	const std::string	target_;
-
-
-	/***** setter ****/
-	void setTarget(const std::string &target);
-
+ private:
+	std::string	target_;
+	const static int GRADE_TO_SIGN_ = 72;
+	const static int GRADE_TO_EXEC_ = 45;
 
 	/***** execute ****/
 	void robotomize() const;

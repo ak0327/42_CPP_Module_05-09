@@ -1,30 +1,29 @@
 #include "ShrubberyCreationForm.hpp"
 
-#define GRADE_TO_SIGN 145
-#define GRADE_TO_EXEC 137
-
 /***** constructor, destructor, copy assignment operator ****/
 ShrubberyCreationForm::ShrubberyCreationForm() :
-		AForm("ShrubberyCreationForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC), target_() {}
+		AForm(INIT_SHRUBBERY_FORM_NAME, false, GRADE_TO_SIGN_, GRADE_TO_EXEC_),
+		target_(INIT_SHRUBBERY_TARGET) {}
 
 ShrubberyCreationForm::~ShrubberyCreationForm() {}
 
 ShrubberyCreationForm::ShrubberyCreationForm(const std::string &target) :
-		AForm("ShrubberyCreationForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC),
+		AForm(INIT_SHRUBBERY_FORM_NAME, false, GRADE_TO_SIGN_, GRADE_TO_EXEC_),
 		target_(target) {
+
 	assertTargetName(target);
 }
 
-ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &form) :
-		AForm("ShrubberyCreationForm", false, GRADE_TO_SIGN, GRADE_TO_EXEC), target_() {
-	*this = form;
-}
+ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &other) :
+		AForm(other),
+		target_(other.getTarget()) {}
 
-ShrubberyCreationForm &ShrubberyCreationForm::operator=(
-		const ShrubberyCreationForm &form) {
-	if (this != &form) {
-
+ShrubberyCreationForm &ShrubberyCreationForm::operator=(const ShrubberyCreationForm &rhs) {
+	if (this == &rhs) {
+		return *this;
 	}
+	AForm::operator=(rhs);
+	target_ = rhs.getTarget();
 	return *this;
 }
 
@@ -43,6 +42,9 @@ void ShrubberyCreationForm::assertTargetName(const std::string &target) const {
 	if (target.empty()) {
 		throw std::invalid_argument("[Error] Target Name invalid");
 	}
+	if (target.find('/') != std::string::npos) {
+		throw std::invalid_argument("[Error] Target Name invalid");
+	}
 }
 
 
@@ -56,8 +58,9 @@ void ShrubberyCreationForm::execute(const Bureaucrat &executor) const {
 /***** create file ****/
 void ShrubberyCreationForm::createShrubberyFile() const {
 	std::ofstream ofs;
+	std::string file = this->getTarget() + FILE_NAME_SUFFIX;
 
-	ofs.open(getTarget(), std::ofstream::out | std::ofstream::trunc);
+	ofs.open(file.c_str(), std::ofstream::out | std::ofstream::trunc);
 	if (!ofs) {
 		throw std::invalid_argument("[Error] file can't open");
 	}
@@ -72,9 +75,8 @@ void ShrubberyCreationForm::createShrubberyFile() const {
 	"   `&%\\ ` /%&'    |.|        \\ '|8'\n"
 	"       |o|        | |         | |\n"
 	"       |.|        | |         | |\n"
-	"    \\\\/ ._\\//_/__/  ,\\_//__\\\\/.  \\_//__/_\n"
+	"    \\\\/ ._\\//_/__/  ,\\_//__\\\\/.  \\ ₍ᐞ•༝•ᐞ₎ //__/_\n"
 	"------------------------------------------------\n";
 
 	ofs.close();
 }
-
