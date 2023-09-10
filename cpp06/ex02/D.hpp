@@ -2,7 +2,8 @@
 
 # include "Base.hpp"
 
-class C : public Base {
+class D : public Base {
 public:
-	virtual ~C();
+	virtual ~D();
 };
+

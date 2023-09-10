@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Base.hpp"
+# include "Base.hpp"
 
 class B : public Base {
 public:

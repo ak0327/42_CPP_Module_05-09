@@ -1,13 +1,14 @@
 NAME		= a.out
 
-CC			= c++
-CXXFLAGS	= -Wall -Wextra -Werror -std=c++98
+CXX			= c++
+CXXFLAGS	= -Wall -Wextra -Werror -std=c++98 -MMD -MP -pedantic
 
 SRCS		= main.cpp \
 			  Base.cpp \
 			  A.cpp \
 			  B.cpp \
-			  C.cpp
+			  C.cpp \
+			  D.cpp
 
 OBJ_DIR		= objs
 OBJ			= $(SRCS:%.cpp=%.o)
@@ -19,11 +20,11 @@ DEPS		= $(OBJS:%.o=%.d)
 all		: $(NAME)
 
 $(NAME)	: $(OBJS)
-	$(CC) $(CXXFALGS) -o $@ $^
+	$(CXX) $(CXXFALGS) -o $@ $^
 
 $(OBJ_DIR)/%.o	: %.cpp
 	@mkdir -p $$(dirname $@)
-	$(CC) $(CXXFLAGS) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 clean	:
 	rm -rf $(OBJ_DIR)
