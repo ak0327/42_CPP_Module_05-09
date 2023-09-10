@@ -1,51 +1,71 @@
 #include <iostream>
 #include "Serializer.hpp"
-#include <limits>
 
 int main() {
 	{
 		try {
-			std::cout << "===== initial : Data data1 =====" << std::endl;
-			Data data1;
-			std::cout << " &data1 = " << &data1 << " (init)" << std::endl;
+			std::cout << "===== data -> serialize -> deserialize =====" << std::endl;
 
-			data1.str = "test string";
-			data1.num = 42;
+			std::cout << "1) data" << std::endl;
+			Data src_data = {};
+			src_data.str = "test string";
+			src_data.num = 42;
 
-			std::cout << " &data1 = " << &data1 << std::endl;
-			std::cout << " str    = " << data1.str << std::endl;
-			std::cout << " num    = " << data1.num << std::endl;
+			std::cout << " &src_data = " << &src_data << std::endl;
+			std::cout << " str       = " << src_data.str << std::endl;
+			std::cout << " num       = " << src_data.num << std::endl;
 			std::cout << std::endl;
 
 
-			uintptr_t ptr1 = 0;
-			std::cout << "===== serialized : uintptr_t ptr1 = serialize(&data1) =====" << std::endl;
-			std::cout << " &ptr1  = " << &ptr1 << ", ptr = " << ptr1 << " (init)" <<  std::endl;
-			ptr1 = Serializer::serialize(&data1);
-			std::cout << " &ptr1  = " << &ptr1 << ", ptr = " << ptr1 << " (serialized)" << std::endl;
-			std::cout << "                             " << "0x" << std::hex << ptr1 << std::dec << " (hex)" <<  std::endl;
+			std::cout << "2) serialize data" << std::endl;
+			uintptr_t serialized = 0;
+			std::cout << "2-1) serialized initial value" << std::endl;
+			std::cout << " &serialized  = " << &serialized << std::endl;
+			std::cout << " serialized   = " << serialized << std::endl;
+			std::cout << std::endl;
+
+			serialized = Serializer::serialize(&src_data);
+			std::cout << "2-2) serialized = serialize(&src_data)" << std::endl;
+			std::cout << " &serialized  = " << &serialized << std::endl;
+			std::cout << " serialized   = " << serialized << std::endl;
+			std::cout << "              = " << "0x" << std::hex << serialized << std::dec << std::endl;
 			std::cout << std::endl;
 
 
-			Data *data2;
-			std::cout << "===== deserialized : Data *data2 = deserialize(ptr1) =====" << std::endl;
-			std::cout << " &data2 = " << data2 << " (init)" << std::endl;
+			std::cout << "3) deserialize serialized data" << std::endl;
+			Data *deserialized = NULL;
 
-			data2 = Serializer::deserialize(ptr1);
-
-			std::cout << " &data2 = " << data2 << " (deserialized)" << std::endl;
-			std::cout << " str    = " << data2->str << std::endl;
-			std::cout << " num    = " << data2->num << std::endl;
+			deserialized = Serializer::deserialize(serialized);
+			std::cout << " &deserialized = " << deserialized << std::endl;
+			std::cout << " str           = " << deserialized->str << std::endl;
+			std::cout << " num           = " << deserialized->num << std::endl;
 			std::cout << std::endl;
-
+			std::cout << "&src == deserialized : " << std::boolalpha << (&src_data == deserialized) << std::endl;
 		}
 		catch (const std::exception &e) {
 			std::cerr << e.what() << std::endl;
 		}
 		std::cout << std::endl;
-
 	}
-
-//	system("leaks -q a.out");
+	{
+		try {
+			std::cout << "===== serialize(NULL) =====" << std::endl;
+			Serializer::serialize(NULL);
+		}
+		catch (const std::exception &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << std::endl;
+	}
 	return 0;
 }
+
+#ifdef __APPLE__
+
+__attribute__((destructor))
+static void	destructor(void)
+{
+	system("leaks -q a.out");
+}
+
+#endif

@@ -1,15 +1,11 @@
 #pragma once
 
-#include <string>
-#include <cstdint>
-
-struct Data {
-	std::string	str;
-	int num;
-};
+# include <cstdint>
+# include <string>
+# include "Data.hpp"
 
 class Serializer {
-public:
+ public:
 	//It takes a pointer and converts it to the unsigned integer type uintptr_t
 	static uintptr_t serialize(Data *ptr);
 
