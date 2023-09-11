@@ -10,6 +10,7 @@
 !.gitignore
 !Makefile
 
+intra_*
 /.idea
 /cmake-build-debug
 /**/objs
