@@ -57,9 +57,12 @@ class ScalarConverter {
 
 	static float get_out_of_range_value(const std::string &num_str);
 
-	static bool is_digit_after_decimal_point(const std::string &substr);
+	static bool is_str_inf(const std::string &str);
+	static bool is_str_nan(const std::string &str);
+	static bool is_str_inff(const std::string &str);
+	static bool is_str_nanf(const std::string &str);
+
 	static bool is_head_space(const std::string &num_str);
-	static bool is_valid_fraction(const std::string &num_str);
 	static bool has_negative_exponent(const std::string &num_str);
 	static bool has_valid_exponent(const std::string &num_str);
 	static bool is_hex(const std::string &num_str);

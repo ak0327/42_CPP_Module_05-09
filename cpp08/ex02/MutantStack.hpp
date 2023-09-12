@@ -1,0 +1,8 @@
+//
+// Created by Akira TANIDA on 2023/09/13.
+//
+
+#ifndef CPP08_MUTANTSTACK_HPP
+#define CPP08_MUTANTSTACK_HPP
+
+#endif //CPP08_MUTANTSTACK_HPP

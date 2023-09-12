@@ -1,5 +1,5 @@
-#include <sstream>
 #include <cmath>
+#include <sstream>
 #include "Display.hpp"
 #include "ScalarConverter.hpp"
 
@@ -16,22 +16,22 @@ void ScalarConverter::convert(const std::string &str) {
 
 	switch (type) {
 		case TYPE_CHAR:
-			// std::cout << "TYPE_CHAR" << std::endl;
+			// std::cout << COLOR_GREEN "char" COLOR_RESET << std::endl;
 			chr = convert_to_char(str);
 			display_convert_result(chr);
 			break;
 		case TYPE_INT:
-			// std::cout << "TYPE_INT" << std::endl;
+			// std::cout << COLOR_GREEN "int" COLOR_RESET << std::endl;
 			int_val = convert_to_int(str);
 			display_convert_result(int_val);
 			break;
 		case TYPE_FLOAT:
-			// std::cout << "TYPE_FLOAT" << std::endl;
+			// std::cout << COLOR_GREEN "float" COLOR_RESET << std::endl;
 			float_val = convert_to_float(str);
 			display_convert_result(float_val);
 			break;
 		case TYPE_DOUBLE:
-			// std::cout << "TYPE_DOUBLE" << std::endl;
+			// std::cout << COLOR_GREEN "double" COLOR_RESET << std::endl;
 			double_val = convert_to_double(str);
 			display_convert_result(double_val);
 			break;
@@ -54,6 +54,9 @@ void ScalarConverter::display_impossible() {
 ////////////////////////////////////////////////////////////////////////////////
 
 enum literal_type ScalarConverter::judge_literal_type(const std::string &str) {
+	if (is_head_space(str) || is_hex(str)) {
+		return TYPE_ERROR;
+	}
 	if (is_literal_char(str)) {
 		return TYPE_CHAR;
 	}
@@ -80,13 +83,15 @@ bool ScalarConverter::is_literal_int(const std::string &str) {
 	int 	int_num;
 	bool	is_convert_err;
 
-	if (is_head_space(str) || is_hex(str)) {
+	if (is_str_inf(str) || is_str_nan(str)){
+		return false;
+	}
+	if (is_str_inff(str) || is_str_nanf(str)){
 		return false;
 	}
 	if (str.find('.') != std::string::npos) {
 		return false;
 	}
-
 	int_num = convert_str_to_int(str, &is_convert_err);
 	if (is_convert_err) {
 		return false;
@@ -96,25 +101,20 @@ bool ScalarConverter::is_literal_int(const std::string &str) {
 }
 
 bool ScalarConverter::is_literal_float(const std::string &str) {
-	bool is_convert_err;
-	float float_num;
-	std::string str_wo_f;
+	size_t	f_pos;
+	bool	is_convert_err;
+	float	float_num;
+	std::string str_rm_f;
 
-	if (is_head_space(str) || is_hex(str)) {
-		return false;
-	}
-	if (str == "inff" || str == "+inff" || str == "-inff" || str == "nanf") {
+	if (is_str_inff(str) || is_str_nanf(str)){
 		return true;
 	}
-	size_t f_pos = str.find('f');
-	if (f_pos == std::string::npos) {
+	f_pos = str.find('f');
+	if (f_pos == std::string::npos || f_pos + 1 != str.size()) {
 		return false;
 	}
-	if (f_pos + 1 != str.size()) {
-		return false;
-	}
-	str_wo_f = remove_suffix_f(str);
-	float_num = convert_str_to_float(str_wo_f, &is_convert_err);
+	str_rm_f = remove_suffix_f(str);
+	float_num = convert_str_to_float(str_rm_f, &is_convert_err);
 	if (is_convert_err) {
 		return false;
 	}
@@ -123,19 +123,16 @@ bool ScalarConverter::is_literal_float(const std::string &str) {
 }
 
 bool ScalarConverter::is_literal_double(const std::string &str) {
-	bool is_convert_err;
-	float double_num;
+	bool	is_convert_err;
+	float	double_num;
 
-	if (is_head_space(str) || is_hex(str)) {
-		return false;
-	}
-	if (str == "inf" || str == "+inf" || str == "-inf" || str == "nan") {
+	if (is_str_inf(str) || is_str_nan(str)){
 		return true;
 	}
 	if (str.find('.') == std::string::npos && str.find_first_of("eE") == std::string::npos) {
 		return false;
 	}
-	double_num = convert_str_to_float(str, &is_convert_err);
+	double_num = convert_str_to_double(str, &is_convert_err);
 	if (is_convert_err) {
 		return false;
 	}
@@ -150,36 +147,48 @@ char ScalarConverter::convert_to_char(const std::string &num_str) {
 }
 
 int ScalarConverter::convert_to_int(const std::string &num_str) {
-	bool is_convert_err;
-
-	return convert_str_to_int(num_str, &is_convert_err);
+	return convert_str_to_int(num_str, NULL);
 }
 
 float ScalarConverter::convert_to_float(const std::string &num_str) {
-	bool is_convert_err;
 	std::string str_wo_f;
 
 	str_wo_f = remove_suffix_f(num_str);
-	return convert_str_to_float(str_wo_f, &is_convert_err);
+	return convert_str_to_float(str_wo_f, NULL);
 }
 
 double ScalarConverter::convert_to_double(const std::string &num_str) {
-	bool is_convert_err;
+	return convert_str_to_double(num_str, NULL);
+}
 
-	return convert_str_to_double(num_str, &is_convert_err);
+int ScalarConverter::convert_str_to_int(const std::string &num_str, bool *err) {
+	int		int_num;
+	size_t	idx;
+
+	if (err) {
+		*err = true;
+	}
+	try {
+		int_num = std::stoi(num_str, &idx, 10);
+		if (num_str[idx] != '\0') {
+			return 0;
+		}
+	} catch (std::exception const &e) {
+		return 0;
+	}
+	if (err) {
+		*err = false;
+	}
+	return int_num;
 }
 
 float ScalarConverter::convert_str_to_float(const std::string &num_str, bool *err) {
 	float	float_num;
 	size_t	idx;
-	std::string float_str;
-	std::ostringstream oss;
 
-	*err = true;
-	if (is_head_space(num_str) || is_hex(num_str)) {
-		return 0;
+	if (err) {
+		*err = true;
 	}
-
 	try {
 		float_num = std::stof(num_str, &idx);
 		if (num_str[idx]) {
@@ -194,21 +203,19 @@ float ScalarConverter::convert_str_to_float(const std::string &num_str, bool *er
 	} catch (const std::exception &e) {
 		return 0;
 	}
-	*err = false;
+	if (err) {
+		*err = false;
+	}
 	return float_num;
 }
 
 double ScalarConverter::convert_str_to_double(const std::string &num_str, bool *err) {
 	double	double_num;
 	size_t	idx;
-	std::string double_str;
-	std::ostringstream oss;
 
-	*err = true;
-	if (is_head_space(num_str) || is_hex(num_str)) {
-		return 0;
+	if (err) {
+		*err = true;
 	}
-
 	try {
 		double_num = std::stod(num_str, &idx);
 		if (num_str[idx]) {
@@ -222,7 +229,9 @@ double ScalarConverter::convert_str_to_double(const std::string &num_str, bool *
 	} catch (const std::exception &e) {
 		return 0;
 	}
-	*err = false;
+	if (err) {
+		*err = false;
+	}
 	return double_num;
 }
 
@@ -231,6 +240,22 @@ double ScalarConverter::convert_str_to_double(const std::string &num_str, bool *
 /* ************************************ */
 /*             helper funcs             */
 /* ************************************ */
+
+bool ScalarConverter::is_str_inf(const std::string &str) {
+	return str == "inf" || str == "+inf" || str == "-inf";
+}
+
+bool ScalarConverter::is_str_nan(const std::string &str) {
+	return str == "nan";
+}
+
+bool ScalarConverter::is_str_inff(const std::string &str) {
+	return str == "inff" || str == "+inff" || str == "-inff";
+}
+
+bool ScalarConverter::is_str_nanf(const std::string &str) {
+	return str == "nanf";
+}
 
 bool ScalarConverter::is_head_space(const std::string &num_str) {
 	return num_str.size() >= 2 && num_str[0] == ' ';
@@ -287,75 +312,12 @@ bool ScalarConverter::has_valid_exponent(const std::string &num_str) {
 	return true;
 }
 
-bool ScalarConverter::is_digit_after_decimal_point(const std::string &s) {
-	size_t i = 0;
-
-	if (s[i] != '.') {
-		return false;
-	}
-	i++;
-	while (isdigit(s[i])) {
-		i++;
-	}
-	if (s[i]) {
-		return false;
-	}
-	return true;
-}
-
-bool ScalarConverter::is_valid_fraction(const std::string &s) {
-	size_t i = 0;
-
-	if (s[i] == '-' || s[i] == '+') {
-		i++;
-	}
-	if (s[i] != '.') {
-		return false;
-	}
-	i++;
-	while (isdigit(s[i])) {
-		i++;
-	}
-	if (s[i]) {
-		return false;
-	}
-	return true;
-}
-
-int ScalarConverter::convert_str_to_int(const std::string &num_str, bool *err) {
-	int		int_num;
-	size_t	idx;
-	std::string endstr;
-
-	*err = true;
-
-	try {
-		int_num = std::stoi(num_str, &idx, 10);
-		endstr = num_str.substr(idx);
-		if (num_str[idx] != '\0' && !is_digit_after_decimal_point(endstr)) {
-			return 0;
-		}
-	} catch (std::out_of_range const &e) {
-		return 0;
-	} catch (std::exception const &e) {
-		if (!is_valid_fraction(num_str)) {
-			return 0;
-		}
-		int_num = 0;
-	}
-	*err = false;
-	return int_num;
-}
-
 std::string ScalarConverter::remove_suffix_f(const std::string &str) {
 	size_t	f_pos;
 	std::string removed_str;
 
 	f_pos = str.rfind('f');
-	if (f_pos == std::string::npos) {
-		return (str);
-	}
-	if (f_pos != str.size() - 1) {
+	if (f_pos == std::string::npos || f_pos != str.size() - 1) {
 		return (str);
 	}
 	removed_str = str;

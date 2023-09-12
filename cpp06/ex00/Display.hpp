@@ -17,14 +17,14 @@ std::string convert_to_char_str(const T &val) {
 	if (std::isnan(val) || std::isinf(val)) {
 		return COLOR_RED "impossible" COLOR_RESET;
 	}
-	if (!isascii(val)) {
+	if (val < CHAR_MIN || CHAR_MAX < val) {
 		return COLOR_RED "impossible" COLOR_RESET;
 	}
 	chr_val = static_cast<char>(val);
-	if (!isprint(chr_val)) {
-		return COLOR_YELLOW "Non displayable" COLOR_RESET;
+	if (isprint(chr_val)) {
+		return "'" + std::string(1, chr_val) + "'";
 	}
-	return "'" + std::string(1, chr_val) + "'";
+	return COLOR_YELLOW "Non displayable" COLOR_RESET;
 }
 
 template <typename T>
