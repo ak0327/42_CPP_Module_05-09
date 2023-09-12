@@ -4,7 +4,11 @@
 # include <stdexcept>
 
 # define COLOR_RED		"\x1b[31m"
+# define COLOR_GREEN	"\x1b[32m"
 # define COLOR_YELLOW	"\x1b[33m"
+# define COLOR_BLUE		"\x1b[34m"
+# define COLOR_MAGENTA	"\x1b[35m"
+# define COLOR_CYAN		"\x1b[36m"
 # define COLOR_RESET	"\x1b[0m"
 
 template <typename T>
@@ -26,7 +30,7 @@ class Array {
 
 	// assignment operator.
 	// modifying either the original array or its copy after copying musn’t affect the other array.
-	T &operator=(const Array &rhs);
+	Array<T> &operator=(const Array &rhs);
 
 	// Elements can be accessed through the subscript operator: [ ].
 	const T &operator[](size_t idx) const;
@@ -53,24 +57,24 @@ Array<T>::Array() : size_(0), arr_(NULL) {
 
 // Construction with an unsigned int n as a parameter:
 template <typename T>
-Array<T>::Array(unsigned int n) : size_(n), arr_(NULL) {
+Array<T>::Array(unsigned int n) : size_(0), arr_(NULL) {
 	try {
-		arr_ = new T[size_]();
+		arr_ = new T[n]();
 	} catch (const std::bad_alloc &e) {
-		size_ = 0;
 		throw;
 	}
+	size_ = n;
 }
 
 // Construction by copy
 template <typename T>
-Array<T>::Array(const Array &other) : size_(other.size()), arr_(NULL) {
+Array<T>::Array(const Array &other) : size_(0), arr_(NULL) {
 	try {
-		arr_ = new T[size_]();
+		arr_ = new T[other.size()]();
 	} catch (const std::bad_alloc &e) {
-		size_ = 0;
 		throw;
 	}
+	size_ = other.size();
 	for (size_t i = 0; i < size_; ++i) {
 		arr_[i] = other.arr_[i];
 	}
@@ -85,21 +89,21 @@ Array<T>::~Array() {
 
 // assignment operator.
 template <typename T>
-T &Array<T>::operator=(const Array &rhs) {
+Array<T> &Array<T>::operator=(const Array &rhs) {
 	if (this == &rhs) {
 		return *this;
 	}
 
 	T *tmp;
 	try {
-		*tmp = new T[size_]();
+		tmp = new T[rhs.size()]();
 	} catch (const std::bad_alloc &e) {
 		throw;
 	}
 
 	delete[] arr_;
 	arr_ = tmp;
-
+	size_ = rhs.size();
 	for (size_t i = 0; i < size_; ++i) {
 		arr_[i] = rhs.arr_[i];
 	}

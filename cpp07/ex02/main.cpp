@@ -1,5 +1,6 @@
-#include <iostream>
 #include <climits>
+#include <cstdlib>
+#include <iostream>
 #include "Array.hpp"
 
 template <typename T>
@@ -7,7 +8,7 @@ void print_arr(Array<T> arr) {
 	size_t i = 0;
 	size_t size = arr.size();
 
-	std::cout << "arr[";
+	std::cout << COLOR_CYAN "arr(" << arr.size() << ") [";
 	while (i < size) {
 		std::cout << arr[i];
 		i++;
@@ -15,17 +16,17 @@ void print_arr(Array<T> arr) {
 			std::cout << ", ";
 		}
 	}
-	std::cout << "]" << std::endl;
+	std::cout << "]" COLOR_RESET << std::endl;
 }
 
 int main() {
 	{
 		std::cout << "--------------- subject ---------------" << std::endl;
+		srand(time(NULL));
 		const int MAX_VAL = 750;
 
 		Array<int> numbers(MAX_VAL);
 		int* mirror = new int[MAX_VAL];
-		srand(time(NULL));
 
 		for (int i = 0; i < MAX_VAL; i++) {
 			const int value = rand();
@@ -66,19 +67,19 @@ int main() {
 	{
 		std::cout << "--------------- default constructor ---------------" << std::endl;
 		{
-			std::cout << "========== Array<int> ==========" << std::endl;
+			std::cout << "[1] int: arr(10)" << std::endl;
 			try {
 				size_t size = 10;
 				Array<int> arr(size);
 
-				std::cout << "1) arr(10)" << std::endl;
+				std::cout << " 1) arr(10)" << std::endl;
 				print_arr(arr);
 				std::cout << std::endl;
 
+				std::cout << " 2) arr[i] = rand() % 10" << std::endl;
 				for (size_t i = 0; i < size; ++i) {
 					arr[i] = rand() % 10;
 				}
-				std::cout << "2) arr[i] = rand() % 10" << std::endl;
 				print_arr(arr);
 				std::cout << std::endl;
 
@@ -88,7 +89,7 @@ int main() {
 			std::cout << std::endl;
 		}
 		{
-			std::cout << " ========== Array<char> ==========" << std::endl;
+			std::cout << "[2] char: arr(10)" << std::endl;
 			try {
 				size_t size = 10;
 				Array<char> arr(size);
@@ -97,10 +98,10 @@ int main() {
 				print_arr(arr);
 				std::cout << std::endl;
 
+				std::cout << "  2) arr[i] = char 'a'~'j'" << std::endl;
 				for (size_t i = 0; i < size; ++i) {
 					arr[i] = static_cast<char>(i + 'a');
 				}
-				std::cout << "  2) arr[i] = char 'a'~'j'" << std::endl;
 				print_arr(arr);
 				std::cout << std::endl;
 
@@ -110,7 +111,7 @@ int main() {
 			std::cout << std::endl;
 		}
 		{
-			std::cout << " ========== Array<std::string> ==========" << std::endl;
+			std::cout << "[3] string: arr(10)" << std::endl;
 			try {
 				size_t size = 10;
 				Array<std::string> arr(size);
@@ -119,6 +120,7 @@ int main() {
 				print_arr(arr);
 				std::cout << std::endl;
 
+				std::cout << "  2) arr[i] = std::string A or B" << std::endl;
 				for (size_t i = 0; i < size; ++i) {
 					if (i % 2 == 0) {
 						arr[i] = "A";
@@ -126,7 +128,6 @@ int main() {
 						arr[i] = "B";
 					}
 				}
-				std::cout << "  2) arr[i] = std::string A or B" << std::endl;
 				print_arr(arr);
 				std::cout << std::endl;
 
@@ -139,18 +140,15 @@ int main() {
 	{
 		std::cout << "--------------- copy constructor ---------------" << std::endl;
 		{
-			std::cout << " ========== Array<long> copy = Array<int>(Array<long> src(10)) ==========" << std::endl;
+			std::cout << "[1] int: copy = Array(src(10))" << std::endl;
 			try {
 				size_t size = 10;
 				Array<int> src(size);
 				Array<int> copy = Array<int>(src);
 
 				std::cout << " 1) pirnt src, copy" << std::endl;
-				std::cout << "  src :";
-				print_arr(src);
-
-				std::cout << "  copy:";
-				print_arr(copy);
+				std::cout << "  src :"; print_arr(src);
+				std::cout << "  copy:"; print_arr(copy);
 				std::cout << std::endl;
 
 				std::cout << " 2) change src elem" << std::endl;
@@ -160,20 +158,15 @@ int main() {
 				std::cout << std::endl;
 
 				std::cout << " 3) pirnt src, copy" << std::endl;
-				std::cout << "  src :";
-				print_arr(src);
-
-				std::cout << "  copy:";
-				print_arr(copy);
+				std::cout << "  src :"; print_arr(src);
+				std::cout << "  copy:"; print_arr(copy);
 				std::cout << std::endl;
 
 				std::cout << " 4) destruct src" << std::endl;
-				src.~Array();
-				std::cout << std::endl;
+				src.~Array(); std::cout << std::endl;
 
 				std::cout << " 5) pirnt copy" << std::endl;
-				std::cout << "  copy:";
-				print_arr(copy);
+				std::cout << "  copy:"; print_arr(copy);
 				std::cout << std::endl;
 
 
@@ -183,20 +176,17 @@ int main() {
 			std::cout << std::endl;
 		}
 		{
-			std::cout << " ========== Array<long> copy = Array<int>(Array<long> src) ==========" << std::endl;
+			std::cout << "[2] int: copy = Array(src)" << std::endl;
 			try {
 				Array<int> src;
 				Array<int> copy = Array<int>(src);
 
-				std::cout << " 1) pirnt src, copy" << std::endl;
-				std::cout << "  src :";
-				print_arr(src);
-
-				std::cout << "  copy:";
-				print_arr(copy);
+				std::cout << " pirnt src, copy" << std::endl;
+				std::cout << "  src :"; print_arr(src);
+				std::cout << "  copy:"; print_arr(copy);
 				std::cout << std::endl;
 
-				std::cout << "copy[0] = " << copy[0] << std::endl;
+				std::cout << "  copy[0] = " << copy[0] << std::endl;
 
 			} catch (std::exception const &e) {
 				std::cerr << e.what() << "\n" << std::endl;
@@ -207,18 +197,83 @@ int main() {
 	{
 		std::cout << "--------------- copy assignment ---------------" << std::endl;
 		{
-			std::cout << " ========== Array<long> copy = Array<long> src(10) ==========" << std::endl;
+			std::cout << "[1] int: copy(10) = src(1)" << std::endl;
+			try {
+				size_t src_size = 1;
+				Array<int> src(src_size);
+				src[0] = 42;
+
+				size_t copy_size = 10;
+				Array<int> copy(copy_size);
+				for (size_t i = 0; i < copy_size; ++i) {
+					copy[i] = rand() % 10;
+				}
+
+				std::cout << " 1) pirnt src, copy" << std::endl;
+				std::cout << "  src :"; print_arr(src);
+				std::cout << "  copy:"; print_arr(copy);
+				std::cout << std::endl;
+
+				std::cout << " 2) copy = src" << std::endl;
+				copy = src;
+				std::cout << std::endl;
+
+				std::cout << " 3) pirnt src, copy" << std::endl;
+				std::cout << "  src :"; print_arr(src);
+				std::cout << "  copy:"; print_arr(copy);
+				std::cout << std::endl;
+
+				std::cout << std::endl;
+
+			} catch (std::exception const &e) {
+				std::cerr << e.what() << "\n" << std::endl;
+			}
+			std::cout << std::endl;
+		}
+		{
+			std::cout << "[2] int: copy(1) = src(10)" << std::endl;
+			try {
+				size_t src_size = 10;
+				Array<int> src(src_size);
+				for (size_t i = 0; i < src_size; ++i) {
+					src[i] = rand() % 10;
+				}
+
+				size_t copy_size = 1;
+				Array<int> copy(copy_size);
+				copy[0] = 42;
+
+				std::cout << " 1) pirnt src, copy" << std::endl;
+				std::cout << "  src :"; print_arr(src);
+				std::cout << "  copy:"; print_arr(copy);
+				std::cout << std::endl;
+
+				std::cout << " 2) copy = src" << std::endl;
+				copy = src;
+				std::cout << std::endl;
+
+				std::cout << " 3) pirnt src, copy" << std::endl;
+				std::cout << "  src :"; print_arr(src);
+				std::cout << "  copy:"; print_arr(copy);
+				std::cout << std::endl;
+
+				std::cout << std::endl;
+
+			} catch (std::exception const &e) {
+				std::cerr << e.what() << "\n" << std::endl;
+			}
+			std::cout << std::endl;
+		}
+		{
+			std::cout << "[3] long: copy = src(10)" << std::endl;
 			try {
 				size_t size = 10;
 				Array<long> src(size);
 				Array<long> copy = src;
 
 				std::cout << " 1) pirnt src, copy" << std::endl;
-				std::cout << "  src :";
-				print_arr(src);
-
-				std::cout << "  copy:";
-				print_arr(copy);
+				std::cout << "  src :"; print_arr(src);
+				std::cout << "  copy:"; print_arr(copy);
 				std::cout << std::endl;
 
 				std::cout << " 2) change src elem" << std::endl;
@@ -228,11 +283,8 @@ int main() {
 				std::cout << std::endl;
 
 				std::cout << " 3) pirnt src, copy" << std::endl;
-				std::cout << "  src :";
-				print_arr(src);
-
-				std::cout << "  copy:";
-				print_arr(copy);
+				std::cout << "  src :"; print_arr(src);
+				std::cout << "  copy:"; print_arr(copy);
 				std::cout << std::endl;
 
 				std::cout << " 4) destruct src" << std::endl;
@@ -240,8 +292,7 @@ int main() {
 				std::cout << std::endl;
 
 				std::cout << " 5) pirnt copy" << std::endl;
-				std::cout << "  copy:";
-				print_arr(copy);
+				std::cout << "  copy:"; print_arr(copy);
 				std::cout << std::endl;
 
 			} catch (std::exception const &e) {
@@ -250,18 +301,14 @@ int main() {
 			std::cout << std::endl;
 		}
 		{
-			std::cout << " ========== Array<long> copy = Array<long> src ==========" << std::endl;
+			std::cout << "[4] long: copy = src" << std::endl;
 			try {
 				Array<long> src;
 				Array<long> copy = src;
 
 				std::cout << " 1) pirnt src, copy" << std::endl;
-				std::cout << "  src :";
-				print_arr(src);
-
-				std::cout << "  copy:";
-				print_arr(copy);
-				std::cout << std::endl;
+				std::cout << "  src :"; print_arr(src);
+				std::cout << "  copy:"; print_arr(copy);
 				std::cout << std::endl;
 
 			} catch (std::exception const &e) {
@@ -271,6 +318,7 @@ int main() {
 		}
 
 	}
+	// can't compile
 	// {
 	// 	std::cout << "--------------- copy assignment <int> -> <long> ---------------" << std::endl;
 	// 	try {
@@ -287,15 +335,15 @@ int main() {
 		std::cout << "--------------- size() ---------------" << std::endl;
 		try {
 			Array<int> arr1;
-			std::cout << " 1) Array<int> arr1; arr1.size() = " << arr1.size() << std::endl;
+			std::cout << " 1) int: arr1; arr1.size() : " << arr1.size() << std::endl;
 			std::cout << std::endl;
 
 			Array<int> arr2(0);
-			std::cout << " 2) Array<int> arr2(2); arr2.size() = " << arr2.size() << std::endl;
+			std::cout << " 2) int: arr2(0); arr2.size() : " << arr2.size() << std::endl;
 			std::cout << std::endl;
 
 			Array<int> arr3(1000);
-			std::cout << " 3) Array<int> arr3(1000); arr3.size() = " << arr3.size() << std::endl;
+			std::cout << " 3) int: arr3(1000); arr3.size() : " << arr3.size() << std::endl;
 			std::cout << std::endl;
 
 		} catch (std::exception const &e) {
@@ -308,7 +356,7 @@ int main() {
 		{
 			try {
 				Array<int> arr;
-				std::cout << "Array<int> arr; arr[0] = " << arr[0] << std::endl;
+				std::cout << " 1) int: arr(); arr[0] : " << arr[0] << std::endl;
 			} catch (std::exception const &e) {
 				std::cerr << e.what() << std::endl;
 			}
@@ -317,7 +365,7 @@ int main() {
 		{
 			try {
 				Array<int> arr;
-				std::cout << "Array<int> arr; assign 1 to arr[0]..." << std::endl;
+				std::cout << " 2) int: arr(); assign 1 to arr[0]..." << std::endl;
 				arr[0] = 1;
 			} catch (std::exception const &e) {
 				std::cerr << e.what() << std::endl;
@@ -327,7 +375,7 @@ int main() {
 		{
 			try {
 				Array<int> arr;
-				std::cout << "Array<int> arr; arr[1] = " << arr[1] << std::endl;
+				std::cout << " 3) int: arr(); arr[1] : " << arr[1] << std::endl;
 			} catch (std::exception const &e) {
 				std::cerr << e.what() << std::endl;
 			}
@@ -336,7 +384,7 @@ int main() {
 		{
 			try {
 				Array<int> arr(10);
-				std::cout << "Array<int> arr(10); arr[9] = " << arr[9] << std::endl;
+				std::cout << " 4) int: arr(10); arr[9] : " << arr[9] << std::endl;
 			} catch (std::exception const &e) {
 				std::cerr << e.what() << std::endl;
 			}
@@ -345,7 +393,7 @@ int main() {
 		{
 			try {
 				Array<int> arr(10);
-				std::cout << "Array<int> arr(10); arr[10] = " << arr[9] << std::endl;
+				std::cout << " 5) int: arr(10); arr[10] : " << arr[9] << std::endl;
 			} catch (std::exception const &e) {
 				std::cerr << e.what() << std::endl;
 			}
@@ -354,31 +402,41 @@ int main() {
 		{
 			try {
 				Array<int> arr(10);
-				std::cout << "Array<int> arr(10); arr[-1] = " << arr[-1] << std::endl;
+				std::cout << " 6) int: arr(10); arr[-1] : " << arr[-1] << std::endl;
 			} catch (std::exception const &e) {
 				std::cerr << e.what() << std::endl;
 			}
 			std::cout << std::endl;
 		}
+		std::cout << std::endl;
 	}
 	{
 		std::cout << "--------------- operator[] ---------------" << std::endl;
 		{
 			{
-				std::cout << " ========== Array<long> arr ==========" << std::endl;
+				std::cout << " 1) int: arr(10); arr[1]" << std::endl;
 				try {
 					Array<int> arr(10);
-					std::cout << "arr[1] = " << arr[1] << std::endl;
+					std::cout << "  arr[1] : " << arr[1] << "\n" << std::endl;
+
+					std::cout << "  arr[1] = 42" << std::endl;
+					arr[1] = 42;
+					std::cout << "  arr[1] : " << arr[1] << std::endl;
 				} catch (std::exception const &e) {
 					std::cerr << e.what() << "\n" << std::endl;
 				}
 				std::cout << std::endl;
 			}
 			{
-				std::cout << " ========== const Array<long> arr ==========" << std::endl;
+				std::cout << " 2) int: const arr(10); arr[1]" << std::endl;
 				try {
 					const Array<int> arr(10);
-					std::cout << "arr[1] = " << arr[1] << std::endl;
+					std::cout << "  arr[1] : " << arr[1] << std::endl;
+
+					// can't compile
+//					std::cout << "  arr[1] = 42" << std::endl;
+//					arr[1] = 42;
+//					std::cout << "  arr[1] = " << arr[1] << std::endl;
 				} catch (std::exception const &e) {
 					std::cerr << e.what() << "\n" << std::endl;
 				}

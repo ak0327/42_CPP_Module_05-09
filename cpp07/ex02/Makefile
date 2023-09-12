@@ -22,7 +22,7 @@ $(NAME)	: $(OBJS)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $^
 
 $(OBJS_DIR)/%.o : %.cpp
-	mkdir -p $$(dirname $@)
+	mkdir -p $(OBJS_DIR)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c -o $@ $<
 
 .PHONY	: clean
@@ -30,7 +30,7 @@ clean	:
 	rm -rf $(OBJS_DIR)
 
 .PHONY	: fclean
-flclean	: clean
+fclean	: clean
 	rm -rf $(NAME)
 
 .PHONY	: re
