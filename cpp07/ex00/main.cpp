@@ -74,6 +74,15 @@ int main(void) {
 		std::cout << "max(a, b):" << ::max(a, b) << ", &max(a,b):" << &::max(a, b) << std::endl;
 		std::cout << std::endl;
 	}
+	{
+		std::cout << "-------------------- min(const a, const b) --------------------" << std::endl;
+		const int a = 1;
+		const int b = 10;
+		int min_val = min(a, b);
+		std::cout << "min:" << min_val << std::endl;
+		min_val++;
 
+		std::cout << std::endl;
+	}
 	return 0;
 }

@@ -14,35 +14,13 @@ void swap(T &a, T &b) {
 // If the two of them are equal, then it returns the second one.
 template <typename T>
 const T &min(const T &a, const T &b) {
-	if (a < b) {
-		return a;
-	}
-	return b;
+	return b <= a ? b : a;
 }
-
-// template <typename T>
-// T &min(T &a, T &b) {
-// 	if (a <= b) {
-// 		return a;
-// 	}
-// 	return b;
-// }
 
 // max:
 // Compares the two values passed in its arguments and returns the greatest one.
 // If the two of them are equal, then it returns the second one.
 template <typename T>
 const T &max(const T &a, const T &b) {
-	if (a <= b) {
-		return b;
-	}
-	return a;
+	return a <= b ? b : a;
 }
-
-// template <typename T>
-// T &max(T &a, T &b) {
-// 	if (a <= b) {
-// 		return b;
-// 	}
-// 	return a;
-// }
