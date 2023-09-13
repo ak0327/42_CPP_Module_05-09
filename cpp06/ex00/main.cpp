@@ -1,3 +1,5 @@
+#include <climits>
+#include <cfloat>
 #include <iostream>
 #include <string>
 #include "ScalarConverter.hpp"
@@ -28,12 +30,13 @@ double: 42.0
 // display a message to inform the user that the type conversion is impossible.
 
 #ifndef DEBUG
+
 int main(int argc, char **argv) {
 	if (argc != 2) {
-		std::cerr << "[Error] invalid argument. Input: ./convert <num>" << std::endl;
+		std::cerr << "[Error] invalid argument. Input: ./convert <char/int/float/double literal>" << std::endl;
 		return 1;
  	}
-	ScalarConverter::display_convert_result(argv[1]);
+	ScalarConverter::convert(argv[1]);
 	return 0;
 }
 
@@ -43,7 +46,7 @@ void test(const std::string &str) {
 
 	std::cout.setf(std::ios::left);
 	std::cout << "[" << str << "]" << std::endl;
-	ScalarConverter::display_convert_result(str);
+	ScalarConverter::convert(str);
 	std::cout << std::endl;
 }
 
@@ -81,21 +84,11 @@ int main() {
 
 	std::cout << "-------------------------------------" << std::endl;
 
-	test("0x12");
-	test("0X12");
-	test("0x5f");
-	test("0xff");
-	test("0xFF");
-
-	std::cout << "-------------------------------------" << std::endl;
-
-
 	test("42.0f");
 	test("42.1");
 	test("42.9");
 
 	std::cout << "-------------------------------------" << std::endl;
-
 
 	test("inf");
 	test("inff");
@@ -108,19 +101,33 @@ int main() {
 
 	std::cout << "-------------------------------------" << std::endl;
 
+	test("-1.0");
+
+	test("255");
+	test("256");
+
 	test("10000.f");
 	test("10000.00");
 
 	test("2147483647");
-	test("2147483648");
+	test("2147483648"); // impossible
+	test("2147483648f");
+	test("2147483648.0");
 	test("-2147483648");
-	test("-2147483649");
+	test("-2147483649"); // impossible
+	test("-2147483649f");
+	test("-2147483649.0");
 
 	test("1E+1000");  // inf
 	test("-1E1000");  // -inf
 	test("1E-1000");  // 0.0
 	test("-1E-1000");  // -0.0
 	test("0E+0000");  // 0.0
+
+	test("3.402823e+38");
+	test("-3.402823e+38");
+	test("1.797693e+308");
+	test("-1.797693e+308");
 
 	std::cout << std::endl;
 	std::cout << "======================  NG ====================== " << std::endl;
@@ -152,6 +159,11 @@ int main() {
 	test("*");
 	test("~");
 	test(" 'a'");
+	test("0x12");
+	test("0X12");
+	test("0x5f");
+	test("0xff");
+	test("0xFF");
 
 	std::cout << std::endl;
 	return 0;
