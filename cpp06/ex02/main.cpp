@@ -58,7 +58,7 @@ void identify(Base &p) {
 	std::cout << "identify(Base &p)" << std::endl;
 	try {
 		A &a = dynamic_cast<A &>(p);
-		static_cast<void>(a);
+		(void)a;
 		std::cout << "identify: argument class is A" << std::endl;
 		return ;
 	}
@@ -66,7 +66,7 @@ void identify(Base &p) {
 
 	try {
 		B &b = dynamic_cast<B &>(p);
-		static_cast<void>(b);
+		(void)b;
 		std::cout << "identify: argument class is B" << std::endl;
 		return ;
 	}
@@ -74,7 +74,7 @@ void identify(Base &p) {
 
 	try {
 		C &c = dynamic_cast<C &>(p);
-		static_cast<void>(c);
+		(void)c;
 		std::cout << "identify: argument class is C" << std::endl;
 		return ;
 	}
@@ -85,7 +85,6 @@ void identify(Base &p) {
 
 int main() {
 	std::srand(std::time(NULL));
-
 	{
 		try {
 			std::cout << "---------- test identify(Base *p) ----------" << std::endl;
