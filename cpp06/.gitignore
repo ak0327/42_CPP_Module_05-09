@@ -10,6 +10,7 @@
 !.gitignore
 !Makefile
 
+playground.cpp
 /.idea
 /cmake-build-debug
 /**/objs
