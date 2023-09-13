@@ -1,0 +1,16 @@
+*
+/**
+
+!/ex00
+!/ex01
+!/ex02
+
+!*.cpp
+!*.hpp
+!.gitignore
+!Makefile
+
+playground.cpp
+/.idea
+/cmake-build-debug
+/**/objs
