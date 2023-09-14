@@ -11,6 +11,10 @@ class Serializer {
 
 	// It takes an unsigned integer parameter and converts it to a pointer to Data
 	static Data *deserialize(uintptr_t raw);
+
+ private:
+	Serializer();
+	~Serializer();
 };
 
 // Write a program to test that your class works as expected.

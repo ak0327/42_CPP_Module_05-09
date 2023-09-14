@@ -1,6 +1,9 @@
 #include <stdexcept>
 #include "Serializer.hpp"
 
+Serializer::Serializer() {}
+Serializer::~Serializer() {}
+
 // cast of ptr : reinterpret_cast
 uintptr_t Serializer::serialize(Data *ptr) {
 	if (!ptr) {
