@@ -1,8 +1,7 @@
+#include <climits>
 #include <iostream>
 #include <deque>
-#include <forward_list>
 #include <list>
-#include <map>
 #include <set>
 #include <vector>
 #include "easyfind.hpp"
@@ -27,18 +26,72 @@ void display_input(const T &container, int value) {
 }
 
 template <typename T>
+size_t get_size(const T &container) {
+	size_t size = 0;
+	typename T::const_iterator itr;
+
+	for (itr = container.begin(); itr != container.end(); ++itr) {
+		size++;
+	}
+	return size;
+}
+
+template <typename T>
 int test(const T &container, int value, bool expected_find, int test_count) {
 	int result;
 
 	std::cout << " TEST No." << test_count << ", ";
 
-	display_input(container, value);
+	if (get_size(container) < 1000) {
+		display_input(container, value);
+	} else {
+		std::cout << "data:[ ... ], value:" << value << std::endl;
+	}
 
 	try {
-		int find_value = easyfind(container, value);
+		typename T::const_iterator itr = easyfind(container, value);
 
-		if (expected_find && value == find_value) {
-			std::cout << "  value found: " << value << std::endl;
+		if (expected_find) {
+			std::cout << "  value found: *itr=" << *itr << std::endl;
+			result = OK;
+		} else {
+			result = KO;
+		}
+	} catch (const std::exception &e) {
+		std::cout << "  value not found: " << e.what() << std::endl;
+		if (!expected_find) {
+			result = OK;
+		} else {
+			result = KO;
+		}
+	}
+
+	std::cout << "  Result : ";
+	if (result == OK) {
+		std::cout << COLOR_GREEN "OK" COLOR_RESET << std::endl;
+	} else {
+		std::cout << COLOR_RED "KO" COLOR_RESET << std::endl;
+	}
+	return result;
+}
+
+template <typename T>
+int test(T &container, int value, bool expected_find, int test_count) {
+	int result;
+
+	std::cout << " TEST No." << test_count << ", ";
+
+	if (get_size(container) < 1000) {
+		display_input(container, value);
+	} else {
+		std::cout << "data:[ ... ], value:" << value << std::endl;
+	}
+
+	try {
+		typename T::iterator itr = easyfind(container, value);
+
+		if (expected_find && *itr == value) {
+			std::cout << "  value found: *itr=" << *itr << std::endl;
 			result = OK;
 		} else {
 			result = KO;
@@ -70,21 +123,21 @@ int main() {
 		std::cout << "-------------------------------------------" << std::endl;
 		{
 			int data[] = {1, 2, 3};
-			std::deque<int> dq(data, std::end(data));
+			std::deque<int> dq(data, data + 3);
 
 			ok += test(dq, 1, true, ++test_count);
 			std::cout << std::endl;
 		}
 		{
 			int data[] = {1, 2, 3};
-			std::deque<int> dq(data, std::end(data));
+			std::deque<int> dq(data, data + 3);
 
 			ok += test(dq, -1, false, ++test_count);
 			std::cout << std::endl;
 		}
 		{
 			int data[] = {1, 1, 1};
-			std::deque<int> dq(data, std::end(data));
+			std::deque<int> dq(data, data + 3);
 
 			ok += test(dq, 1, true, ++test_count);
 			std::cout << std::endl;
@@ -97,74 +150,54 @@ int main() {
 		}
 		{
 			int data[] = {1, 2, 3};
-			const std::deque<int> dq(data, std::end(data));
+			const std::deque<int> dq(data, data + 3);
 
 			ok += test(dq, 1, true, ++test_count);
 			std::cout << std::endl;
 		}
 		std::cout << std::endl;
-	}
-	{
-		std::cout << "-------------------------------------------" << std::endl;
-		std::cout << "   [2] forward_list" << std::endl;
-		std::cout << "-------------------------------------------" << std::endl;
 		{
-			int data[] = {1, 2, 3};
-			std::forward_list<int> ls(data, std::end(data));
+			std::deque<int> dq;
+			for (int i = 0; i < 10001; ++i) {
+				dq.push_back(i);
+			}
 
-			ok += test(ls, 1, true, ++test_count);
+			ok += test(dq, 10000, true, ++test_count);
 			std::cout << std::endl;
 		}
+		std::cout << std::endl;
 		{
-			int data[] = {1, 2, 3};
-			std::forward_list<int> ls(data, std::end(data));
+			std::deque<int> dq;
+			for (int i = 0; i < 10001; ++i) {
+				dq.push_back(i);
+			}
 
-			ok += test(ls, -1, false, ++test_count);
-			std::cout << std::endl;
-		}
-		{
-			int data[] = {1, 1, 1};
-			std::forward_list<int> ls(data, std::end(data));
-
-			ok += test(ls, 1, true, ++test_count);
-			std::cout << std::endl;
-		}
-		{
-			std::forward_list<int> ls;
-
-			ok += test(ls, 1, false, ++test_count);
-			std::cout << std::endl;
-		}
-		{
-			int data[] = {1, 2, 3};
-			const std::forward_list<int> ls(data, std::end(data));
-
-			ok += test(ls, 1, true, ++test_count);
+			ok += test(dq, INT_MAX, false, ++test_count);
 			std::cout << std::endl;
 		}
 		std::cout << std::endl;
 	}
 	{
 		std::cout << "-------------------------------------------" << std::endl;
-		std::cout << "   [3] list" << std::endl;
+		std::cout << "   [2] list" << std::endl;
 		std::cout << "-------------------------------------------" << std::endl;
 		{
 			int data[] = {1, 2, 3};
-			std::list<int> ls(data, std::end(data));
+			std::list<int> ls(data, data + 3);
 
 			ok += test(ls, 1, true, ++test_count);
 			std::cout << std::endl;
 		}
 		{
 			int data[] = {1, 2, 3};
-			std::list<int> ls(data, std::end(data));
+			std::list<int> ls(data, data + 3);
 
 			ok += test(ls, -1, false, ++test_count);
 			std::cout << std::endl;
 		}
 		{
 			int data[] = {1, 1, 1};
-			std::list<int> ls(data, std::end(data));
+			std::list<int> ls(data, data + 3);
 
 			ok += test(ls, 1, true, ++test_count);
 			std::cout << std::endl;
@@ -177,34 +210,33 @@ int main() {
 		}
 		{
 			int data[] = {1, 2, 3};
-			const std::list<int> ls(data, std::end(data));
+			const std::list<int> ls(data, data + 3);
 
 			ok += test(ls, 1, true, ++test_count);
 			std::cout << std::endl;
 		}
-		std::cout << std::endl;
 	}
 	{
 		std::cout << "-------------------------------------------" << std::endl;
-		std::cout << "   [4] set" << std::endl;
+		std::cout << "   [3] set" << std::endl;
 		std::cout << "-------------------------------------------" << std::endl;
 		{
 			int data[] = {1, 2, 3};
-			std::set<int> st(data, std::end(data));
+			std::set<int> st(data, data + 3);
 
 			ok += test(st, 1, true, ++test_count);
 			std::cout << std::endl;
 		}
 		{
 			int data[] = {1, 2, 3};
-			std::set<int> st(data, std::end(data));
+			std::set<int> st(data, data + 3);
 
 			ok += test(st, -1, false, ++test_count);
 			std::cout << std::endl;
 		}
 		{
 			int data[] = {1, 1, 1};
-			std::set<int> st(data, std::end(data));
+			std::set<int> st(data, data + 3);
 
 			ok += test(st, 1, true, ++test_count);
 			std::cout << std::endl;
@@ -217,7 +249,7 @@ int main() {
 		}
 		{
 			int data[] = {1, 2, 3};
-			const std::set<int> st(data, std::end(data));
+			const std::set<int> st(data, data + 3);
 
 			ok += test(st, 1, true, ++test_count);
 			std::cout << std::endl;
@@ -226,25 +258,25 @@ int main() {
 	}
 	{
 		std::cout << "-------------------------------------------" << std::endl;
-		std::cout << "   [5] vector" << std::endl;
+		std::cout << "   [4] vector" << std::endl;
 		std::cout << "-------------------------------------------" << std::endl;
 		{
 			int data[] = {1, 2, 3};
-			std::vector<int> vec(data, std::end(data));
+			std::vector<int> vec(data, data + 3);
 
 			ok += test(vec, 1, true, ++test_count);
 			std::cout << std::endl;
 		}
 		{
 			int data[] = {1, 2, 3};
-			std::vector<int> vec(data, std::end(data));
+			std::vector<int> vec(data, data + 3);
 
 			ok += test(vec, -1, false, ++test_count);
 			std::cout << std::endl;
 		}
 		{
 			int data[] = {1, 1, 1};
-			std::vector<int> vec(data, std::end(data));
+			std::vector<int> vec(data, data + 3);
 
 			ok += test(vec, 1, true, ++test_count);
 			std::cout << std::endl;
@@ -257,7 +289,7 @@ int main() {
 		}
 		{
 			int data[] = {1, 2, 3};
-			const std::vector<int> vec(data, std::end(data));
+			const std::vector<int> vec(data, data + 3);
 
 			ok += test(vec, 1, true, ++test_count);
 			std::cout << std::endl;
@@ -272,3 +304,13 @@ int main() {
 	std::cout << "===============================================" << std::endl;
 	return 0;
 }
+
+#ifdef __APPLE__
+
+__attribute__((destructor))
+static void	destructor(void)
+{
+	system("leaks -q a.out");
+}
+
+#endif

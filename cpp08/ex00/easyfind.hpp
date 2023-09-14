@@ -14,10 +14,21 @@
 # define COLOR_RESET	"\x1b[0m"
 
 template <typename T>
-int easyfind(const T &container, int find_value) {
+typename T::const_iterator easyfind(const T &container, int find_value) {
+//	std::cout << COLOR_MAGENTA "const easyfind called" COLOR_RESET << std::endl;
 	typename T::const_iterator itr = std::find(container.begin(), container.end(), find_value);
 	if (itr == container.end()) {
 		throw std::runtime_error(COLOR_YELLOW "[Error] value not found" COLOR_RESET);
 	}
-	return *itr;
+	return itr;
+}
+
+template <typename T>
+typename T::iterator easyfind(T &container, int find_value) {
+//	std::cout << COLOR_CYAN "easyfind called" COLOR_RESET << std::endl;
+	typename T::iterator itr = std::find(container.begin(), container.end(), find_value);
+	if (itr == container.end()) {
+		throw std::runtime_error(COLOR_YELLOW "[Error] value not found" COLOR_RESET);
+	}
+	return itr;
 }
