@@ -6,14 +6,20 @@
 #include <sstream>
 #include "Span.hpp"
 
+/* constructor, operator */
+Span::Span() : max_size_(0),
+			   shortest_span_(UINT_MAX),
+			   longest_span_(0),
+			   data_(std::set<int>()) {}
+
 Span::Span(unsigned int n) : max_size_(n),
 							 shortest_span_(UINT_MAX),
-							 longest_spen_(0),
+							 longest_span_(0),
 							 data_(std::set<int>()) {}
 
 Span::Span(const Span &other) : max_size_(other.max_size_),
 								shortest_span_(other.shortest_span_),
-								longest_spen_(other.longest_spen_),
+								longest_span_(other.longest_span_),
 								data_(other.data_) {}
 
 Span::~Span() {}
@@ -24,30 +30,89 @@ Span &Span::operator=(const Span &rhs) {
 	}
 	max_size_ = rhs.max_size_;
 	shortest_span_ = rhs.shortest_span_;
-	longest_spen_ = rhs.longest_spen_;
+	longest_span_ = rhs.longest_span_;
 	data_ = rhs.data_;
 	return *this;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+/* member function */
+// addNumber
 void Span::addNumber(int num) {
 	if (data_.size() == max_size_) {
-		throw std::invalid_argument("[Error] Span is full");
+		throw std::invalid_argument(YELLOW "[Error] Span is full" RESET);
 	}
 	data_.insert(num);
 	update_shortest_span(num);
 	update_longest_span();
 }
 
-void assert_range_param(int start, int stop, int step) {
+template <typename Container>
+void Span::addContainerNumbers(const Container &c) {
+	typename Container::const_iterator itr;
+
+	for (itr = c.begin(); itr != c.end(); ++itr) {
+		addNumber(*itr);
+	}
+}
+
+void Span::addNumbers(const std::deque<int> &dq) {
+	addContainerNumbers(dq);
+}
+
+void Span::addNumbers(const std::list<int> &lst) {
+	addContainerNumbers(lst);
+}
+
+void Span::addNumbers(const std::set<int> &st) {
+	addContainerNumbers(st);
+}
+
+void Span::addNumbers(const std::vector<int> &vec) {
+	addContainerNumbers(vec);
+}
+
+void Span::addNumbers(const int *start, const int *stop) {
+	if (!start || !stop) {
+		throw std::invalid_argument(YELLOW "[Error] invalid argument" RESET);
+	}
+	if (stop < start) {
+		throw std::invalid_argument(YELLOW "[Error] invalid argument" RESET);
+	}
+	for (int *ptr = const_cast<int *>(start); ptr != stop; ++ptr) {
+		addNumber(*ptr);
+	}
+}
+
+/* addRangeNumber */
+void Span::addRangeNumber(int start, int stop, int step) {
+	// std::cout << "addRangeNumber:" << start << "->" << stop << "/" << step << std::endl;
+
+	if (data_.size() == max_size_) {
+		throw std::invalid_argument("[Error] Span is full");
+	}
+	try {
+		assert_range_param(start, stop, step);
+		if (step > 0) {
+			addPositiveRangeNumber(start, stop, step);
+		} else {
+			addNegativeRangeNumber(start, stop, step);
+		}
+	} catch (const std::invalid_argument &e) {
+		throw;
+	}
+}
+
+void Span::assert_range_param(int start, int stop, int step) const {
 	// std::cout << "assert:" << start << "->" << stop << "/" << step << std::endl;
 	if (step == 0) {
-		throw std::invalid_argument("[Error] Invalid argument: invalid step");
+		throw std::invalid_argument(YELLOW "[Error] Invalid argument: invalid step" RESET);
 	}
 	if (start < stop && step < 0) {
-		throw std::invalid_argument("[Error] Invalid argument: invalid range");
+		throw std::invalid_argument(YELLOW "[Error] Invalid argument: invalid range" RESET);
 	}
 	if (start > stop && step > 0) {
-		throw std::invalid_argument("[Error] Invalid argument: invalid range");
+		throw std::invalid_argument(YELLOW "[Error] Invalid argument: invalid range" RESET);
 	}
 }
 
@@ -75,36 +140,20 @@ void Span::addNegativeRangeNumber(int start, int stop, int step) {
 	}
 }
 
-void Span::addRangeNumber(int start, int stop, int step) {
-	// std::cout << "addRangeNumber:" << start << "->" << stop << "/" << step << std::endl;
-
-	if (data_.size() == max_size_) {
-		throw std::invalid_argument("[Error] Span is full");
-	}
-	try {
-		assert_range_param(start, stop, step);
-		if (step > 0) {
-			addPositiveRangeNumber(start, stop, step);
-		} else {
-			addNegativeRangeNumber(start, stop, step);
-		}
-	} catch (const std::invalid_argument &e) {
-		throw;
-	}
-}
-
+/* shortestSpan */
 unsigned int Span::shortestSpan() const {
-	if (data_.size() < 2) {
-		throw std::invalid_argument("[Error] Lack numbers to find span");
+	if (data_.size() < MIN_TO_GET_SPAN) {
+		throw std::invalid_argument(YELLOW "[Error] Lack numbers to find span" RESET);
 	}
 	return shortest_span_;
 }
 
+/* longestSpan */
 unsigned int Span::longestSpan() const {
-	if (data_.size() < 2) {
-		throw std::invalid_argument("[Error] Lack numbers to find span");
+	if (data_.size() < MIN_TO_GET_SPAN) {
+		throw std::invalid_argument(YELLOW "[Error] Lack numbers to find span" RESET);
 	}
-	return longest_spen_;
+	return longest_span_;
 }
 
 void Span::update_shortest_span(int num) {
@@ -134,14 +183,16 @@ void Span::update_longest_span() {
 		return;
 	}
 	span_begin_to_end = *end - *begin;
-	longest_spen_ = std::max(longest_spen_, span_begin_to_end);
+	longest_span_ = std::max(longest_span_, span_begin_to_end);
 }
 
 std::set<int> Span::get_data() const { return data_; }
 
 size_t Span::get_size() const { return data_.size(); }
 
-std::string get_data_str(const std::set<int> &st) {
+////////////////////////////////////////////////////////////////////////////////
+
+static std::string get_data_str(const std::set<int> &st) {
 	std::ostringstream oss;
 
 	oss << "[";
