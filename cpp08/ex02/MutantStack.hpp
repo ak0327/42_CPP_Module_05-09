@@ -7,24 +7,28 @@
 # include <stack>
 # include <list>
 
-# define COLOR_RED		"\x1b[31m"
-# define COLOR_GREEN	"\x1b[32m"
-# define COLOR_YELLOW	"\x1b[33m"
-# define COLOR_BLUE		"\x1b[34m"
-# define COLOR_MAGENTA	"\x1b[35m"
-# define COLOR_CYAN		"\x1b[36m"
-# define COLOR_RESET	"\x1b[0m"
+# define RESET			"\033[0m"
+# define BOLD			"\033[1m"
+# define BLACK			"\033[30m"
+# define RED			"\033[31m"
+# define GREEN			"\033[32m"
+# define YELLOW			"\033[33m"
+# define BLUE			"\033[34m"
+# define MAGENTA		"\033[35m"
+# define CYAN			"\033[36m"
+# define WHITE			"\033[37m"
+# define UNDERLINE		"\033[4m"
+# define BOLD_UNDERLINE	"\033[1;4m"
 
 template <typename T>
-class MutantStack {
+class MutantStack : public std::stack<T> {
  public:
 	/* constructor, operator */
 	MutantStack();
 	~MutantStack();
-	MutantStack<T>(const MutantStack<T> &other);
-
+	MutantStack(const MutantStack<T> &other);
 	MutantStack<T> &operator=(const MutantStack<T> &rhs);
-	operator std::stack<T>() const;
+	MutantStack<T> &operator=(const std::stack<T> &rhs);
 
 	/* member function */
 	const T &top() const;
@@ -34,97 +38,97 @@ class MutantStack {
 	void push(const T &value);
 	void pop();
 
+	/* original function */
 	void display_info() const;
 	void display_data() const;
 
-
 	/* iterator */
-	typedef typename std::list<T>::iterator iterator;
-	typedef typename std::list<T>::const_iterator const_iterator;
-
+	typedef typename std::stack<T>::container_type::iterator iterator;
+	typedef typename std::stack<T>::container_type::const_iterator const_iterator;
+	typedef typename std::stack<T>::container_type::reverse_iterator reverse_iterator;
+	typedef typename std::stack<T>::container_type::const_reverse_iterator const_reverse_iterator;
 	iterator begin();
 	const_iterator begin() const;
 
-	iterator rbegin();
-	const_iterator rbegin() const;
+	reverse_iterator rbegin();
+	const_reverse_iterator rbegin() const;
 
 	iterator end();
 	const_iterator end() const;
 
-	iterator rend();
-	const_iterator rend() const;
-
- private:
-	std::stack<T> data_;
-	std::list<T> itr_;
+	reverse_iterator rend();
+	const_reverse_iterator rend() const;
 
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 /* constructor, operator */
 template <typename T>
-MutantStack<T>::MutantStack() : data_(), itr_() {}
+MutantStack<T>::MutantStack() : std::stack<T>() {}
 
 template <typename T>
 MutantStack<T>::~MutantStack() {}
 
 template <typename T>
-MutantStack<T>::MutantStack(const MutantStack<T> &other)
-		: data_(other.data_), itr_(other.itr_) {}
+MutantStack<T>::MutantStack(const MutantStack<T> &other) : std::stack<T>(other) {}
 
 template <typename T>
 MutantStack<T> &MutantStack<T>::operator=(const MutantStack<T> &rhs) {
 	if (this == &rhs) {
 		return *this;
 	}
-	data_ = rhs.data_;
-	itr_ = rhs.itr_;
+	std::stack<T>::operator=(rhs);
 	return *this;
 }
 
 template <typename T>
-MutantStack<T>::operator std::stack<T>() const {
-	return data_;
+MutantStack<T> &MutantStack<T>::operator=(const std::stack<T> &rhs) {
+	if (this == &rhs) {
+		return *this;
+	}
+	std::stack<T>::operator=(rhs);
+	return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /* member function */
 template <typename T>
 const T &MutantStack<T>::top() const {
-	if (data_.empty()) {
-		throw std::invalid_argument(COLOR_YELLOW "[Error] stack is empty" COLOR_RESET);
+	if (empty()) {
+		throw std::invalid_argument(YELLOW "[Error] stack is empty" RESET);
 	}
-	return data_.top();
+	return std::stack<T>::top();
 }
 
 template <typename T>
 bool MutantStack<T>::empty() const {
-	return data_.empty();
+	return std::stack<T>::empty();
 }
 
 template <typename T>
 size_t MutantStack<T>::size() const {
-	return data_.size();
+	return std::stack<T>::size();
 }
 
 template <typename T>
 void MutantStack<T>::push(const T &value) {
-	data_.push(value);
-	itr_.push_back(data_.top());
+	std::stack<T>::push(value);
 }
 
 template <typename T>
 void MutantStack<T>::pop() {
-	data_.pop();
-	itr_.pop_back();
+	if (empty()) {
+		throw std::invalid_argument(YELLOW "[Error] stack is empty" RESET);
+	}
+	std::stack<T>::pop();
 }
 
 template <typename T>
 void MutantStack<T>::display_info() const {
 	std::cout << "----------[stack info]----------" << std::endl;
 	std::cout << " *stack : "; display_data();
-	std::cout << " *size  : " << size() << std::endl;
-	std::cout << " *empty : " << std::boolalpha << empty() << std::endl;
+	std::cout << " *size  : " << std::stack<T>::size() << std::endl;
+	std::cout << " *empty : " << std::boolalpha << std::stack<T>::empty() << std::endl;
 	std::cout << " *top   : ";
 	try {
 		std::cout << top() << std::endl;
@@ -137,55 +141,55 @@ void MutantStack<T>::display_info() const {
 template <typename T>
 void MutantStack<T>::display_data() const {
 	std::cout << "[";
-	for (const_iterator itr = itr_.begin(); itr != itr_.end(); ++itr) {
+	for (const_iterator itr = begin(); itr != end(); ++itr) {
 		std::cout << *itr;
 		const_iterator next = itr;
 		++next;
-		if (next != itr_.end()) {
+		if (next != end()) {
 			std::cout << " ";
 		}
 	}
-	std::cout << " (top)" << std::endl;
+	std::cout << "]" << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 /* iterator */
 template <typename T>
-typename std::list<T>::iterator MutantStack<T>::begin() {
-	return itr_.begin();
+typename std::stack<T>::container_type::iterator MutantStack<T>::begin() {
+	return std::stack<T>::c.begin();
 }
 
 template <typename T>
-typename std::list<T>::const_iterator MutantStack<T>::begin() const {
-	return itr_.begin();
+typename std::stack<T>::container_type::const_iterator MutantStack<T>::begin() const {
+	return static_cast<const_iterator>(std::stack<T>::c.begin());
 }
 
 template <typename T>
-typename std::list<T>::iterator MutantStack<T>::rbegin() {
-	return itr_.rbegin();
+typename std::stack<T>::container_type::reverse_iterator MutantStack<T>::rbegin() {
+	return std::stack<T>::c.rbegin();
 }
 
 template <typename T>
-typename std::list<T>::const_iterator MutantStack<T>::rbegin() const {
-	return itr_.rbegin();
+typename std::stack<T>::container_type::const_reverse_iterator MutantStack<T>::rbegin() const {
+	return static_cast<const_reverse_iterator>(std::stack<T>::c.rbegin());
 }
 
 template <typename T>
-typename std::list<T>::iterator MutantStack<T>::end() {
-	return itr_.end();
+typename std::stack<T>::container_type::iterator MutantStack<T>::end() {
+	return std::stack<T>::c.end();
 }
 
 template <typename T>
-typename std::list<T>::const_iterator MutantStack<T>::end() const {
-	return itr_.end();
+typename std::stack<T>::container_type::const_iterator MutantStack<T>::end() const {
+	return static_cast<const_iterator>(std::stack<T>::c.end());
 }
 
 template <typename T>
-typename std::list<T>::iterator MutantStack<T>::rend() {
-	return itr_.rend();
+typename std::stack<T>::container_type::reverse_iterator MutantStack<T>::rend() {
+	return std::stack<T>::c.rend();
 }
 
 template <typename T>
-typename std::list<T>::const_iterator MutantStack<T>::rend() const {
-	return itr_.rend();
+typename std::stack<T>::container_type::const_reverse_iterator MutantStack<T>::rend() const {
+	return static_cast<const_reverse_iterator>(std::stack<T>::c.rend());
 }

@@ -431,7 +431,7 @@ int main() {
 				std::cout << " 2) int: const arr(10); arr[1]" << std::endl;
 				try {
 					const Array<int> arr(10);
-					std::cout << "  arr[1] : " << arr[1] << std::endl;
+					std::cout << "  const arr[1] : " << arr[1] << std::endl;
 
 					// can't compile
 //					std::cout << "  arr[1] = 42" << std::endl;
