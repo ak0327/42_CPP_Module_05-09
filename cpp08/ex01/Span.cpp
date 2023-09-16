@@ -8,19 +8,20 @@
 
 /* constructor, operator */
 Span::Span() : max_size_(0),
+			   num_count_(0),
 			   shortest_span_(UINT_MAX),
 			   longest_span_(0),
 			   data_(std::set<int>()) {}
 
 Span::Span(unsigned int n) : max_size_(n),
+							 num_count_(0),
 							 shortest_span_(UINT_MAX),
 							 longest_span_(0),
 							 data_(std::set<int>()) {}
 
-Span::Span(const Span &other) : max_size_(other.max_size_),
-								shortest_span_(other.shortest_span_),
-								longest_span_(other.longest_span_),
-								data_(other.data_) {}
+Span::Span(const Span &other) {
+	*this = other;
+}
 
 Span::~Span() {}
 
@@ -29,6 +30,7 @@ Span &Span::operator=(const Span &rhs) {
 		return *this;
 	}
 	max_size_ = rhs.max_size_;
+	num_count_ = rhs.num_count_;
 	shortest_span_ = rhs.shortest_span_;
 	longest_span_ = rhs.longest_span_;
 	data_ = rhs.data_;
@@ -39,9 +41,10 @@ Span &Span::operator=(const Span &rhs) {
 /* member function */
 // addNumber
 void Span::addNumber(int num) {
-	if (data_.size() == max_size_) {
+	if (num_count_ == max_size_) {
 		throw std::invalid_argument(YELLOW "[Error] Span is full" RESET);
 	}
+	num_count_++;
 	data_.insert(num);
 	update_shortest_span(num);
 	update_longest_span();
@@ -88,7 +91,7 @@ void Span::addNumbers(const int *start, const int *stop) {
 void Span::addRangeNumber(int start, int stop, int step) {
 	// std::cout << "addRangeNumber:" << start << "->" << stop << "/" << step << std::endl;
 
-	if (data_.size() == max_size_) {
+	if (num_count_ == max_size_) {
 		throw std::invalid_argument("[Error] Span is full");
 	}
 	try {
@@ -142,7 +145,7 @@ void Span::addNegativeRangeNumber(int start, int stop, int step) {
 
 /* shortestSpan */
 unsigned int Span::shortestSpan() const {
-	if (data_.size() < MIN_TO_GET_SPAN) {
+	if (num_count_ < MIN_TO_GET_SPAN) {
 		throw std::invalid_argument(YELLOW "[Error] Lack numbers to find span" RESET);
 	}
 	return shortest_span_;
@@ -150,7 +153,7 @@ unsigned int Span::shortestSpan() const {
 
 /* longestSpan */
 unsigned int Span::longestSpan() const {
-	if (data_.size() < MIN_TO_GET_SPAN) {
+	if (num_count_ < MIN_TO_GET_SPAN) {
 		throw std::invalid_argument(YELLOW "[Error] Lack numbers to find span" RESET);
 	}
 	return longest_span_;
@@ -160,13 +163,18 @@ void Span::update_shortest_span(int num) {
 	std::set<int>::iterator pos, prev, next;
 	unsigned int span_pos_to_prev, span_pos_to_next;
 
-	pos = data_.find(num);
-	next = pos; ++next;
+	if (data_.size() < num_count_) {
+		shortest_span_ = 0;
+		return;
+	}
+
+ 	pos = data_.find(num);
 	if (pos != data_.begin()) {
 		prev = pos; --prev;
 		span_pos_to_prev = *pos - *prev;
 		shortest_span_ = std::min(shortest_span_, span_pos_to_prev);
 	}
+	next = pos; ++next;
 	if (next != data_.end()) {
 		span_pos_to_next = *next - *pos;
 		shortest_span_ = std::min(shortest_span_, span_pos_to_next);
@@ -174,21 +182,21 @@ void Span::update_shortest_span(int num) {
 }
 
 void Span::update_longest_span() {
-	std::set<int>::iterator begin, end;
-	unsigned int span_begin_to_end;
+	std::set<int>::iterator head, tail;
+	unsigned int span_head_to_tail;
 
-	begin = data_.begin();
-	end = data_.end(); --end;
-	if (end == data_.begin()) {
+	head = data_.begin();
+	tail = data_.end(); --tail;
+	if (head == tail) {
 		return;
 	}
-	span_begin_to_end = *end - *begin;
-	longest_span_ = std::max(longest_span_, span_begin_to_end);
+	span_head_to_tail = *tail - *head;
+	longest_span_ = std::max(longest_span_, span_head_to_tail);
 }
 
 std::set<int> Span::get_data() const { return data_; }
 
-size_t Span::get_size() const { return data_.size(); }
+size_t Span::get_size() const { return num_count_; }
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -208,22 +216,19 @@ static std::string get_data_str(const std::set<int> &st) {
 }
 
 std::ostream &operator<<(std::ostream &os, const Span &span) {
-	ssize_t span_min, span_max;
+	os << " data : " << get_data_str(span.get_data()) << std::endl;
+	os << " size : " << span.get_size() << std::endl;
+	os << " min  : ";
 	try {
-		span_min = span.shortestSpan();
+		std::cout << span.shortestSpan() << std::endl;
 	} catch (const std::exception &e) {
-		span_min = -1;
+		std::cout << "-" << std::endl;
 	}
+	os << " max  : ";
 	try {
-		span_max = span.longestSpan();
+		std::cout << span.longestSpan() << std::endl;
 	} catch (const std::exception &e) {
-		span_max = -1;
+		std::cout << "-" << std::endl;
 	}
-
-	os << " data:" << get_data_str(span.get_data()) << std::endl;
-	os << " size:" << span.get_size() << std::endl;
-	os << " min :" << span_min << std::endl;
-	os << " max :" << span_max << std::endl;
-
 	return os;
 }

@@ -175,6 +175,34 @@ void test_simple() {
 			Span span(10);
 			std::cout << span << std::endl;
 
+			std::cout << CYAN "add(1)" RESET << std::endl;
+			span.addNumber(1);
+			std::cout << span << std::endl;
+
+			std::cout << CYAN "add(1)" RESET << std::endl;
+			span.addNumber(1);
+			std::cout << span << std::endl;
+
+			std::cout << CYAN "add(1)" RESET << std::endl;
+			span.addNumber(1);
+			std::cout << span << std::endl;
+
+			std::cout << CYAN "add(5)" RESET << std::endl;
+			span.addNumber(5);
+			std::cout << span << std::endl;
+
+		} catch (const std::exception &e) {
+			std::cerr << e.what() << std::endl;
+		}
+		std::cout << std::endl;
+	}
+	{
+		std::cout << "-------------------- test --------------------" << std::endl;
+		try {
+			std::cout << CYAN "span(10)" RESET << std::endl;
+			Span span(10);
+			std::cout << span << std::endl;
+
 			std::cout << CYAN "add(1) x 100" RESET << std::endl;
 			for (int i = 0; i < 100; ++i) {
 				span.addNumber(1);
@@ -382,14 +410,9 @@ void test_add_numbers() {
 		std::cout << std::endl;
 	}
 	{
-		std::cout << " 3) addNumbers(forward_list)" << std::endl;
-		std::cout << "delete: C++11" << std::endl;
-		std::cout << std::endl;
-	}
-	{
-		std::cout << " 4) addNumbers(list)" << std::endl;
+		std::cout << " 3) addNumbers(list)" << std::endl;
 		{
-			std::cout << CYAN " 4-1) sp([1, 2, 3, 4, 5])" RESET << std::endl;
+			std::cout << CYAN " 3-1) sp([1, 2, 3, 4, 5])" RESET << std::endl;
 
 			try {
 				std::cout << CYAN "  int values[] = {1, 2, 3, 4, 5};" RESET << std::endl;
@@ -412,7 +435,7 @@ void test_add_numbers() {
 			std::cout << std::endl;
 		}
 		{
-			std::cout << CYAN " 4-2) sp(const [1, 2, 3, 4, 5])" RESET << std::endl;
+			std::cout << CYAN " 3-2) sp(const [1, 2, 3, 4, 5])" RESET << std::endl;
 
 			try {
 				std::cout << CYAN "  const int values[] = {1, 2, 3, 4, 5};" RESET << std::endl;
@@ -435,7 +458,7 @@ void test_add_numbers() {
 			std::cout << std::endl;
 		}
 		{
-			std::cout << CYAN " 4-3) empty container" RESET << std::endl;
+			std::cout << CYAN " 3-3) empty container" RESET << std::endl;
 
 			try {
 				std::cout << CYAN "  int values[] = {1, 2, 3, 4, 5};" RESET << std::endl;
@@ -459,9 +482,9 @@ void test_add_numbers() {
 		std::cout << std::endl;
 	}
 	{
-		std::cout << " 5) addNumbers(set)" << std::endl;
+		std::cout << " 4) addNumbers(set)" << std::endl;
 		{
-			std::cout << CYAN " 5-1) sp([1, 2, 3, 4, 5])" RESET << std::endl;
+			std::cout << CYAN " 4-1) sp([1, 2, 3, 4, 5])" RESET << std::endl;
 
 			try {
 				std::cout << CYAN "  int values[] = {1, 2, 3, 4, 5};" RESET << std::endl;
@@ -484,7 +507,7 @@ void test_add_numbers() {
 			std::cout << std::endl;
 		}
 		{
-			std::cout << CYAN " 5-2) sp(const [1, 2, 3, 4, 5])" RESET << std::endl;
+			std::cout << CYAN " 4-2) sp(const [1, 2, 3, 4, 5])" RESET << std::endl;
 
 			try {
 				std::cout << CYAN "  const int values[] = {1, 2, 3, 4, 5};" RESET << std::endl;
@@ -507,7 +530,7 @@ void test_add_numbers() {
 			std::cout << std::endl;
 		}
 		{
-			std::cout << CYAN " 5-3) empty container" RESET << std::endl;
+			std::cout << CYAN " 4-3) empty container" RESET << std::endl;
 
 			try {
 				std::cout << CYAN "  int values[] = {1, 2, 3, 4, 5};" RESET << std::endl;
@@ -531,9 +554,9 @@ void test_add_numbers() {
 		std::cout << std::endl;
 	}
 	{
-		std::cout << " 6) addNumbers(vector)" << std::endl;
+		std::cout << " 5) addNumbers(vector)" << std::endl;
 		{
-			std::cout << CYAN " 6-1) sp([1, 2, 3, 4, 5])" RESET << std::endl;
+			std::cout << CYAN " 5-1) sp([1, 2, 3, 4, 5])" RESET << std::endl;
 
 			try {
 				std::cout << CYAN "  int values[] = {1, 2, 3, 4, 5};" RESET << std::endl;
@@ -556,7 +579,7 @@ void test_add_numbers() {
 			std::cout << std::endl;
 		}
 		{
-			std::cout << CYAN " 6-2) sp(const [1, 2, 3, 4, 5])" RESET << std::endl;
+			std::cout << CYAN " 5-2) sp(const [1, 2, 3, 4, 5])" RESET << std::endl;
 
 			try {
 				std::cout << CYAN "  const int values[] = {1, 2, 3, 4, 5};" RESET << std::endl;
@@ -579,7 +602,7 @@ void test_add_numbers() {
 			std::cout << std::endl;
 		}
 		{
-			std::cout << CYAN " 6-3) empty container" RESET << std::endl;
+			std::cout << CYAN " 5-3) empty container" RESET << std::endl;
 
 			try {
 				std::cout << CYAN "  int values[] = {1, 2, 3, 4, 5};" RESET << std::endl;
@@ -1061,7 +1084,7 @@ void test_many_numbers() {
 		std::cout << std::endl;
 	}
 	{
-		std::cout << CYAN " 3) 1000,000 numbers" RESET << std::endl;
+		std::cout << CYAN " 3) 1,000,000 numbers" RESET << std::endl;
 		try {
 			std::cout << CYAN " std::vector<int> vec" RESET << std::endl;
 			std::vector<int> vec;
@@ -1101,6 +1124,7 @@ void test_many_numbers() {
 
 int main() {
 	srand(time(NULL));
+
 	test_subject();
 	test_copy();
 	test_simple();

@@ -54,6 +54,7 @@ class Span {
 
  private:
 	unsigned int max_size_;
+	unsigned int num_count_;
 	unsigned int shortest_span_;
 	unsigned int longest_span_;
 	std::set<int> data_;
