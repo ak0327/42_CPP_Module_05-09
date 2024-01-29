@@ -53,13 +53,13 @@ void split_line_by_delimiter(const std::string &line,
 	delim_pos = line.find(delimiter);
 	if (delim_pos == std::string::npos) {
 		std::stringstream ss;
-		ss << std::left << std::setw(20) << "Data invalid." << " => " + line;
+		ss << std::left << std::setw(28) << "Data invalid." << " => " + line;
 		std::string error_msg = ss.str();
 		throw std::invalid_argument(error_msg);
 	}
 	if (delim_pos == 0 || delim_pos + delimiter.length() == line.length()) {
 		std::stringstream ss;
-		ss << std::left << std::setw(20) << "Data invalid." << " => " + line;
+		ss << std::left << std::setw(28) << "Data invalid." << " => " + line;
 		std::string error_msg = ss.str();
 		throw std::invalid_argument(error_msg);
 	}
@@ -91,6 +91,10 @@ std::map<Date, float> BitcoinExchange::get_price_data(std::ifstream &ifs) {
 				throw std::invalid_argument("data.csv data invalid.");
 			}
 			data[date] = rate;
+
+			// std::cout << "[" << line << "]"
+			// 		  << " -> [" << timestamp << "],"
+			// 		  << " [" << rate_str << "](" << rate << ")" << std::endl;
 
 		} catch (const std::exception &e) {
 
@@ -139,7 +143,7 @@ void BitcoinExchange::exchange(const char *input_file_path) {
 			value = lib::to_float_num(value_str, &succeed);
 			if (!succeed || value < 0.0f || 1000.0f < value) {
 				std::stringstream ss;
-				ss << std::left << std::setw(20) << "Input data invalid. " << " => " + value_str;
+				ss << std::left << std::setw(28) << "Input data invalid. " << " => " + value_str;
 				std::string error_msg = ss.str();
 				throw std::invalid_argument(error_msg);
 			}
@@ -147,11 +151,19 @@ void BitcoinExchange::exchange(const char *input_file_path) {
 			rate = get_rate(this->data_, date);
 			if (rate == GET_RATE_ERROR) {
 				std::stringstream ss;
-				ss << std::left << std::setw(20) << "Date too old." << " => " + timestamp;
+				ss << std::left << std::setw(28) << "Date too old." << " => " + timestamp;
 				std::string error_msg = ss.str();
 				throw std::invalid_argument(error_msg);
 			}
+
 			price = rate * value;
+			if (isinf(price)) {
+				std::stringstream ss;
+				ss << std::left << std::setw(28) << "Calculated price too high." << " => " + timestamp;
+				std::string error_msg = ss.str();
+				throw std::invalid_argument(error_msg);
+			}
+
 			std::stringstream ss;
 			ss << std::left << std::setw(13) << timestamp << " => "
 			   << std::right << std::setw(5) << value     << " => "
@@ -176,13 +188,13 @@ Date::Date() : year_(0), month_(0), day_(0) {}
 Date::Date(const std::string &timestamp) : year_(0), month_(0), day_(0) {
 	if (parse_timestamp(timestamp) == FAILURE) {
 		std::stringstream ss;
-		ss << std::left << std::setw(20) << "Invalid date." << " => " + timestamp;
+		ss << std::left << std::setw(28) << "Invalid date." << " => " + timestamp;
 		std::string error_msg = ss.str();
 		throw std::invalid_argument(error_msg);
 	}
 	if (validate_date() == FAILURE) {
 		std::stringstream ss;
-		ss << std::left << std::setw(20) << "Invalid date." << " => " + timestamp;
+		ss << std::left << std::setw(28) << "Invalid date." << " => " + timestamp;
 		std::string error_msg = ss.str();
 		throw std::invalid_argument(error_msg);
 	}
@@ -406,8 +418,26 @@ float get_fractional_part(const std::string &str_after_decimal_point,
 	return num;
 }
 
+
+float get_integer_part(const std::string &str, std::size_t *idx) {
+	float num;
+	int digit;
+	size_t	pos;
+
+	num = 0;
+	pos = 0;
+	while (isdigit(str[pos])) {
+		digit = lib::to_digit(str[pos]);
+		num = num * 10 + static_cast<float>(digit);
+		++pos;
+	}
+	*idx = pos;
+	return num;
+}
+
+
 float lib::to_float_num(const std::string &str, bool *succeed) {
-	bool		is_success, is_of;
+	bool		is_success;
 	float		num, precision_num;
 	std::size_t	pos, precision_idx;
 
@@ -418,13 +448,9 @@ float lib::to_float_num(const std::string &str, bool *succeed) {
 	if (!std::isdigit(str[pos])) {
 		return num;
 	}
-	num = static_cast<float>(stoi(str, &pos, &is_of));
-	if (is_of) {
-		if (succeed) {
-			*succeed = false;
-		}
-		return num;
-	}
+
+	num = get_integer_part(str, &pos);
+
 	if (str[pos] != DECIMAL_POINT) {
 		if (str[pos] == '\0') {
 			is_success = true;
