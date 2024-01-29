@@ -3,7 +3,7 @@ NAME		=	btc
 CXX			=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -MMD -MP -pedantic
 
-SRCS		=	main.cpp
+SRCS		=	main.cpp BitcoinExchange.cpp
 
 OBJS_DIR	=	objs
 OBJ			=	$(SRCS:%.cpp=%.o)
@@ -38,6 +38,12 @@ re		: fclean all
 
 .PHONY	: run
 run		: all
-	./$(NAME)
+	./$(NAME) input.txt
+
+#.PHONY	: test
+#test	:
+#	cmake -S . -B build
+#	cmake --build build
+#	./build/test
 
 -include $(DEPS)
