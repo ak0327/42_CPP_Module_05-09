@@ -16,13 +16,13 @@
 # define PRICE_DATA_PATH		"./data.csv"
 # define DATA_CSV_HEADER		"date,exchange_rate"
 
-# define RESET            "\033[0m"
-# define RED             "\033[31m"
-# define GREEN           "\033[32m"
-# define YELLOW          "\033[33m"
-# define BLUE            "\033[34m"
-# define MAGENTA         "\033[35m"
-# define CYAN            "\033[36m"
+# define RESET			"\033[0m"
+# define RED			"\033[31m"
+# define GREEN			"\033[32m"
+# define YELLOW			"\033[33m"
+# define BLUE			"\033[34m"
+# define MAGENTA		"\033[35m"
+# define CYAN			"\033[36m"
 # define GRAY			"\033[90m"
 
 namespace lib {
