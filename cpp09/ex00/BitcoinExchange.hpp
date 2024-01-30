@@ -28,7 +28,7 @@
 namespace lib {
 
 int to_digit(const char &c);
-int to_integer(const std::string &str, std::size_t *end, bool *is_overflow);
+int to_integer_num(const std::string &str, std::size_t *end, bool *is_overflow);
 float to_float_num(const std::string &str, bool *succeed);
 
 }
@@ -50,8 +50,8 @@ struct Date {
 
  private:
 	int parse_timestamp(const std::string &timestamp);
-	int validate_date();
-	bool is_leap_year(int year);
+	int validate_date() const;
+	bool is_leap_year(int year) const;
 };
 
 class BitcoinExchange {
@@ -69,3 +69,5 @@ class BitcoinExchange {
 
 	std::map<Date, float> get_price_data(std::ifstream &ifs);
 };
+
+std::ostream &operator<<(std::ostream &out, const std::map<Date, float> &data);

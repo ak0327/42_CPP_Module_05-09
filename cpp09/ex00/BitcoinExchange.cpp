@@ -13,6 +13,7 @@ BitcoinExchange::BitcoinExchange() {
 	}
 
 	this->data_ = get_price_data(ifs);
+	// std::cout << this->data_;
 	ifs.close();
 }
 
@@ -112,7 +113,7 @@ float get_rate(std::map<Date, float> &data, const Date &date) {
 	}
 
 	itr = data.lower_bound(date);
-	if (itr == data.begin() || itr == data.end()) {
+	if (itr == data.begin()) {
 		return GET_RATE_ERROR;
 	}
 	--itr;
@@ -126,6 +127,7 @@ void BitcoinExchange::exchange(const char *input_file_path) {
 	float value, price, rate;
 	bool succeed;
 	Date date;
+	std::size_t line_no;
 
 	ifs.open(input_file_path, std::ifstream::in);
 	if (!ifs.is_open()) {
@@ -134,8 +136,15 @@ void BitcoinExchange::exchange(const char *input_file_path) {
 
 	skip_header(ifs, "date | value");
 
+	line_no = 1;
 	while (std::getline(ifs, line)) {
 		try {
+			++line_no;
+
+			if (line.empty()) {
+				continue;
+			}
+
 			split_line_by_delimiter(line, INPUT_DELIMITER,timestamp, value_str);
 
 			date = Date(timestamp);
@@ -143,7 +152,7 @@ void BitcoinExchange::exchange(const char *input_file_path) {
 			value = lib::to_float_num(value_str, &succeed);
 			if (!succeed || value < 0.0f || 1000.0f < value) {
 				std::stringstream ss;
-				ss << std::left << std::setw(28) << "Input data invalid. " << " => " + value_str;
+				ss << std::left << std::setw(28) << "Input data invalid. " << " => " << value_str;
 				std::string error_msg = ss.str();
 				throw std::invalid_argument(error_msg);
 			}
@@ -151,33 +160,52 @@ void BitcoinExchange::exchange(const char *input_file_path) {
 			rate = get_rate(this->data_, date);
 			if (rate == GET_RATE_ERROR) {
 				std::stringstream ss;
-				ss << std::left << std::setw(28) << "Date too old." << " => " + timestamp;
+				ss << std::left << std::setw(28) << "Date too old." << " => " << timestamp;
 				std::string error_msg = ss.str();
 				throw std::invalid_argument(error_msg);
 			}
 
 			price = rate * value;
+			// std::cout << CYAN << "price:" << price << ", rate:" << rate << ", value:" << value << RESET << std::endl;
+
 			if (isinf(price)) {
 				std::stringstream ss;
-				ss << std::left << std::setw(28) << "Calculated price too high." << " => " + timestamp;
+				ss << std::left << std::setw(28) << "Calculated price too high." << " => " << timestamp;
 				std::string error_msg = ss.str();
 				throw std::invalid_argument(error_msg);
 			}
 
 			std::stringstream ss;
-			ss << std::left << std::setw(13) << timestamp << " => "
-			   << std::right << std::setw(5) << value     << " => "
-			   << std::right << std::setw(5) << price;
+			ss << std::left << std::setw(12) << timestamp << " => "
+			   << std::right << std::setw(12) << std::fixed << std::setprecision(6) << value     << " => "
+			   << std::right << std::setw(15) << std::fixed << std::setprecision(6) << price;
 			std::cout << CYAN << ss.str() << RESET << std::endl;
 
 		} catch (const std::exception &e) {
-			std::string error_msg = "[Error]: " + std::string(e.what());
+			std::stringstream ss;
+			ss << std::left << std::setw(60) << "[Error]: " + std::string(e.what()) << " :(L" << line_no << ")";
+			std::string error_msg = ss.str();
 			std::cout << YELLOW << error_msg << RESET << std::endl;
 		}
+
+
 	}
 	ifs.close();
 }
 
+
+std::ostream &operator<<(std::ostream &out, const std::map<Date, float> &data) {
+	std::map<Date, float>::const_iterator itr;
+	for (itr = data.begin(); itr != data.end(); ++itr) {
+		Date date = itr->first;
+		float rate = itr->second;
+
+		out << date.year_ << "-" << date.month_ << "-"<< date.day_
+			<< ":"
+			<< rate << std::endl;
+	}
+	return out;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -238,7 +266,7 @@ int Date::parse_timestamp(const std::string &timestamp) {
 
 	pos = 0;
 
-	year = lib::to_integer(&timestamp[pos], &end, &is_of);
+	year = lib::to_integer_num(&timestamp[pos], &end, &is_of);
 	pos += end;
 	if (end == 0 || is_of) {
 		return FAILURE;
@@ -248,7 +276,7 @@ int Date::parse_timestamp(const std::string &timestamp) {
 	}
 	++pos;
 
-	month = lib::to_integer(&timestamp[pos], &end, &is_of);
+	month = lib::to_integer_num(&timestamp[pos], &end, &is_of);
 	pos += end;
 	if (end == 0 || is_of) {
 		return FAILURE;
@@ -258,7 +286,7 @@ int Date::parse_timestamp(const std::string &timestamp) {
 	}
 	++pos;
 
-	day = lib::to_integer(&timestamp[pos], &end, &is_of);
+	day = lib::to_integer_num(&timestamp[pos], &end, &is_of);
 	pos += end;
 	if (end == 0 || is_of) {
 		return FAILURE;
@@ -274,7 +302,7 @@ int Date::parse_timestamp(const std::string &timestamp) {
 }
 
 
-bool Date::is_leap_year(int year) {
+bool Date::is_leap_year(int year) const {
 	if (year % 4 != 0) {
 		return false;
 	}
@@ -285,7 +313,7 @@ bool Date::is_leap_year(int year) {
 }
 
 
-int Date::validate_date() {
+int Date::validate_date() const {
 	int month_idx;
 	int days_in_month[12];
 	const int jan_idx = 0, feb_idx = 1, mar_idx = 2, apr_idx = 3,
@@ -293,13 +321,17 @@ int Date::validate_date() {
 			  sep_idx = 8, oct_idx = 9, nov_idx = 10, dec_idx = 11;
 	const int GREGORIAN_CALENDAR = 1582;
 
-	if (this->year_ < GREGORIAN_CALENDAR || this->month_ < 1 || 12 < this->month_) {
+	int year = this->year_;
+	int month = this->month_;
+	int day = this->day_;
+
+	if (year < GREGORIAN_CALENDAR || month < 1 || 12 < month) {
 		return FAILURE;
 	}
-	month_idx = this->month_ - 1;
+	month_idx = month - 1;
 
 	days_in_month[jan_idx] = 31;
-	days_in_month[feb_idx] = is_leap_year(this->year_) ? 29 : 28;
+	days_in_month[feb_idx] = is_leap_year(year) ? 29 : 28;
 	days_in_month[mar_idx] = 31;
 	days_in_month[apr_idx] = 30;
 	days_in_month[may_idx] = 31;
@@ -311,7 +343,7 @@ int Date::validate_date() {
 	days_in_month[nov_idx] = 30;
 	days_in_month[dec_idx] = 31;
 
-	if (1 <= this->day_ && this->day_ <= days_in_month[month_idx]) {
+	if (1 <= day && day <= days_in_month[month_idx]) {
 		return SUCCESS;
 	}
 	return FAILURE;
@@ -388,7 +420,7 @@ int stoi(const std::string &str, std::size_t *idx, bool *overflow) {
 }
 
 
-int lib::to_integer(const std::string &str, std::size_t *end, bool *is_overflow) {
+int lib::to_integer_num(const std::string &str, std::size_t *end, bool *is_overflow) {
 	std::size_t pos = 0;
 
 	if (is_overflow) { *is_overflow = false; }
@@ -398,9 +430,9 @@ int lib::to_integer(const std::string &str, std::size_t *end, bool *is_overflow)
 }
 
 
-float get_fractional_part(const std::string &str_after_decimal_point,
+double get_fractional_part(const std::string &str_after_decimal_point,
 						   size_t *precision_idx) {
-	float	digit, num;
+	double	digit, num;
 	int		precision_num;
 	size_t	pos;
 
@@ -409,7 +441,7 @@ float get_fractional_part(const std::string &str_after_decimal_point,
 	pos = 0;
 	while (isdigit(str_after_decimal_point[pos])) {
 		precision_num = lib::to_digit(str_after_decimal_point[pos]);
-		num = num * 10 + static_cast<float>(precision_num);
+		num = num * 10 + static_cast<double>(precision_num);
 		digit *= 10;
 		++pos;
 	}
@@ -419,16 +451,16 @@ float get_fractional_part(const std::string &str_after_decimal_point,
 }
 
 
-float get_integer_part(const std::string &str, std::size_t *idx) {
-	float num;
+double get_integer_part(const std::string &str, std::size_t *idx) {
+	double num;
 	int digit;
-	size_t	pos;
+	size_t pos;
 
 	num = 0;
 	pos = 0;
 	while (isdigit(str[pos])) {
 		digit = lib::to_digit(str[pos]);
-		num = num * 10 + static_cast<float>(digit);
+		num = num * 10 + static_cast<double>(digit);
 		++pos;
 	}
 	*idx = pos;
@@ -437,8 +469,8 @@ float get_integer_part(const std::string &str, std::size_t *idx) {
 
 
 float lib::to_float_num(const std::string &str, bool *succeed) {
-	bool		is_success;
-	float		num, precision_num;
+	bool is_success;
+	double num, precision_num;
 	std::size_t	pos, precision_idx;
 
 	is_success = false;
@@ -446,7 +478,7 @@ float lib::to_float_num(const std::string &str, bool *succeed) {
 	num = 0;
 	pos = 0;
 	if (!std::isdigit(str[pos])) {
-		return num;
+		return static_cast<float>(num);
 	}
 
 	num = get_integer_part(str, &pos);
@@ -458,7 +490,7 @@ float lib::to_float_num(const std::string &str, bool *succeed) {
 		if (succeed) {
 			*succeed = is_success;
 		}
-		return num;
+		return static_cast<float>(num);
 	}
 	++pos;
 
@@ -472,5 +504,5 @@ float lib::to_float_num(const std::string &str, bool *succeed) {
 	if (succeed) {
 		*succeed = is_success;
 	}
-	return num;
+	return static_cast<float>(num);
 }
