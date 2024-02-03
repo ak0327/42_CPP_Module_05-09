@@ -282,7 +282,7 @@ int main(int argc, char **argv) {
     //--------------------------------------------------------------------------
     std::cout << "compare count(deque)  : " << sort_deque.get_compare_cnt() << std::endl;
     std::cout << "compare count(vector) : " << sort_vector.get_compare_cnt() << std::endl;
-    std::cout << "log(n)                : " << calc_compare_count(static_cast<int>(nums_cnt)) << std::endl;
+    std::cout << "sum(k=1..N) ⌈log2(k)⌉ : " << calc_compare_count(static_cast<int>(nums_cnt)) << std::endl;
 
     return EXIT_SUCCESS;
 }
