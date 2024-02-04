@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <list>
 #include <vector>
 #include "PmergeMe.hpp"
 
@@ -85,12 +86,13 @@ int to_integer_num(const std::string &str, std::size_t &end, bool &succeed) {
     return stoi(str, end, succeed);
 }
 
-template <typename Container1, typename Container2>
+template <typename Container1, typename Container2, typename Container3>
 void get_args(std::size_t &nums_idx,
               char **args,
               bool &succeed,
               Container1 &container1,
-              Container2 &container2) {
+              Container2 &container2,
+              Container3 &container3) {
     int num;
     bool stoi_succeed;
     std::size_t end;
@@ -110,6 +112,7 @@ void get_args(std::size_t &nums_idx,
 
         container1.push_back(num);
         container2.push_back(num);
+        container3.push_back(num);
         ++nums_idx;
     }
 
@@ -122,7 +125,7 @@ void get_args(std::size_t &nums_idx,
 
 template <typename Container>
 std::string get_elements_str(const Container &container) {
-    typename Container::const_iterator elem;
+    typename Container::const_iterator elem, next_elem;
     std::stringstream ss;
     std::size_t cnt;
 
@@ -135,7 +138,10 @@ std::string get_elements_str(const Container &container) {
             break;
         }
         ss << *elem;
-        if (elem + 1 != container.end()) {
+
+        next_elem = elem;
+        ++next_elem;
+        if (next_elem != container.end()) {
             ss << " ";
         }
     }
@@ -143,8 +149,13 @@ std::string get_elements_str(const Container &container) {
     return ss.str();
 }
 
-std::ostream &operator<<(std::ostream &out, const std::deque<int> &deque) {
-    out << get_elements_str(deque);
+// std::ostream &operator<<(std::ostream &out, const std::deque<int> &deque) {
+//     out << get_elements_str(deque);
+//     return out;
+// }
+
+std::ostream &operator<<(std::ostream &out, const std::list<int> &list) {
+    out << get_elements_str(list);
     return out;
 }
 
@@ -174,9 +185,11 @@ std::string get_error_msg(const char *err_arg) {
 
 template <typename Container>
 std::string result(const std::vector<int> &expected, const Container &actual) {
+    std::vector<int>::const_iterator expected_itr;
+    typename Container::const_iterator actual_itr;
     std::stringstream ss;
     std::size_t cnt;
-    bool ok = true;
+    bool ok, omitted;
 
     if (expected.size() != actual.size()) {
         ss << YELLOW << " <sort result> size NG -> "
@@ -186,38 +199,44 @@ std::string result(const std::vector<int> &expected, const Container &actual) {
     }
 
     cnt = 0;
+    ok = true;
+    omitted = false;
+    expected_itr = expected.begin();
+    actual_itr = actual.begin();
+
     ss << "[";
-    for (std::size_t i = 0; i < expected.size(); ++i) {
+    while (expected_itr != expected.end() && actual_itr != actual.end()) {
         ++cnt;
-        if (cnt >= OMIT_CNT) {
-            ss << "... ";
-            break;
+        if (cnt == OMIT_CNT) {
+            ss << "...";
+            omitted = true;
         }
-        if (expected[i] == actual[i]) {
-            ss << actual[i];
+
+        std::stringstream elem_ss;
+        if (*expected_itr == *actual_itr) {
+            elem_ss << *actual_itr;
         } else {
-            ss << RED << actual[i] << RESET;
+            ok = false;
+            elem_ss << RED << *actual_itr << RESET;
         }
-        ss << (i + 1 < expected.size() ? " " : "");
+
+        if (!omitted) {
+            ss << elem_ss.str();
+        }
+
+        ss << (!omitted && expected_itr + 1 != expected.end() ? " " : "");
+
+        ++expected_itr;
+        ++actual_itr;
     }
     ss << "]";
+
     if (ok) {
         ss << GREEN << " OK" << RESET;
     } else {
         ss << RED << " NG" << RESET;
     }
     return ss.str();
-}
-
-
-int calc_compare_count(int n) {
-    double ans = 0;
-
-    for (int k = 1; k <= n; ++k) {
-        double term = std::ceil(std::log2(3.0 * k / 4.0));
-        ans += term;
-    }
-    return static_cast<int>(ans);
 }
 
 
@@ -230,25 +249,29 @@ int main(int argc, char **argv) {
     std::size_t nums_idx;
     std::size_t nums_cnt;
     std::vector<int> std_sorted;
-    std::vector<int> nums_vec, sorted_vec;
     std::deque<int> nums_dq, sorted_dq;
+    std::list<int> nums_list, sorted_list;
+    std::vector<int> nums_vec, sorted_vec;
+    PmergeMe<std::deque<int> > sort_deque;
+    PmergeMe<std::list<int> > sort_list;
     PmergeMe<std::vector<int> > sort_vector;
-    PmergeMe<std::deque<int> >  sort_deque;
 
-    get_args(nums_idx, &argv[1], succeed, nums_dq, nums_vec);
+    get_args(nums_idx, &argv[1], succeed, nums_dq, nums_list, nums_vec);
     if (!succeed) {
         std::cout << YELLOW << "[Error] " << get_error_msg(argv[nums_idx + 1]) << RESET << std::endl;
         return EXIT_FAILURE;
     }
 
     nums_cnt = argc - 1;
+    // sort_deque.sort(nums_dq);
+    sort_list.sort(nums_list);
     sort_vector.sort(nums_vec);
-    sort_deque.sort(nums_dq);
 
     //--------------------------------------------------------------------------
     // before
     //--------------------------------------------------------------------------
-    std::cout << "Before(deque) : " << sort_deque.get_sequence() << std::endl;
+    // std::cout << "Before(deque) : " << sort_deque.get_sequence() << std::endl;
+    std::cout << "Before(list)  : " << sort_list.get_sequence() << std::endl;
     std::cout << "Before(vector): " << sort_vector.get_sequence() << std::endl;
     std::cout << std::endl;
 
@@ -257,12 +280,15 @@ int main(int argc, char **argv) {
     //--------------------------------------------------------------------------
     std_sorted = nums_vec;
     std::sort(std_sorted.begin(), std_sorted.end());
+
+    // sorted_dq = sort_deque.get_sorted();
     sorted_vec = sort_vector.get_sorted();
-    sorted_dq = sort_deque.get_sorted();
+    sorted_list = sort_list.get_sorted();
 
     std::cout << "std::sort     : " << std_sorted << std::endl;
+    // std::cout << "After(deque)  : " << result(std_sorted, sorted_dq) << std::endl;
+    std::cout << "After(list)   : " << result(std_sorted, sorted_list) << std::endl;
     std::cout << "After(vector) : " << result(std_sorted, sorted_vec) << std::endl;
-    std::cout << "After(deque)  : " << result(std_sorted, sorted_dq) << std::endl;
 
     std::cout << std::endl;
 
@@ -270,19 +296,16 @@ int main(int argc, char **argv) {
     //--------------------------------------------------------------------------
     // time
     //--------------------------------------------------------------------------
+    // std::cout << runtime_msg(nums_cnt, "std::deque ") << " : "
+    //           << std::fixed << std::setprecision(0) << sort_deque.get_process_time() << " us" << std::endl;
+
+    std::cout << runtime_msg(nums_cnt, "std::list  ") << " : "
+              << std::fixed << std::setprecision(0) << sort_list.get_process_time() << " us" << std::endl;
+
     std::cout << runtime_msg(nums_cnt, "std::vector") << " : "
-    << std::fixed << std::setprecision(1) << sort_vector.get_process_time() << " us" << std::endl;
+              << std::fixed << std::setprecision(0) << sort_vector.get_process_time() << " us" << std::endl;
 
-    std::cout << runtime_msg(nums_cnt, "std::deque ") << " : "
-    << std::fixed << std::setprecision(1) << sort_deque.get_process_time() << " us" << std::endl;
     std::cout << std::endl;
-
-    //--------------------------------------------------------------------------
-    // compare_cnt
-    //--------------------------------------------------------------------------
-    std::cout << "compare count(deque)  : " << sort_deque.get_compare_cnt() << std::endl;
-    std::cout << "compare count(vector) : " << sort_vector.get_compare_cnt() << std::endl;
-    std::cout << "sum(k=1..N) ⌈log2(k)⌉ : " << calc_compare_count(static_cast<int>(nums_cnt)) << std::endl;
 
     return EXIT_SUCCESS;
 }

@@ -3,5 +3,5 @@
 !.gitignore
 !Makefile
 !main.cpp
-!PmergeMe.cpp
+!PmergeMe.tpp
 !PmergeMe.hpp
