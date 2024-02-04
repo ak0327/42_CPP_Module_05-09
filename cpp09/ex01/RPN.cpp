@@ -1,3 +1,4 @@
+#include <climits>
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -8,69 +9,12 @@
 
 RPN::RPN() : succeed_(false), calc_result_(), num_stack_() {}
 
+RPN::RPN(const char *expression) : succeed_(false), calc_result_(), num_stack_() {
+    rpn(std::string(expression));
+}
+
 RPN::RPN(const std::string &expression) : succeed_(false), calc_result_(), num_stack_() {
-	int num, num1, num2;
-	char c, op;
-
-	for (std::size_t pos = 0; pos < expression.length(); ++pos) {
-		c = expression[pos];
-
-		if (is_delimiter(c)) {
-			continue;
-		}
-		if (is_num(c)) {
-			num = to_digit(c);
-			this->num_stack_.push(num);
-			continue;
-		}
-		if (is_operator(c)) {
-			op = c;
-			if (this->num_stack_.size() < 2) {
-				return;
-			}
-			num2 = this->num_stack_.top();
-			this->num_stack_.pop();
-			num1 = this->num_stack_.top();
-			this->num_stack_.pop();
-
-			if (!is_valid_operand(num1, num2, op)) {
-				return;
-			}
-
-			switch (op) {
-				case '+':
-					num = num1 + num2;
-					break;
-				case '-':
-					num = num1 - num2;
-					break;
-				case '*':
-					num = num1 * num2;
-					break;
-				case '/':
-					num = num1 / num2;
-					break;
-				default:
-					return;
-			}
-			// std::cout << CYAN << " "
-			// << std::right << std::setw(10) << num1
-			// << " " << op << " "
-			// << std::left << std::setw(10) << num2
-			// << " = "
-			// << std::right << std::setw(10)<< num << RESET << std::endl;
-			this->num_stack_.push(num);
-			continue;
-		}
-		return;
-	}
-
-	if (this->num_stack_.size() != 1) {
-		return;
-	}
-	this->calc_result_ = num_stack_.top();
-	this->num_stack_.pop();
-	this->succeed_ = true;
+    rpn(expression);
 }
 
 RPN::RPN(const RPN &other) {
@@ -87,6 +31,71 @@ RPN &RPN::operator=(const RPN &rhs) {
 	this->calc_result_ = rhs.calc_result_;
 	this->num_stack_ = rhs.num_stack_;
 	return *this;
+}
+
+void RPN::rpn(const std::string &expression) {
+    int num, num1, num2;
+    char c, op;
+
+    for (std::size_t pos = 0; pos < expression.length(); ++pos) {
+        c = expression[pos];
+
+        if (is_delimiter(c)) {
+            continue;
+        }
+        if (is_num(c)) {
+            num = to_digit(c);
+            this->num_stack_.push(num);
+            continue;
+        }
+        if (is_operator(c)) {
+            op = c;
+            if (this->num_stack_.size() < 2) {
+                return;
+            }
+            num2 = this->num_stack_.top();
+            this->num_stack_.pop();
+            num1 = this->num_stack_.top();
+            this->num_stack_.pop();
+
+            if (!is_valid_operand(num1, num2, op)) {
+                return;
+            }
+
+            switch (op) {
+                case '+':
+                    num = num1 + num2;
+                    break;
+                case '-':
+                    num = num1 - num2;
+                    break;
+                case '*':
+                    num = num1 * num2;
+                    break;
+                case '/':
+                    num = num1 / num2;
+                    break;
+                default:
+                    return;
+            }
+            // std::cout << CYAN << " "
+            // << std::right << std::setw(10) << num1
+            // << " " << op << " "
+            // << std::left << std::setw(10) << num2
+            // << " = "
+            // << std::right << std::setw(10)<< num << RESET << std::endl;
+            this->num_stack_.push(num);
+            continue;
+        }
+        return;
+    }
+
+    if (this->num_stack_.size() != 1) {
+        return;
+    }
+    this->calc_result_ = num_stack_.top();
+    this->num_stack_.pop();
+    this->succeed_ = true;
 }
 
 bool RPN::is_succeed() { return this->succeed_; }

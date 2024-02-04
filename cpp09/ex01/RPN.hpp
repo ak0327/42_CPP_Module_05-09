@@ -1,6 +1,7 @@
 #pragma once
 
 # include <stack>
+# include <string>
 
 # define DELIMITER	" \t"
 # define OPERATOR	"+-/*"
@@ -8,6 +9,7 @@
 class RPN {
  public:
 	RPN();
+    RPN(const char *expression);
 	RPN(const std::string &expression);
 	RPN(const RPN &other);
 	~RPN();
@@ -30,6 +32,8 @@ class RPN {
 	bool succeed_;
 	int calc_result_;
 	std::stack<int> num_stack_;
+
+    void rpn(const std::string &expression);
 
 	bool is_operator(char c);
 	bool is_num(char c);
