@@ -54,13 +54,13 @@ void split_line_by_delimiter(const std::string &line,
 	delim_pos = line.find(delimiter);
 	if (delim_pos == std::string::npos) {
 		std::stringstream ss;
-		ss << std::left << std::setw(28) << "Data invalid." << " => " + line;
+		ss << std::left << std::setw(28) << "Input data invalid." << " => '" << line << "'";
 		std::string error_msg = ss.str();
 		throw std::invalid_argument(error_msg);
 	}
 	if (delim_pos == 0 || delim_pos + delimiter.length() == line.length()) {
 		std::stringstream ss;
-		ss << std::left << std::setw(28) << "Data invalid." << " => " + line;
+		ss << std::left << std::setw(28) << "Input data invalid." << " => '" << line << "'";
 		std::string error_msg = ss.str();
 		throw std::invalid_argument(error_msg);
 	}
@@ -152,7 +152,7 @@ void BitcoinExchange::exchange(const char *input_file_path) {
 			value = lib::to_float_num(value_str, &succeed);
 			if (!succeed || value < 0.0f || 1000.0f < value) {
 				std::stringstream ss;
-				ss << std::left << std::setw(28) << "Input data invalid. " << " => " << value_str;
+				ss << std::left << std::setw(28) << "Input value invalid. " << " => '" << value_str << "'";
 				std::string error_msg = ss.str();
 				throw std::invalid_argument(error_msg);
 			}
@@ -160,7 +160,7 @@ void BitcoinExchange::exchange(const char *input_file_path) {
 			rate = get_rate(this->data_, date);
 			if (rate == GET_RATE_ERROR) {
 				std::stringstream ss;
-				ss << std::left << std::setw(28) << "Date too old." << " => " << timestamp;
+				ss << std::left << std::setw(28) << "Input date too old." << " => '" << timestamp << "'";
 				std::string error_msg = ss.str();
 				throw std::invalid_argument(error_msg);
 			}
@@ -170,7 +170,7 @@ void BitcoinExchange::exchange(const char *input_file_path) {
 
 			if (isinf(price)) {
 				std::stringstream ss;
-				ss << std::left << std::setw(28) << "Calculated price too high." << " => " << timestamp;
+				ss << std::left << std::setw(28) << "Calculated price too high." << " => '" << timestamp << "'";
 				std::string error_msg = ss.str();
 				throw std::invalid_argument(error_msg);
 			}
@@ -216,13 +216,13 @@ Date::Date() : year_(0), month_(0), day_(0) {}
 Date::Date(const std::string &timestamp) : year_(0), month_(0), day_(0) {
 	if (parse_timestamp(timestamp) == FAILURE) {
 		std::stringstream ss;
-		ss << std::left << std::setw(28) << "Invalid date." << " => " + timestamp;
+		ss << std::left << std::setw(28) << "Invalid date." << " => '" + timestamp << "'";
 		std::string error_msg = ss.str();
 		throw std::invalid_argument(error_msg);
 	}
 	if (validate_date() == FAILURE) {
 		std::stringstream ss;
-		ss << std::left << std::setw(28) << "Invalid date." << " => " + timestamp;
+		ss << std::left << std::setw(28) << "Invalid date." << " => '" + timestamp << "'";
 		std::string error_msg = ss.str();
 		throw std::invalid_argument(error_msg);
 	}
