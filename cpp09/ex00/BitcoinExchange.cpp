@@ -1,3 +1,6 @@
+#include <climits>
+#include <cmath>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -367,10 +370,10 @@ bool is_in_int_range(int before_x10_num,
 		max_div = -(INT_MIN / 10);
 		max_mod = -(INT_MIN % 10);
 	}
-	if (std::abs(before_x10_num) < max_div) {
+	if (abs(before_x10_num) < max_div) {
 		return true;
 	}
-	if (std::abs(before_x10_num) == max_div && max_mod == add_num) {
+	if (abs(before_x10_num) == max_div && max_mod == add_num) {
 		return true;
 	}
 	return false;
