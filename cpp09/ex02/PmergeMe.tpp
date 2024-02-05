@@ -55,33 +55,39 @@ const Container &PmergeMe<Container>::get_sorted() const {
     return sorted_;
 }
 
-/*
- * sequences : [3, 1, 4, 1, 5, 9, 2, 6]
+/* Merge insertion Sort
+ * https://github.com/decidedlyso/merge-insertion-sort
  *
- * (a, b)    : (3, 1), (4, 1), (5, 9), (2, 6)
+ * sequences  : [3 1 4 1 5 9 2 6 5]
  *
- * sort by a : (2, 6), (3, 1), (4, 1), (5, 9)
+ * sep        : (3, 1), (4, 1), (5, 9), (2, 6)   5
+ * (a, b)pair : (1, 3), (1, 4), (5, 9), (2, 6)   5
+ *
+ * sort by a  : (1, 3), (1, 4), (2, 6), (5, 9)   5
  *               |_______^_______^______^ sorted
  *
- * main chain: [2 3 4 5]
- * b_arr     : [6 1 1 9]
+ * main chain : [1 1 2 5]
+ * b_arr      : [3 4 6 9]   5
  *
  * insert b to main chain by binary search, upper or lower is a
- *      6(2) : [2 3 4 5]
- *                     ^
+ *      3(1)  : [1 1 2 5]
+ *               |    ^
  *
- *      1(3) : [2 3 4 5 6]
- *             ^
+ *      4(1)  : [1 1 2 3 5]
+ *               |      ^
  *
- *      1(4) : [1 2 3 4 5 6]
- *             ^
+ *      6(2)  : [1 1 2 3 4 5]
+ *                   |      ^
  *
- *      9(5) : [1 1 2 3 4 5 6]
- *                          ^
+ *      9(5)  : [1 1 2 3 4 5 6]
+ *                         |  ^
+ *
+ *      5     : [1 1 2 3 4 5 6 9]
+ *                         ^
  */
 template <typename Container>
 void PmergeMe<Container>::sort(const Container &arr) {
-    timeval start_time, end_time;
+    timeval start_time = {}, end_time = {};
 
     this->sequence_ = arr;
     gettimeofday(&start_time, NULL);
@@ -91,38 +97,50 @@ void PmergeMe<Container>::sort(const Container &arr) {
 }
 
 template <typename Container>
-template <typename Iterator>
-void PmergeMe<Container>::merge(Iterator first, Iterator mid, Iterator last) const {
-    typedef typename std::iterator_traits<Iterator>::value_type ValueType;
-    std::vector<ValueType> temp(std::distance(first, last));
-    Iterator left, right, tmp;
+template <typename PairIterator>
+void PmergeMe<Container>::merge(PairIterator first, PairIterator mid, PairIterator last) const {
+    typedef typename std::iterator_traits<PairIterator>::value_type ItrType;
+    typedef typename Container::value_type ValueType;
+    std::vector<ItrType> merged(std::distance(first, last));
+    PairIterator left, right, merged_elem;
+    ValueType a_left, a_right;
 
     left = first;
     right = mid;
-    tmp = temp.begin();
+    merged_elem = merged.begin();
     while (left < mid && right < last) {
-        if ((*left).first <= (*right).first) {
-            *tmp++ = *left++;
+        a_left = (*left).first;
+        a_right = (*right).first;
+
+        if (a_left <= a_right) {
+            *merged_elem = *left;
+            ++left;
         } else {
-            *tmp++ = *right++;
+            *merged_elem = *right;
+            ++right;
         }
+        ++merged_elem;
     }
 
     while (left < mid) {
-        *tmp++ = *left++;
+        *merged_elem = *left;
+        ++merged_elem;
+        ++left;
     }
 
     while (right < last) {
-        *tmp++ = *right++;
+        *merged_elem = *right;
+        ++merged_elem;
+        ++right;
     }
 
-    std::copy(temp.begin(), temp.end(), first);
+    std::copy(merged.begin(), merged.end(), first);
 }
 
 template <typename Container>
-template <typename Iterator>
-void PmergeMe<Container>::merge_sort(Iterator first, Iterator last) const {
-    Iterator mid;
+template <typename PairIterator>
+void PmergeMe<Container>::merge_sort(PairIterator first, PairIterator last) const {
+    PairIterator mid;
 
     if (std::distance(first, last) > 1) {
         mid = first + std::distance(first, last) / 2;
@@ -133,7 +151,7 @@ void PmergeMe<Container>::merge_sort(Iterator first, Iterator last) const {
 }
 
 template <typename Container>
-Container PmergeMe<Container>::merge_insertion_sort(const Container &arr) {
+Container PmergeMe<Container>::merge_insertion_sort(const Container &arr) const {
     const bool IS_ODD = arr.size() % 2 != 0;
     typedef typename Container::value_type ValueType;
     typename Container::const_iterator elem, next_elem;

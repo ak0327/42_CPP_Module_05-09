@@ -11,7 +11,6 @@ OBJS		=	$(addprefix $(OBJS_DIR)/, $(OBJ))
 
 DEPS		=	$(OBJS:%.o=%.d)
 
-
 INCLUDES	=	-I.
 
 
@@ -36,9 +35,9 @@ fclean	: clean
 .PHONY	: re
 re		: fclean all
 
-.PHONY	: run
-run		: all
-	./$(NAME)
+.PHONY	: debug
+debug	: CXXFLAGS += -D DEBUG
+debug	: re
 
 #.PHONY	: test
 #test	:

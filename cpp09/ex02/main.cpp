@@ -2,6 +2,8 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <climits>
+#include <cstdlib>
 #include <list>
 #include <vector>
 #include "PmergeMe.hpp"
@@ -149,6 +151,7 @@ std::string get_elements_str(const Container &container) {
     return ss.str();
 }
 
+#ifdef DEBUG
 // std::ostream &operator<<(std::ostream &out, const std::deque<int> &deque) {
 //     out << get_elements_str(deque);
 //     return out;
@@ -158,7 +161,7 @@ std::ostream &operator<<(std::ostream &out, const std::list<int> &list) {
     out << get_elements_str(list);
     return out;
 }
-
+#endif
 std::ostream &operator<<(std::ostream &out, const std::vector<int> &vector) {
     out << get_elements_str(vector);
     return out;
@@ -188,26 +191,26 @@ std::string result(const std::vector<int> &expected, const Container &actual) {
     std::vector<int>::const_iterator expected_itr;
     typename Container::const_iterator actual_itr;
     std::stringstream ss;
-    std::size_t cnt;
-    bool ok, omitted;
+    std::size_t elem_cnt;
+    bool succeed, omitted;
 
     if (expected.size() != actual.size()) {
         ss << YELLOW << " <sort result> size NG -> "
-        << "expected: " << expected.size()
-        << ", actual: " << actual.size() << RESET;
+           << "expected: " << expected.size()
+           << ", actual: " << actual.size() << RESET;
         return ss.str();
     }
 
-    cnt = 0;
-    ok = true;
+    elem_cnt = 0;
+    succeed = true;
     omitted = false;
     expected_itr = expected.begin();
     actual_itr = actual.begin();
 
     ss << "[";
     while (expected_itr != expected.end() && actual_itr != actual.end()) {
-        ++cnt;
-        if (cnt == OMIT_CNT) {
+        ++elem_cnt;
+        if (elem_cnt == OMIT_CNT) {
             ss << "...";
             omitted = true;
         }
@@ -216,7 +219,7 @@ std::string result(const std::vector<int> &expected, const Container &actual) {
         if (*expected_itr == *actual_itr) {
             elem_ss << *actual_itr;
         } else {
-            ok = false;
+            succeed = false;
             elem_ss << RED << *actual_itr << RESET;
         }
 
@@ -229,13 +232,7 @@ std::string result(const std::vector<int> &expected, const Container &actual) {
         ++expected_itr;
         ++actual_itr;
     }
-    ss << "]";
-
-    if (ok) {
-        ss << GREEN << " OK" << RESET;
-    } else {
-        ss << RED << " NG" << RESET;
-    }
+    ss << "]" << (succeed ? GREEN " OK" RESET : RED " NG" RESET);
     return ss.str();
 }
 
@@ -262,14 +259,25 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
+    /* before */
     nums_cnt = argc - 1;
     // sort_deque.sort(nums_dq);
     sort_list.sort(nums_list);
     sort_vector.sort(nums_vec);
 
+    /* after */
+    std_sorted = nums_vec;
+    std::sort(std_sorted.begin(), std_sorted.end());
+
+    // sorted_dq = sort_deque.get_sorted();
+    sorted_vec = sort_vector.get_sorted();
+    sorted_list = sort_list.get_sorted();
+
+#ifdef DEBUG
     //--------------------------------------------------------------------------
     // before
     //--------------------------------------------------------------------------
+    std::cout << std::endl;
     // std::cout << "Before(deque) : " << sort_deque.get_sequence() << std::endl;
     std::cout << "Before(list)  : " << sort_list.get_sequence() << std::endl;
     std::cout << "Before(vector): " << sort_vector.get_sequence() << std::endl;
@@ -278,21 +286,15 @@ int main(int argc, char **argv) {
     //--------------------------------------------------------------------------
     // after
     //--------------------------------------------------------------------------
-    std_sorted = nums_vec;
-    std::sort(std_sorted.begin(), std_sorted.end());
-
-    // sorted_dq = sort_deque.get_sorted();
-    sorted_vec = sort_vector.get_sorted();
-    sorted_list = sort_list.get_sorted();
-
     std::cout << "std::sort     : " << std_sorted << std::endl;
     // std::cout << "After(deque)  : " << result(std_sorted, sorted_dq) << std::endl;
     std::cout << "After(list)   : " << result(std_sorted, sorted_list) << std::endl;
     std::cout << "After(vector) : " << result(std_sorted, sorted_vec) << std::endl;
-
     std::cout << std::endl;
-
-
+#else
+    std::cout << "Before : " << sort_vector.get_sequence() << std::endl;
+    std::cout << "After  : " << result(std_sorted, sorted_vec) << std::endl;
+#endif
     //--------------------------------------------------------------------------
     // time
     //--------------------------------------------------------------------------
