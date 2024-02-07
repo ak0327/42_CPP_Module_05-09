@@ -5,3 +5,7 @@
 !main.cpp
 !RPN.cpp
 !RPN.hpp
+
+!CMakeLists.txt
+!TestOverflow.cpp
+!TestRPN.cpp
